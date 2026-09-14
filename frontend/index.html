@@ -3,19 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/src/css/index.css">
-    <title>Document</title>
+    <link rel="stylesheet" href="src/css/main.css">
+    <title>CONFESSION | О проекте</title>
+
+    <!--
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    -->
+    
 </head>
+
 <body>
+
     <header>
-
+        <a href="#" class="nav-link">О нас</a>
+        <a href="#" class="logo">CONFESSION</a>
+        <div class="auth-btns">
+            <button onclick="alert('Вход')">Войти</button>
+            <button onclick="alert('Регистрация')" class="signup-btn">Регистрация</button>
+        </div>
     </header>
-    <main>
 
+    <main>
+        <div class="left-content-zone">
+            <span class="title-brand">Интерактивная платформа</span>
+            <h1 class="main-heading">CONFESSION</h1>
+            <p class="description-text">
+                Профессиональный тренажер для развития навыков деловой речи и ведения жестких бизнес-переговоров. 
+                Платформа моделирует реальные управленческие кейсы, оценивает уровень стрессоустойчивости, 
+                способность находить компромиссы и рассчитывает экономическую выгоду принимаемых решений.
+            </p>
+            <div>
+                <button onclick="alert('Запуск симулятора...')" class="play-btn">Начать симуляцию</button>
+            </div>
+        </div>
+
+        <div class="right-graphic-zone">
+            <div class="hub-container">
+                <div class="orbit-line orbit-1"></div>
+                <div class="orbit-line orbit-2"></div>
+                <div class="orbit-line orbit-3"></div>
+                <div class="pulse-sphere"></div>
+            </div>
+        </div>
     </main>
+
     <footer>
-        
+        <p>2026 Разработка команды Quantise. Все права защищены.</p>
     </footer>
+
     <script src="src/js/index.js"></script>
+
 </body>
 </html>
