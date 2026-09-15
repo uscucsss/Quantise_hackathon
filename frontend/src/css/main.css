@@ -1,1 +1,214 @@
-@import url('pages/home/index.css');
+/* Глубокая тёмно-фиолетовая палитра i.moscow */
+body {
+    background: radial-gradient(circle at 75% 25%, #110822, #030105);
+    color: #f8fafc;
+    font-family: 'Montserrat', -apple-system, sans-serif;
+    margin: 0; 
+    padding: 0; 
+    min-height: 100vh;
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between;
+}
+
+/* Настройки минималистичной шапки хедера */
+header {
+    background: linear-gradient(to bottom, rgba(17, 8, 34, 0.4) 0%, rgba(3, 1, 5, 0) 100%);
+    backdrop-filter: blur(8px);
+    padding: 22px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    position: sticky; 
+    top: 0; 
+    z-index: 100;
+}
+
+.left-nav-group {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-link {
+    font-size: 13px; 
+    color: rgba(248, 250, 252, 0.7);
+    text-decoration: none;
+    font-weight: 500; 
+    transition: color 0.2s ease;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+.nav-link:hover { 
+    color: #ffffff; 
+}
+
+.auth-btns { 
+    display: flex; 
+    align-items: center; 
+    gap: 25px;
+}
+.auth-btn {
+    background: none; 
+    border: none; 
+    color: rgba(248, 250, 252, 0.7); 
+    font-size: 13px;
+    font-weight: 500; 
+    cursor: pointer; 
+    padding: 0;
+    transition: color 0.2s ease;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+.auth-btn:hover { 
+    color: #ffffff; 
+}
+
+.auth-btns .signup-btn {
+    color: #c084fc;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(192, 132, 252, 0.4);
+    padding-bottom: 2px;
+}
+.auth-btns .signup-btn:hover {
+    color: #ffffff;
+    border-color: #ffffff;
+}
+
+/* МЕЙН-СЕТКА */
+main {
+    flex-grow: 1; 
+    max-width: 1500px; 
+    width: 100%; 
+    margin: 0 auto;
+    padding: 40px 60px; 
+    box-sizing: border-box;
+    display: grid; 
+    grid-template-columns: 1fr; 
+    gap: 60px; 
+    align-items: center;
+}
+
+@media (min-width: 1024px) { 
+    main { 
+        grid-template-columns: 1.25fr 0.75fr; 
+    } 
+}
+
+.custom-game-card {
+    background-color: rgba(30, 27, 46, 0.2);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(168, 85, 247, 0.1);
+    border-radius: 20px;
+    padding: 45px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.title-brand {
+    font-size: 11px; 
+    text-transform: uppercase; 
+    font-weight: 600; 
+    color: #a78bfa;
+    letter-spacing: 3px; 
+    margin-top: 0; 
+    margin-bottom: 16px; 
+    display: block; 
+    line-height: 1.2;
+}
+.main-heading {
+    font-size: 50px; 
+    font-weight: 900; 
+    color: #ffffff;
+    margin-top: 0; 
+    margin-bottom: 30px; 
+    line-height: 60px; 
+    letter-spacing: -1.5px;
+}
+.description-text { 
+    color: #94a3b8; 
+    font-size: 15px; 
+    line-height: 28px; 
+    margin-top: 0; 
+    margin-bottom: 40px; 
+}
+
+.play-btn {
+    background: linear-gradient(135deg, #7c3aed, #4f46e5); 
+    color: white; 
+    border: none;
+    padding: 18px 55px; 
+    border-radius: 12px; 
+    font-size: 13px; 
+    font-weight: 700;
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
+    cursor: pointer;
+    transition: all 0.3s ease; 
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.15);
+}
+.play-btn:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 4px 25px rgba(124, 58, 237, 0.35); 
+}
+
+.right-graphic-zone { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    width: 100%; 
+    min-height: 400px; 
+}
+.hub-container { 
+    position: relative; 
+    width: 340px; 
+    height: 340px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+}
+.orbit-line { 
+    position: absolute; 
+    border: 1px dashed rgba(168, 85, 247, 0.06); 
+    border-radius: 50%; 
+    animation: spin 30s linear infinite; 
+}
+.orbit-1 { width: 340px; height: 340px; }
+.orbit-2 { width: 280px; height: 280px; animation-duration: 15s; animation-direction: reverse; border-style: dotted; }
+.orbit-3 { width: 220px; height: 220px; animation-duration: 8s; }
+
+@keyframes spin { 
+    100% { transform: rotate(360deg); } 
+}
+
+.pulse-sphere {
+    width: 180px; 
+    height: 180px; 
+    background: radial-gradient(circle at 35% 35%, #c084fc, #6366f1, #1e1b4b);
+    border-radius: 50%; 
+    box-shadow: 0 0 65px rgba(168, 85, 247, 0.22), inset -10px -10px 30px rgba(0,0,0,0.8);
+    animation: pulseAnimation 4s infinite ease-in-out; 
+    z-index: 10;
+}
+
+@keyframes pulseAnimation {
+    0% { transform: scale(1); box-shadow: 0 0 65px rgba(168, 85, 247, 0.22); }
+    50% { transform: scale(1.03); box-shadow: 0 0 75px rgba(99, 102, 241, 0.35); }
+    100% { transform: scale(1); box-shadow: 0 0 65px rgba(168, 85, 247, 0.22); }
+}
+
+footer {
+    background-color: #030105; 
+    border-top: 1px solid rgba(168, 85, 247, 0.03);
+    padding: 22px; 
+    text-align: center; 
+    font-size: 12px; 
+    color: #475569; 
+    font-weight: 600; 
+    letter-spacing: 0.5px;
+}
