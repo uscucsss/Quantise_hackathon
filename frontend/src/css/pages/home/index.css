@@ -250,3 +250,50 @@ footer {
 .right-graphic-zone {
     animation: fadeInUp 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
+/* --- АВТОМАТИЧЕСКАЯ РЕЗИНОВАЯ АДАПТИВНОСТЬ ДЛЯ СМАРТФОНОВ --- */
+@media screen and (max-width: 768px) {
+    body, html {
+        overflow-x: hidden !important;
+        width: 100% !important;
+    }
+    
+    main {
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 5vh 20px !important; /* Отступы зависят от высоты экрана (vh) */
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .custom-game-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 30px 20px !important;
+        box-sizing: border-box !important;
+    }
+
+    .main-heading {
+        font-size: 9vw !important; /* Шрифт подстраивается под ширину любого телефона */
+        max-size: 48px; /* Ограничение, чтобы на планшетах не стал слишком огромным */
+        white-space: normal !important;
+        word-break: break-word !important;
+    }
+
+    .description-text {
+        font-size: 4vw !important; /* Текст описания тоже становится "резиновым" */
+        max-size: 16px;
+        line-height: 1.5 !important;
+    }
+
+    /* Адаптация шапки сайта, чтобы кнопки не наезжали друг на друга */
+    header {
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+        justify-content: center !important;
+        padding: 15px !important;
+    }
+
+    .right-graphic-zone {
+        display: none !important; /* На смартфонах графику скрываем, на планшетах вернем */
+    }
+}
