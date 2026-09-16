@@ -1,39 +1,97 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Detroit & LCT Advanced Interface</title>
-    <link rel="stylesheet" href="/frontend/src/css/pages/menu/index.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONFESSION | Выбор сценария</title>
+    <link rel="stylesheet" href="../src/css/pages/menu/index.css">
 </head>
 <body>
-    <canvas id="lctCanvas"></canvas>
-    <div class="cyber-grid"></div>
-    <div class="carousel-zone">
-        <div class="carousel-wrapper" id="carouselWrapper">
-            <div id="circle"></div>
-        </div>
-        <div class="controls">
-            <button id="rotateLeft">SYS.UP</button>
-            <button id="rotateRight">SYS.DOWN</button>
-        </div>
-    </div>
-    <div class="content" id="mainContent">
-        <h2 id="contentTitle">ЗАГРУЗКА СИСТЕМЫ...</h2>
-        <div id="contentDesc">Пожалуйста, выберите узел или прокрутите карусель.</div>
-    </div>
-    <div id="detroitOverlay" class="detroit-overlay">
-        <div class="detroit-header">
-            <div class="chapter-info">ГЛАВА 01 // ТЕСТИРОВАНИЕ СИСТЕМЫ</div>
-            <div class="flowchart-title">ПРОГРЕСС СЮЖЕТНОЙ ЛИНИИ</div>
-            <button class="close-detroit-btn" id="closeDetroit">ВЕРНУТЬСЯ В ИНТЕРФЕЙС</button>
-        </div>
-        <div class="flowchart-container">
-            <svg id="flowchartLines"></svg>
-            <div id="flowchartNodes"></div>
-        </div>
-    </div>
-    <script src="/frontend/src/js/menu/carousel.js"></script>
-    <script src="/frontend/src/js/menu/background.js"></script>
+    <header class="app-header">
+        <div class="logo">CONFESSION</div>
+        <button class="close-detroit-btn" onclick="window.location.href='../index.html'">На главную</button>
+    </header>
+
+    <main class="split-container">
+        <!-- ЛЕВАЯ ПАНЕЛЬ: СПИСОК СЦЕНАРИЕВ -->
+        <section class="left-panel">
+            <h2 class="section-title">Сценарии обучения</h2>
+            <div class="scenarios-list">
+                
+                <!-- Сюжет 1 (ЛЕГКИЙ) -->
+                <div id="item_crisis" class="scenario-item active" onclick="loadStoryTree('crisis')">
+                    <div class="item-header">
+                        <span class="badge status-open">Доступно</span>
+                        <span class="badge difficulty-easy">Легкая сложность</span>
+                    </div>
+                    <h3>Кризис-менеджмент</h3>
+                    <p>Базовый уровень. Утечка данных на прод-сервере. Нивелируйте панику клиента.</p>
+                </div>
+
+                <!-- Сюжет 2 (СРЕДНИЙ) -->
+                <div id="item_deadline" class="scenario-item" onclick="loadStoryTree('deadline')">
+                    <div class="item-header">
+                        <span class="badge status-open">Доступно</span>
+                        <span class="badge difficulty-medium">Средняя сложность</span>
+                    </div>
+                    <h3>Сдвиг дедлайнов</h3>
+                    <p>Жесткие переговоры с ИТ-директором о переносе сроков релиза без штрафов.</p>
+                </div>
+
+                <!-- Сюжет 3 (СРЕДНИЙ) -->
+                <div id="item_check" class="scenario-item" onclick="loadStoryTree('check')">
+                    <div class="item-header">
+                        <span class="badge status-open">Доступно</span>
+                        <span class="badge difficulty-medium">Средняя сложность</span>
+                    </div>
+                    <h3>Повышение чека</h3>
+                    <p>Обоснование индексации стоимости техподдержки на следующий год.</p>
+                </div>
+
+                <!-- Сюжет 4 (СЛОЖНЫЙ) -->
+                <div id="item_budget" class="scenario-item" onclick="loadStoryTree('budget')">
+                    <div class="item-header">
+                        <span class="badge status-open">Доступно</span>
+                        <span class="badge difficulty-hard">Хардкор</span>
+                    </div>
+                    <h3>Правки бюджета</h3>
+                    <p>Заказчик требует срезать стоимость разработки на 30%. Удержите маржу.</p>
+                </div>
+
+                <!-- Сюжет 5 (СЛОЖНЫЙ) -->
+                <div id="item_final" class="scenario-item" onclick="loadStoryTree('final')">
+                    <div class="item-header">
+                        <span class="badge status-open">Доступно</span>
+                        <span class="badge difficulty-hard">Хардкор</span>
+                    </div>
+                    <h3>Финальный контракт</h3>
+                    <p>Защита жестких условий SLA перед генеральным директором компании.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ПРАВАЯ ПАНЕЛЬ: ДЕРЕВО СЮЖЕТА -->
+        <section class="right-panel">
+            <div class="tree-header">
+                <span class="chapter-tag">Глава 01 // Симуляция</span>
+                <h2 id="currentStoryTitle">Кризис-менеджмент (Дерево развилок)</h2>
+                <p>Выберите тактический узел для просмотра структуры переговоров.</p>
+            </div>
+
+            <!-- Зона для отрисовки горизонтального графа -->
+            <div class="story-tree-flow" id="treeFlowZone">
+                <!-- Сюда JS вставит ветки графа -->
+                        </div> <!-- Конец блока story-tree-flow -->
+
+            <!-- ПРАВИЛЬНАЯ ЗОНА КНОПКИ ЗАПУСКА -->
+            <div class="simulation-start-zone" style="width: 100%; display: flex; justify-content: flex-end; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.04); margin-top: auto;">
+                <button class="primary-start-btn" id="startSimBtn" onclick="startActiveSimulation()">Начать симуляцию</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="../src/js/menu/carousel.js"></script>
 </body>
 </html>
+

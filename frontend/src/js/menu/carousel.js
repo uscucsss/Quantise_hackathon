@@ -1,122 +1,150 @@
-const circle = document.getElementById('circle');
-const wrapper = document.getElementById('carouselWrapper');
-const contentTitle = document.getElementById('contentTitle');
-const contentDesc = document.getElementById('contentDesc');
-const detroitOverlay = document.getElementById('detroitOverlay');
-const closeDetroit = document.getElementById('closeDetroit');
-
-const radius = 340; 
-const numCards = 5;  
-let currentStep = 0; 
-
-// База данных для описаний
-const nodeData = [
-  { title: "NODE_01 // LCT_PLATFORM", desc: "Глобальная платформа цифровой трансформации. Интеграция передовых ИИ-решений в городские структуры и масштабные хакатоны для лучших разработчиков." },
-  { title: "NODE_02 // DATA_LANDSCAPE", desc: "Генерация топографических интерфейсов. Визуализация потоков информации в реальном времени через трехмерные массивы связанных частиц." },
-  { title: "NODE_03 // SMART_METROPOLIS", desc: "Концепция умного города. Мониторинг экологических датчиков, оптимизация транспортных развязок и предиктивное обслуживание электросетей." },
-  { title: "NODE_04 // NEURAL_ROUTING", desc: "Нейросетевое распределение вычислительных мощностей. Масштабирование систем под экстремальные пиковые нагрузки без потери отклика ядра." },
-  { title: "NODE_05 // ARCHIVE_VAULT", desc: "Локальный архив зашифрованных системных журналов. Хранение статических бэкапов и логов завершенных сессий ядра. Доступ ограничен." }
-];
-
-// Динамическое создание карточек
-for (let i = 0; i < numCards; i++) {
-  const card = document.createElement('div');
-  card.className = 'card';
-  card.innerText = 'NODE_0' + (i + 1);
-  
-  const angleDeg = (360 / numCards) * i;
-  const angleRad = (angleDeg + 90) * Math.PI / 180;
-  
-  const x = Math.sin(angleRad) * radius;
-  const y = -Math.cos(angleRad) * radius;
-  
-  card.dataset.x = x;
-  card.dataset.y = y;
-  
-  card.onclick = () => {
-    // Просто выбираем карточку, карусель НЕ крутится на месте
-    selectCard(i);
-    
-    // Активируем полноэкранный интерфейс Detroit сюжета
-    detroitOverlay.classList.add('visible');
-    
-    // Передаем индекс во второй скрипт для перерисовки Flowchart
-    if (typeof renderDetroitFlowchart === 'function') {
-      renderDetroitFlowchart(i);
+// База данных разветвленных горизонтальных графов розвилок
+const storiesData = {
+    crisis: {
+        title: "Кризис-менеджмент (Дерево развилок)",
+        html: `
+            <div class="tree-branch-level" style="display: flex; align-items: center; gap: 20px;">
+                <div class="tree-node-card current">
+                    <div class="node-number">Шаг 01</div>
+                    <h4>Паника клиента</h4>
+                    <div class="node-tactics"><span class="tactic-tag diplomat">Дипломатия</span></div>
+                </div>
+                <div class="tree-connector-line"></div>
+                <div class="tree-node-card locked">
+                    <div class="node-number">Шаг 02</div>
+                    <h4>Стабилизация контракта</h4>
+                </div>
+            </div>
+        `
+    },
+    deadline: {
+        title: "Сдвиг дедлайнов (Дерево развилок)",
+        html: `
+            <div class="tree-branch-level" style="display: flex; align-items: center; gap: 20px;">
+                <div class="tree-node-card current">
+                    <div class="node-number">Шаг 01</div>
+                    <h4>Старт переговоров</h4>
+                    <div class="node-tactics"><span class="tactic-tag analyst">Аналитика</span><span class="tactic-tag fighter">Давление</span></div>
+                </div>
+                <div class="tree-connector-line"></div>
+                <div class="tree-column-branches" style="display: flex; flex-direction: column; gap: 20px;">
+                    <div class="tree-node-card reached"><h4>Ветка А: Компромисс</h4></div>
+                    <div class="tree-node-card reached"><h4>Ветка Б: Штрафы</h4></div>
+                </div>
+            </div>
+        `
+    },
+    check: {
+        title: "Повышение чека (Дерево развилок)",
+        html: `
+            <div class="tree-branch-level" style="display: flex; align-items: center; gap: 20px;">
+                <div class="tree-node-card current">
+                    <div class="node-number">Шаг 01</div>
+                    <h4>Аргументация цены</h4>
+                    <div class="node-tactics"><span class="tactic-tag charismatic">Обаяние</span></div>
+                </div>
+                <div class="tree-connector-line"></div>
+                <div class="tree-node-card locked">
+                    <div class="node-number">Шаг 02</div>
+                    <h4>Новое доп. соглашение</h4>
+                </div>
+            </div>
+        `
+    },
+    budget: {
+        title: "Правки бюджета (Дерево развилок)",
+        html: `
+            <div class="tree-branch-level" style="display: flex; align-items: center; gap: 20px;">
+                <div class="tree-node-card current">
+                    <div class="node-number">Шаг 01</div>
+                    <h4>Срез сметы на 30%</h4>
+                    <div class="node-tactics"><span class="tactic-tag fighter">Давление</span></div>
+                </div>
+                <div class="tree-connector-line dashed"></div>
+                <div class="tree-node-card locked">
+                    <div class="node-number">Шаг 02</div>
+                    <h4>Фиксация маржи</h4>
+                </div>
+            </div>
+        `
+    },
+    final: {
+        title: "Финальный контракт (Дерево развилок)",
+        html: `
+            <div class="tree-branch-level" style="display: flex; align-items: center; gap: 20px;">
+                <div class="tree-node-card current">
+                    <div class="node-number">Шаг 01</div>
+                    <h4>Защита SLA</h4>
+                    <div class="node-tactics"><span class="tactic-tag analyst">Аналитика</span></div>
+                </div>
+            </div>
+        `
     }
-
-    // Запускаем анимацию печатной микросхемы вокруг карточки
-    if (typeof triggerNodeElectricity === 'function') {
-      triggerNodeElectricity(card);
-    }
-  };
-
-  circle.appendChild(card);
-}
-
-function selectCard(index) {
-  const normalizedIndex = (index % numCards + numCards) % numCards;
-  
-  const cards = circle.querySelectorAll('.card');
-  cards.forEach(c => c.classList.remove('selected'));
-  
-  const targetCard = cards[normalizedIndex];
-  if (targetCard) targetCard.classList.add('selected');
-  
-  contentTitle.innerText = nodeData[normalizedIndex].title;
-  contentDesc.innerText = nodeData[normalizedIndex].desc;
-}
-
-closeDetroit.onclick = () => {
-  detroitOverlay.classList.remove('visible');
 };
 
-function updateCarousel(isFirstLoad = false) {
-  const stepAngle = 360 / numCards; 
-  const totalCircleAngle = currentStep * stepAngle;
-  
-  circle.style.transform = `rotate(${totalCircleAngle}deg)`;
-  
-  // СТИРАЕМ старое электричество при начале любого вращения
-  if (typeof clearCircuitBoard === 'function') {
-    clearCircuitBoard();
-  }
-  
-  const cards = circle.querySelectorAll('.card');
-  cards.forEach((card) => {
-    const x = card.dataset.x;
-    const y = card.dataset.y;
-    const compensateAngle = -totalCircleAngle; 
-    
-    if (isFirstLoad) {
-      card.classList.add('active');
-      card.style.transform = `translate(${x}px, ${y}px) rotate(${compensateAngle}deg) scale(1)`;
-    } else {
-      card.style.transitionDelay = '0s';
-      card.style.transform = `translate(${x}px, ${y}px) rotate(${compensateAngle}deg) scale(1)`;
-    }
-  });
+const storyIds = ['crisis', 'deadline', 'check', 'budget', 'final'];
+let currentActiveIndex = 0;
+let activeStoryId = "crisis";
 
-  const activeIndex = (-currentStep % numCards + numCards) % numCards;
-  selectCard(activeIndex);
+// Новые точные углы сжатия дуги
+const rotationAngles = { crisis: 36, deadline: 18, check: 0, budget: -18, final: -36 };
+
+function loadStoryTree(storyId) {
+    const rightPanel = document.querySelector('.right-panel');
+    const scenariosList = document.querySelector('.scenarios-list');
+    const titleElement = document.getElementById('currentStoryTitle');
+    const treeZone = document.getElementById('treeFlowZone');
+
+    if (!storiesData[storyId]) return;
+
+    activeStoryId = storyId;
+    currentActiveIndex = storyIds.indexOf(storyId);
+
+    // Вращаем дугу вокруг зафиксированного центра
+    if (rotationAngles[storyId] !== undefined) {
+        scenariosList.style.transform = `translateY(-50%) rotate(${rotationAngles[storyId]}deg)`;
+    }
+
+    // Подсветка активной карточки
+    document.querySelectorAll('.scenario-item').forEach(item => item.classList.remove('active'));
+    const targetCard = document.getElementById(`item_${storyId}`);
+    if (targetCard) targetCard.classList.add('active');
+
+    // Плавное растворение
+    rightPanel.classList.add('fade-out');
+
+    setTimeout(() => {
+        const story = storiesData[storyId];
+        titleElement.innerText = story.title;
+        treeZone.innerHTML = story.html; 
+        rightPanel.classList.remove('fade-out');
+    }, 200);
 }
 
-// Управление кнопками
-document.getElementById('rotateLeft').onclick = () => { currentStep--; updateCarousel(); };
-document.getElementById('rotateRight').onclick = () => { currentStep++; updateCarousel(); };
+// ПЕРЕХВАТЧИК КОЛЕСИКА МЫШИ ДЛЯ РАДИАЛЬНОГО ВРАЩЕНИЯ
+window.addEventListener('wheel', function(event) {
+    const leftPanel = document.querySelector('.left-panel');
+    if (!leftPanel || !leftPanel.contains(event.target)) return;
 
-// Управление колесиком мыши
-let isThrottled = false;
-wrapper.addEventListener('wheel', (e) => {
-  e.preventDefault();
-  if (isThrottled) return; 
+    event.preventDefault(); // Блокируем скролл сайта
 
-  if (e.deltaY > 0) currentStep++; else currentStep--;
-  updateCarousel();
-
-  isThrottled = true;
-  setTimeout(() => { isThrottled = false; }, 200);
+    if (event.deltaY > 0) {
+        if (currentActiveIndex < storyIds.length - 1) {
+            currentActiveIndex++;
+            loadStoryTree(storyIds[currentActiveIndex]);
+        }
+    } else {
+        if (currentActiveIndex > 0) {
+            currentActiveIndex--;
+            loadStoryTree(storyIds[currentActiveIndex]);
+        }
+    }
 }, { passive: false });
 
-// Стартовый запуск меню
-updateCarousel(true);
+function startActiveSimulation() {
+    window.location.href = `chat.html?scenario=${activeStoryId}`;
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    loadStoryTree('crisis'); // Стартуем с легкого уровня по центру
+});
