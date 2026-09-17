@@ -4,19 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CONFESSION — Симуляция</title>
-    <!-- Подключение анимированного фона -->
     <link rel="stylesheet" href="../src/css/pages/scene1/background.css">
-    <!-- Подключение основных стилей сцены -->
     <link rel="stylesheet" href="../src/css/pages/scene1/scene1.css">
 </head>
 <body>
 
-    <!-- ДИНАМИЧЕСКИЙ ЗАДНИЙ ФОН С ЖИВЫМИ ЧАСТИЦАМИ -->
     <div class="animated-bg">
         <div class="bg-glow-particle particle-1"></div>
         <div class="bg-glow-particle particle-2"></div>
-        
-        <!-- Сетка мелких плавающих нано-частиц -->
         <div class="nano-particle p1"></div>
         <div class="nano-particle p2"></div>
         <div class="nano-particle p3"></div>
@@ -28,39 +23,56 @@
     </div>
 
     <div class="fullscreen-app">
-        
-        <!-- ВЕРХНЯЯ ИНТЕРАКТИВНАЯ ЗОНА -->
         <div class="top-section">
-            <!-- Левая сторона: Собеседник, неоновая сфера и КНОПКА ВЫХОДА -->
             <div class="visual-area">
-                
-                <!-- Кнопка в верхнем левом углу страницы -->
                 <button class="exit-app-btn" id="save-exit-btn">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; transform: translateY(1px);"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                     Сохранить и выйти
                 </button>
 
-                <div class="neon-sphere-wrapper">
-                    <div class="neon-orbit pulse"></div>
-                    <div class="neon-sphere"></div>
+                <div class="metrics-bar-container">
+                    <div class="metric-item">
+                        <div class="metric-label"><span>СОГЛАСИЕ</span><span id="val-agreement">50%</span></div>
+                        <div class="metric-track"><div class="metric-fill agreement" id="bar-agreement"></div></div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label"><span>ВЫГОДА</span><span id="val-profit">50%</span></div>
+                        <div class="metric-track"><div class="metric-fill profit" id="bar-profit"></div></div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label"><span>СТРЕСС</span><span id="val-stress">20%</span></div>
+                        <div class="metric-track"><div class="metric-fill stress" id="bar-stress"></div></div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label"><span>ТЕРПЕНИЕ</span><span id="val-patience">80%</span></div>
+                        <div class="metric-track"><div class="metric-fill patience" id="bar-patience"></div></div>
+                    </div>
                 </div>
 
-                <!-- Высокотехнологичный аватар работодателя -->
                 <div class="employer-avatar">
+                    <div class="neon-sphere-wrapper">
+                        <div class="neon-orbit"></div>
+                        <div class="neon-sphere"></div>
+                    </div>
                     <div class="cyber-scan-line"></div>
-                    <div class="avatar-core">AI</div>
                     <div class="avatar-glow-ring"></div>
+                    
+                    <svg class="corporate-silhouette" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org">
+                        <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12Z" fill="url(#silhouette-grad)"/>
+                        <path d="M12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="url(#silhouette-grad)"/>
+                        <defs>
+                            <linearGradient id="silhouette-grad" x1="4" y1="4" x2="20" y2="20" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#ffffff"/>
+                                <stop offset="60%" stop-color="#a78bfa"/>
+                                <stop offset="100%" stop-color="#3861ff"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
                 </div>
-
             </div>
             
-            <!-- Правая сторона: 4 окна ответов и отдельная кнопка -->
             <div class="answers-sidebar">
-                <div class="answers-grid" id="choices-container">
-                    <!-- Окна генерируются динамически через JS -->
-                </div>
-                
-                <!-- Фиксированная зона с отдельной большой кнопкой -->
+                <div class="answers-grid" id="choices-container"></div>
                 <div class="sidebar-action-zone">
                     <button class="select-action-btn" id="main-submit-btn" disabled>
                         Выберите стратегию поведения
@@ -69,14 +81,12 @@
             </div>
         </div>
 
-        <!-- НИЖНЯЯ ПАНЕЛЬ ДИАЛОГА (Карточка во всю длину) -->
         <div class="bottom-dialogue-bar">
             <div class="dialogue-card-glass">
-                <div class="speaker-badge" id="boss-name">Работодатель</div>
+                <div class="speaker-badge">Работодатель</div>
                 <p class="dialogue-text-content" id="boss-speech">Загрузка вопроса сценария...</p>
             </div>
         </div>
-
     </div>
 
     <script src="../src/js/scene1/scene1.js"></script>
