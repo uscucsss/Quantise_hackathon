@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONFESSION | Выбор сценария</title>
+    <link rel="stylesheet" href="../src/css/pages/menu/index.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="logo">CONFESSION</div>
+        <button class="close-detroit-btn" onclick="window.location.href='../index.html'">На главную</button>
+    </header>
+    <main class="split-container">
+        <section class="left-panel">
+            <h2 class="section-title">Сценарии обучения</h2>
+            <div class="scenarios-list">
+                <div id="item_crisis" class="scenario-item active" onclick="loadStoryTree('crisis')">
+                    <div class="item-header">
+                        <span class="badge status-open">Доступно</span>
+                        <span class="badge difficulty-easy">Легкая сложность</span>
+                    </div>
+                    <h3>Кризис-менеджмент</h3>
+                    <p>Базовый уровень. Утечка данных на прод-сервере. Нивелируйте панику клиента.</p>
+                </div>
+                <div id="item_deadline" class="scenario-item" onclick="loadStoryTree('deadline')">
+                    <div class="item-header">
+                        <span class="badge status-open">Доступно</span>
+                        <span class="badge difficulty-medium">Средняя сложность</span>
+                    </div>
+                    <h3>Сдвиг дедлайнов</h3>
+                    <p>Жесткие переговоры с ИТ-директором о переносе сроков релиза без штрафов.</p>
+                </div>
+                <div id="item_check" class="scenario-item" onclick="loadStoryTree('check')">
+                    <div class="item-header">
+                        <span class="badge status-open">Доступно</span>
+                        <span class="badge difficulty-medium">Средняя сложность</span>
+                    </div>
+                    <h3>Повышение чека</h3>
+                    <p>Обоснование индексации стоимости техподдержки на следующий год.</p>
+                </div>
+                <div id="item_budget" class="scenario-item" onclick="loadStoryTree('budget')">
+                    <div class="item-header">
+                        <span class="badge status-open">Доступно</span>
+                        <span class="badge difficulty-hard">Хардкор</span>
+                    </div>
+                    <h3>Правки бюджета</h3>
+                    <p>Заказчик требует срезать стоимость разработки на 30%. Удержите маржу.</p>
+                </div>
+                <div id="item_final" class="scenario-item" onclick="loadStoryTree('final')">
+                    <div class="item-header">
+                        <span class="badge status-open">Доступно</span>
+                        <span class="badge difficulty-hard">Хардкор</span>
+                    </div>
+                    <h3>Финальный контракт</h3>
+                    <p>Защита жестких условий SLA перед генеральным директором компании.</p>
+                </div>
+            </div>
+        </section>
+        <section class="right-panel">
+            <div class="tree-header">
+                <span class="chapter-tag">Глава 01 // Симуляция</span>
+                <h2 id="currentStoryTitle">Кризис-менеджмент (Дерево развилок)</h2>
+                <p>Выберите тактический узел для просмотра структуры переговоров.</p>
+            </div>
+            <div class="story-tree-flow" id="treeFlowZone"></div>
+            <div class="simulation-start-zone" style="width: 100%; display: flex; justify-content: flex-end; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.04); margin-top: auto;">
+                <button class="primary-start-btn" id="startSimBtn" onclick="startActiveSimulation()">Начать симуляцию</button>
+            </div>
+        </section>
+    </main>
+    <script src="../src/js/menu/carousel.js"></script>
+</body>
+</html>
