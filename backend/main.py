@@ -2,6 +2,7 @@
 import json
 import uuid
 import requests
+import hashlib
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -10,12 +11,24 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 # Импортируем модели и настройки БД из соседнего файла database.py
-from .database import SessionLocal, init_db, GameSession, Message
+from .database import SessionLocal, init_db, GameSession, Message, User
 
 app = FastAPI()
 
 # Автоматически создаем таблицы в PostgreSQL при запуске сервера
 init_db()
+
+
+# Простые функции безопасного хеширования паролей на базе встроенного hashlib
+def hash_password(password: str) -> str:
+    # Используем соль для надежности хеша на хакатоне
+    salt = "hackathon_secret_salt_2026"
+    return hashlib.sha256((password + salt).encode("utf-8")).hexdigest()
+
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return hash_password(plain_password) == hashed_password
+
 
 # Настройка CORS для работы фронтенда
 app.add_middleware(
@@ -40,7 +53,12 @@ def get_db():
         db.close()
 
 
-# Модель входящего запроса от фронтенда
+# --- МОДЕЛИ ВАЛИДАЦИИ ДАННЫХ ---
+class UserAuth(BaseModel):
+    username: str
+    password: str
+
+
 class GameState(BaseModel):
     session_id: str | None = None
     player_message: str | None = None  # На первом ходу будет None
@@ -48,13 +66,51 @@ class GameState(BaseModel):
     scenario_id: str  # crisis, deadline, check
 
 
+# --- ЭНДПОИНТ РЕГИСТРАЦИИ ---
+@app.post("/api/register")
+async def register_user(user_data: UserAuth, db: Session = Depends(get_db)):
+    from .database import DATABASE_URL
+    print(f"\n[DEBUG REGISTER] Попытка записи в базу: {DATABASE_URL}")
+    print(f"[DEBUG REGISTER] Пользователь: {user_data.username}")
+
+    existing_user = db.query(User).filter(User.username.ilike(user_data.username)).first()
+    if existing_user:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Этот никнейм уже занят!")
+
+    # Хешируем через наш встроенный sha256
+    hashed = hash_password(user_data.password)
+    new_user = User(username=user_data.username, password_hash=hashed)
+    db.add(new_user)
+    db.commit()
+    print("[DEBUG REGISTER] Успешно закоммичено в Postgres!")
+    return {"message": "Регистрация успешна!"}
+
+
+# --- ЭНДПОИНТ ВХОДА ---
+@app.post("/api/login")
+async def login_user(user_data: UserAuth, db: Session = Depends(get_db)):
+    from .database import DATABASE_URL
+    print(f"\n[DEBUG LOGIN] Проверка авторизации в базе: {DATABASE_URL}")
+
+    user = db.query(User).filter(User.username.ilike(user_data.username)).first()
+    if user:
+        print(f"[DEBUG LOGIN] Пользователь найден в БД!")
+    else:
+        print("[DEBUG LOGIN] Пользователь НЕ найден в этой БД!")
+
+    # Проверяем пароль чистым сравнением хешей
+    if not user or not verify_password(user_data.password, user.password_hash):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="invalid_credentials")
+    return {"message": "Успешный вход!"}
+
+
 # --- ИГРОВОЙ ЭНДПОИНТ ДЛЯ ГЕНЕРАЦИИ РАЗВИЛОК СЮЖЕТА ---
 @app.post("/game/chat")
 async def chat_step(state: GameState, db: Session = Depends(get_db)):
-    # 1. Проверяем наличие сессии или создаем новую
     if not state.session_id:
         session_id = str(uuid.uuid4())
-        db_session = GameSession(id=session_id, stress=20, agreement=30, status="in_progress", current_stage=state.scenario_id)
+        db_session = GameSession(id=session_id, stress=20, agreement=30, status="in_progress",
+                                 current_stage=state.scenario_id)
         db.add(db_session)
         db.commit()
         db.refresh(db_session)
@@ -72,7 +128,6 @@ async def chat_step(state: GameState, db: Session = Depends(get_db)):
             "options": {}
         }
 
-    # 2. Подгружаем профиль сценария
     scenarios = {
         "crisis": "Кризис-менеджмент. Утечка данных на прод-сервере. Клиент в панике и ярости, требует объяснений.",
         "deadline": "Сдвиг дедлайнов. Переговоры о переносе сроков релиза. Клиент жесткий, не хочет терять деньги.",
@@ -80,7 +135,6 @@ async def chat_step(state: GameState, db: Session = Depends(get_db)):
     }
     client_profile = scenarios.get(state.scenario_id, "Жесткий директор IT.")
 
-    # 3. Инструктируем Ollama вернуть фразу директора И 4 варианта ответов в JSON
     system_prompt = (
         f"Ты играешь роль клиента симулятора жестких переговоров. Профиль: {client_profile}. "
         f"Текущий уровень стресса: {db_session.stress}%, согласие на сделку: {db_session.agreement}%. "
@@ -103,13 +157,8 @@ async def chat_step(state: GameState, db: Session = Depends(get_db)):
     )
 
     prompt_context = f"Прошлое сообщение игрока: {state.player_message}" if state.player_message else "Начало игры, первый ход."
-
-    payload = {
-        "model": MODEL_NAME,
-        "prompt": f"{system_prompt}\n\nКонтекст: {prompt_context}\nОтвет в JSON:",
-        "stream": False,
-        "format": "json"
-    }
+    payload = {"model": MODEL_NAME, "prompt": f"{system_prompt}\n\nКонтекст: {prompt_context}\nОтвет в JSON:",
+               "stream": False, "format": "json"}
 
     try:
         response = requests.post(OLLAMA_URL, json=payload, timeout=30)
@@ -117,7 +166,6 @@ async def chat_step(state: GameState, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Ошибка генерации Ollama: {str(e)}")
 
-    # 4. Расчет новых шкал
     new_stress = max(0, min(100, db_session.stress + ai_json.get("stress_change", 0)))
     new_agreement = max(0, min(100, db_session.agreement + ai_json.get("agreement_change", 0)))
 
@@ -169,15 +217,14 @@ async def chat_step(state: GameState, db: Session = Depends(get_db)):
     }
 
 
-
 # --- ИНТЕГРАЦИЯ И СЛИЯНИЕ С ФРОНТЕНДОМ ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "frontend"))
 
-# Монтируем папки так, как их запрашивает фронтенд в своих тегах <link> и <script>
 if os.path.exists(FRONTEND_DIR):
     app.mount("/src", StaticFiles(directory=os.path.join(FRONTEND_DIR, "src")), name="src")
     app.mount("/pages", StaticFiles(directory=os.path.join(FRONTEND_DIR, "pages")), name="pages")
+
 
 @app.get("/")
 async def get_index():
@@ -189,4 +236,5 @@ async def get_index():
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

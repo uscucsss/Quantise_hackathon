@@ -48,47 +48,9 @@ document.querySelectorAll('.password-wrapper').forEach(wrapper => {
   });
 });
 
+// --- ВЗАИМОДЕЙСТВИЕ С РЕАЛЬНЫМ БЭКЕНДОМ FASTAPI (POSTGRESQL) ---
 
-//начало заглушки
-
-
-// --- СИМУЛЯЦИЯ БАЗЫ ДАННЫХ (MOCK FETCH) ---
-
-if (!localStorage.getItem('sql_users_table')) {
-  localStorage.setItem('sql_users_table', JSON.stringify([{ username: 'admin', password: '123' }]));
-}
-
-async function mockFetch(url, options) {
-  await new Promise(resolve => setTimeout(resolve, 1500)); 
-  const body = JSON.parse(options.body);
-  const usersTable = JSON.parse(localStorage.getItem('sql_users_table'));
-
-  if (url === '/api/register') {
-    const userExists = usersTable.some(u => u.username.toLowerCase() === body.username.toLowerCase());
-    if (userExists) {
-      return { ok: false, json: async () => ({ message: 'Этот никнейм уже занят!' }) };
-    }
-    usersTable.push({ username: body.username, password: body.password });
-    localStorage.setItem('sql_users_table', JSON.stringify(usersTable));
-    return { ok: true, json: async () => ({ message: 'Регистрация успешна!' }) };
-  }
-
-  if (url === '/api/login') {
-    const foundUser = usersTable.find(u => u.username.toLowerCase() === body.username.toLowerCase());
-    if (!foundUser || foundUser.password !== body.password) {
-      return { ok: false, json: async () => ({ message: 'invalid_credentials' }) };
-    }
-    return { ok: true, json: async () => ({ message: 'Успешный вход!' }) };
-  }
-}
-
-//конец заглушки
-
-
-
-// --- ОБРАБОТЧИКИ ОТПРАВКИ ФОРМ ---
-
-// ВХОД
+// 1. ОБРАБОТЧИК ДЛЯ ФОРМЫ ВХОДА
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   loginError.style.display = 'none';
@@ -100,126 +62,42 @@ loginForm.addEventListener('submit', async (e) => {
   const dataObject = Object.fromEntries(formData.entries());
 
   try {
-    const response = await mockFetch('/api/login', { method: 'POST', body: JSON.stringify(dataObject) });
-    const result = await response.json();
-
-    if (response.ok) {
-      alert('Вы успешно вошли!');
-      window.location.href = '/profile.html';
-    } else {
-      if (result.message === 'invalid_credentials') {
-        loginError.innerHTML = 'Неверный логин или пароль! Попробуйте снова или если у вас нет аккаунта, <span class="error-link" id="go-to-reg">зарегистрируйтесь</span>';
-        loginError.style.display = 'block';
-
-        document.getElementById('go-to-reg').addEventListener('click', () => {
-          showRegister();
-          window.location.hash = 'register';
-        });
-      }
-    }
-  } catch (error) {
-    loginError.textContent = 'Ошибка соединения с сервером';
-    loginError.style.display = 'block';
-  } finally {
-    submitBtn.classList.remove('loading');
-  }
-});
-
-// РЕГИСТРАЦИЯ
-registerForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  registerError.style.display = 'none';
-
-  const submitBtn = registerForm.querySelector('.submit-btn');
-  submitBtn.classList.add('loading');
-
-  const formData = new FormData(registerForm);
-  const dataObject = Object.fromEntries(formData.entries());
-
-  try {
-    const response = await mockFetch('/api/register', { method: 'POST', body: JSON.stringify(dataObject) });
-    const result = await response.json();
-
-    if (response.ok) {
-      alert('Аккаунт успешно создан!');
-      window.location.href = '/profile.html';
-    } else {
-      registerError.textContent = result.message;
-      registerError.style.display = 'block';
-    }
-  } catch (error) {
-    registerError.textContent = 'Ошибка соединения с сервером';
-    registerError.style.display = 'block';
-  } finally {
-    submitBtn.classList.remove('loading');
-  }
-});
-
-
-
-
-
-
-// далее рабочий код, вставить вместо заглушки
-
-
-/* 
-
-// --- ВЗАИМОДЕЙСТВИЕ С РЕАЛЬНЫМ БЭКЕНДОМ НА PYTHON ---
-
-// 1. ОБРАБОТЧИК ДЛЯ ФОРМЫ ВХОДА
-loginForm.addEventListener('submit', async (e) => {
-  e.preventDefault(); // Запрещаем браузеру перезагружать страницу
-  loginError.style.display = 'none'; // Прячем прошлую ошибку
-  
-  // Включаем спиннер загрузки на кнопке
-  const submitBtn = loginForm.querySelector('.submit-btn');
-  submitBtn.classList.add('loading');
-
-  // Собираем данные из полей ввода в JS-объект
-  const formData = new FormData(loginForm);
-  const dataObject = Object.fromEntries(formData.entries()); // Получаем { username: "...", password: "..." }
-
-  try {
-    // Делаем РЕАЛЬНЫЙ сетевой запрос к серверу на Python
-    const response = await fetch('http://127.0.0', { 
-      method: 'POST', // Метод отправки данных
+    // Отправляем реальный запрос на эндпоинт FastAPI
+    const response = await fetch('/api/login', { 
+      method: 'POST',
       headers: { 
-        'Content-Type': 'application/json' // Говорим серверу, что отправляем JSON
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(dataObject) // Превращаем объект в JSON-строку
+      body: JSON.stringify(dataObject)
     });
 
-    // Ждем ответ от Python-сервера и парсим его JSON
     const result = await response.json();
 
     if (response.ok) {
-      // Если Python вернул статус успешного ответа (код 200)
       alert('Вы успешно вошли!');
-      window.location.href = '/profile.html'; // Перенаправляем в личный кабинет
+      // Перенаправляем на игровое меню вместо несуществующего профиля
+      window.location.href = '/pages/menu.html'; 
     } else {
-      // Если Python вернул ошибку (например, код 401 - Неверные данные)
-      if (result.message === 'invalid_credentials') {
+      // Получаем текст ошибки валидации Pydantic или FastAPI HTTPException
+      const errDetail = result.detail || 'Неверный логин или пароль';
+      
+      if (errDetail === 'invalid_credentials') {
         loginError.innerHTML = 'Неверный логин или пароль! Попробуйте снова или если у вас нет аккаунта, <span class="error-link" id="go-to-reg">зарегистрируйтесь</span>';
         loginError.style.display = 'block';
 
-        // Вешаем клик на ссылку "зарегистрируйтесь" внутри ошибки
         document.getElementById('go-to-reg').addEventListener('click', () => {
           showRegister();
           window.location.hash = 'register';
         });
       } else {
-        // Любая другая ошибка от бэкенда (например, сервер сломался)
-        loginError.textContent = result.message || 'Произошла ошибка при входе';
+        loginError.textContent = errDetail;
         loginError.style.display = 'block';
       }
     }
   } catch (error) {
-    // Сработает, если у пользователя пропал интернет или Python-сервер вообще выключен
     loginError.textContent = 'Не удалось связаться с сервером. Проверьте подключение.';
     loginError.style.display = 'block';
   } finally {
-    // В любом случае (успех или ошибка) выключаем спиннер и возвращаем текст кнопке
     submitBtn.classList.remove('loading');
   }
 });
@@ -237,8 +115,8 @@ registerForm.addEventListener('submit', async (e) => {
   const dataObject = Object.fromEntries(formData.entries());
 
   try {
-    // Шлём запрос на эндпоинт регистрации Python-сервера
-    const response = await fetch('http://127.0.0', { 
+    // Отправляем запрос на регистрацию в PostgreSQL
+    const response = await fetch('/api/register', { 
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dataObject)
@@ -247,11 +125,12 @@ registerForm.addEventListener('submit', async (e) => {
     const result = await response.json();
 
     if (response.ok) {
-      alert('Аккаунт успешно создан!');
-      window.location.href = '/profile.html';
+      alert('Аккаунт успешно создан! Теперь вы можете войти.');
+      showLogin(); // Переключаем форму на вход
+      window.location.hash = 'login';
     } else {
-      // Выводим ошибку от бэкенда (например: "Этот никнейм уже занят!")
-      registerError.textContent = result.message || 'Ошибка при регистрации';
+      // Отображаем ошибку от FastAPI (например, "Этот никнейм уже занят!")
+      registerError.textContent = result.detail || 'Ошибка при регистрации';
       registerError.style.display = 'block';
     }
   } catch (error) {
@@ -261,7 +140,3 @@ registerForm.addEventListener('submit', async (e) => {
     submitBtn.classList.remove('loading');
   }
 });
-
-
-
- */
