@@ -34,39 +34,92 @@ body, html {
     justify-content: center;
     align-items: flex-end;
     overflow: hidden;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Кнопка входа */
+/* Кнопка в левом углу с неоновым свечением */
 .exit-app-btn {
     position: absolute;
     top: 30px;
     left: 40px;
     z-index: 10;
-    background: rgba(20, 16, 32, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(40, 32, 64, 0.6);
+    border: 1px solid rgba(167, 139, 250, 0.4);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    color: #94a3b8;
+    color: #cbd5e1;
     padding: 12px 20px;
     border-radius: 10px;
     font-size: 15px;
     font-weight: 600;
-    letter-spacing: 0.5px;
     cursor: pointer;
     display: flex;
     align-items: center;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.25s ease;
+    box-shadow: 0 0 10px rgba(167, 139, 250, 0.15);
 }
 
 .exit-app-btn:hover {
     color: #ffffff;
-    background: rgba(28, 22, 46, 0.8);
-    border-color: #8146ff;
-    box-shadow: 0 0 15px rgba(112, 51, 255, 0.25);
+    background: rgba(55, 44, 88, 0.8);
+    border-color: #a78bfa;
+    box-shadow: 0 0 20px rgba(167, 139, 250, 0.5);
     transform: translateY(-1px);
 }
 
-/* Сфера */
+/* ================= ИГРОВЫЕ ШКАЛЫ ХАРАКТЕРИСТИК ================= */
+.metrics-bar-container {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    width: 320px;
+    z-index: 10;
+    background: rgba(25, 18, 40, 0.65);
+    border: 1px solid rgba(167, 139, 250, 0.3);
+    border-radius: 14px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 15px rgba(168, 85, 247, 0.2);
+}
+
+.metric-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.metric-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 800;
+    color: #94a3b8;
+}
+
+.metric-track {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.metric-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+}
+
+.metric-fill.agreement { background: linear-gradient(90deg, #a855f7, #c084fc); box-shadow: 0 0 10px rgba(168, 85, 247, 0.6); }
+.metric-fill.profit { background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 10px rgba(59, 130, 246, 0.6); }
+.metric-fill.stress { background: linear-gradient(90deg, #ef4444, #f87171); box-shadow: 0 0 10px rgba(239, 44, 68, 0.6); }
+.metric-fill.patience { background: linear-gradient(90deg, #10b981, #34d399); box-shadow: 0 0 10px rgba(16, 185, 129, 0.6); }
+
+/* ================= СФЕРА И АВАТАР СОБЕСЕДНИКА ================= */
 .neon-sphere-wrapper {
     position: absolute;
     top: 50%;
@@ -77,80 +130,97 @@ body, html {
     justify-content: center;
     align-items: center;
 }
+
 .neon-sphere {
     width: 240px;
     height: 240px;
-    background: radial-gradient(circle at 30% 30%, #a78bfa 0%, #3b82f6 50%, #1e1b4b 100%);
+    background: radial-gradient(circle at 50% 30%, rgba(196, 181, 253, 0.6) 0%, rgba(96, 165, 250, 0.4) 50%, rgba(49, 46, 129, 0.25) 100%);
     border-radius: 50%;
-    box-shadow: 0 0 70px rgba(59, 130, 246, 0.4), inset -10px -10px 40px rgba(0,0,0,0.6);
+    box-shadow: inset -5px -5px 25px rgba(0, 0, 0, 0.3), 0 0 40px rgba(96, 165, 250, 0.2);
+    position: absolute;
+    z-index: 1;
 }
 
-/* Обновленный круглый неоновый аватар ИИ */
+.neon-orbit {
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    border: 2px dashed rgba(167, 139, 250, 0.2);
+    border-radius: 50%;
+    z-index: 0;
+}
+
 .employer-avatar {
     width: 320px;
     height: 320px;
-    background: radial-gradient(circle, rgba(129, 70, 255, 0.08) 0%, rgba(20, 16, 32, 0.6) 100%);
-    border: 2px solid rgba(129, 70, 255, 0.3);
+    background: radial-gradient(circle, rgba(167, 139, 250, 0.12) 0%, rgba(35, 25, 55, 0.6) 100%);
+    border: 2px solid rgba(167, 139, 250, 0.4);
     border-radius: 50%;
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    z-index: 2;
+    z-index: 4;
     position: relative;
     margin-bottom: 120px;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 40px rgba(112, 51, 255, 0.15), inset 0 0 20px rgba(56, 97, 255, 0.2);
+    box-shadow: 0 0 50px rgba(167, 139, 250, 0.25), inset 0 0 25px rgba(96, 165, 250, 0.3);
+    overflow: hidden;
 }
-.avatar-core {
-    font-size: 32px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    background: linear-gradient(135deg, #ffffff 0%, #a78bfa 100%);
-    -webkit-background-clip: text;
-    background-clip: text; /* Исправлено для совместимости */
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 20px rgba(167, 139, 250, 0.6);
+
+.corporate-silhouette {
+    width: 65%;
+    height: 65%;
+    position: relative;
+    z-index: 3;
+    filter: drop-shadow(0 0 20px rgba(196, 181, 253, 0.7));
+    animation: silhouetteHologram 6s infinite ease-in-out;
 }
+
+@keyframes silhouetteHologram {
+    0%, 100% { opacity: 0.85; transform: scale(1); filter: drop-shadow(0 0 15px rgba(196, 181, 253, 0.5)); }
+    50% { opacity: 1; transform: scale(1.02); filter: drop-shadow(0 0 30px rgba(96, 165, 250, 0.8)); }
+}
+
 .avatar-glow-ring {
     position: absolute;
     width: 104%;
     height: 104%;
-    border: 1px solid #3861ff;
+    border: 1px solid #60a5fa;
     border-radius: 50%;
     animation: pulseRing 3s infinite ease-in-out;
 }
+
 @keyframes pulseRing {
-    0%, 100% { transform: scale(1); opacity: 0.7; }
-    50% { transform: scale(1.06); opacity: 0.3; filter: blur(2px); }
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.06); opacity: 0.4; filter: blur(2px); }
 }
+
 .cyber-scan-line {
     position: absolute;
     width: 100%;
     height: 4px;
-    background: linear-gradient(90deg, transparent, #8146ff, #3861ff, #8146ff, transparent);
+    background: linear-gradient(90deg, transparent, #a78bfa, #60a5fa, #a78bfa, transparent);
     left: 0;
     top: 0;
-    opacity: 0.8;
-    box-shadow: 0 0 10px #3861ff;
+    opacity: 0.9;
+    box-shadow: 0 0 12px #60a5fa;
     animation: scanMove 4s infinite linear;
 }
+
 @keyframes scanMove {
     0%, 100% { top: 0%; }
     50% { top: 100%; }
 }
 
-/* Сайдбар */
+/* ================= ПРАВЫЙ САЙДБАР С ОТВЕТАМИ ================= */
 .answers-sidebar {
     width: 580px;
-    background: rgba(10, 6, 18, 0.4);
+    background: rgba(20, 15, 35, 0.5);
     padding: 30px;
     display: flex;
     flex-direction: column;
-    border-left: 1px solid rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
+
 .answers-grid {
     flex: 1;
     display: flex;
@@ -160,11 +230,10 @@ body, html {
     margin-bottom: 25px;
 }
 
-/* Окна ответов */
 .answer-window {
     flex: 1;
-    background: rgba(20, 16, 32, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(40, 30, 65, 0.65);
+    border: 1px solid rgba(96, 165, 250, 0.3);
     border-radius: 16px;
     padding: 24px 30px;
     display: flex;
@@ -172,86 +241,99 @@ body, html {
     justify-content: center;
     align-items: flex-start;
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.25s ease;
+    box-shadow: 0 0 12px rgba(96, 165, 250, 0.1);
 }
+
 .answer-window:hover {
-    border-color: rgba(129, 70, 255, 0.4);
-    background: rgba(28, 22, 46, 0.7);
+    border-color: rgba(167, 139, 250, 0.6);
+    background: rgba(55, 40, 90, 0.8);
+    box-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
 }
+
 .answer-window.active {
-    background: rgba(23, 18, 41, 0.95);
-    border-color: #8146ff;
-    box-shadow: 0 0 25px rgba(112, 51, 255, 0.15);
+    background: rgba(45, 30, 80, 0.95);
+    border-color: #a78bfa;
+    box-shadow: 0 0 30px rgba(167, 139, 250, 0.5), inset 0 0 15px rgba(167, 139, 250, 0.2);
     cursor: default;
 }
+
 .archetype-title {
     font-size: 22px;
     font-weight: 800;
     letter-spacing: 3px;
-    color: #a78bfa;
+    color: #c4b5fd;
     text-transform: uppercase;
 }
+
 .archetype-description {
     font-size: 18px;
     line-height: 1.6;
-    color: #e2e8f0;
+    color: #f1f5f9;
 }
 
-/* Отдельная кнопка */
-.sidebar-action-zone { width: 100%; }
+/* Фиксированная большая неоновая кнопка */
+.sidebar-action-zone {
+    width: 100%;
+}
+
 .select-action-btn {
     width: 100%;
-    background: linear-gradient(90deg, #7033ff 0%, #2550ff 100%);
+    background: linear-gradient(90deg, #8146ff 0%, #3b82f6 100%);
     color: #ffffff;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 18px 30px;
     border-radius: 14px;
     font-size: 18px;
     font-weight: 700;
-    letter-spacing: 1px;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 8px 25px rgba(112, 51, 255, 0.3);
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(129, 70, 255, 0.4), 0 0 15px rgba(59, 130, 246, 0.3);
 }
+
 .select-action-btn:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 12px 30px rgba(112, 51, 255, 0.5);
-    filter: brightness(1.1);
+    box-shadow: 0 12px 35px rgba(129, 70, 255, 0.6), 0 0 25px rgba(59, 130, 246, 0.5);
+    filter: brightness(1.15);
 }
+
 .select-action-btn:disabled {
-    background: #1e1b29;
-    color: #4b4857;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: #2d2640;
+    color: #64748b;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
 }
 
-/* ================= НИЖНЯЯ ЧАСТЬ ================= */
+/* ================= НИЖНЯЯ ПАНЕЛЬ ДИАЛОГА ================= */
 .bottom-dialogue-bar {
     height: 250px;
     padding: 0 40px 35px 40px;
     background: transparent;
 }
+
 .dialogue-card-glass {
     width: 100%;
     height: 100%;
-    background: rgba(18, 14, 28, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(30, 22, 45, 0.75);
+    border: 1px solid rgba(167, 139, 250, 0.35);
+    border-top: 3px solid #a78bfa;
     border-radius: 20px;
     padding: 35px 50px;
     backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 12px 45px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 12px 45px rgba(0, 0, 0, 0.4), 0 0 25px rgba(167, 139, 250, 0.2);
 }
+
 .speaker-badge {
     font-size: 15px;
     font-weight: 700;
-    color: #a78bfa;
+    color: #c4b5fd;
     text-transform: uppercase;
     letter-spacing: 2.5px;
     margin-bottom: 14px;
 }
+
 .dialogue-text-content {
     font-size: 22px;
     line-height: 1.7;
