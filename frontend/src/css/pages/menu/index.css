@@ -1,9 +1,5 @@
 /* ==========================================================================
-<<<<<<< HEAD
    ПОЛНАЯ ЗАМЕНА CSS: ЧАСТЬ 1 — ГЛОБАЛЬНЫЕ НАСТРОЙКИ, ШАПКА И СТЕКЛЯННЫЕ КАРТОЧКИ
-=======
-   ПОЛНАЯ ЗАМЕНА CSS: ЧАСТЬ 1 — ГЛОБАЛЬНЫЕ НАСТРОЙКИ, ШАПКА И ЛЕВАЯ ПАНЕЛЬ
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
    ========================================================================== */
 * {
     box-sizing: border-box;
@@ -18,38 +14,20 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-<<<<<<< HEAD
     overflow: hidden;
 }
 
 /* ВЕРХНЯЯ КОРПОРАТИВНАЯ ШАПКА */
-=======
-    overflow: hidden; /* Гарантирует отсутствие полос прокрутки по краям экрана */
-}
-
-
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
 .app-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-<<<<<<< HEAD
     padding: 20px 40px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     background: #06030e;
     z-index: 20;
 }
 
-=======
-    padding: 20px 50px; /* Немного увеличили боковые отступы */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    background: #06030e;
-    z-index: 20;
-    width: 100%;
-}
-
-
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
 .logo {
     font-size: 20px;
     font-weight: 800;
@@ -76,22 +54,13 @@ body {
     display: flex;
     flex-grow: 1;
     width: 100%;
-<<<<<<< HEAD
     max-width: 1600px;
     margin: 0 auto;
-=======
-    max-width: 100% !important; 
-    margin: 0;
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
     overflow: hidden;
     position: relative;
 }
 
-<<<<<<< HEAD
 /* ЛЕВАЯ ПАНЕЛЬ С ВАШИМ РАБОЧИМ КОЛЕСОМ (ГЕОМЕТРИЯ НЕ МЕНЯЕТСЯ) */
-=======
-
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
 .left-panel {
     width: 440px;
     min-width: 440px;
@@ -101,18 +70,10 @@ body {
     justify-content: flex-start;
     padding-left: 20px;
     background: radial-gradient(circle at left, rgba(27, 20, 54, 0.2) 0%, rgba(6, 3, 14, 0) 100%);
-<<<<<<< HEAD
     border-right: 1px solid rgba(255, 255, 255, 0.03);
     overflow: visible !important;
 }
 
-=======
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
-    overflow: visible !important;
-}
-
-
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
 .section-title {
     position: absolute;
     top: 30px;
@@ -125,21 +86,10 @@ body {
     margin: 0;
     z-index: 5;
 }
-<<<<<<< HEAD
 
 .scenarios-list {
     position: absolute;
     left: -480px; 
-=======
-/* ==========================================================================
-   ПОЛНАЯ ЗАМЕНА CSS: ЧАСТЬ 2 — РАБОЧЕЕ КОЛЕСО И СТЕКЛЯННЫЕ КАРТОЧКИ
-   ========================================================================== */
-
-
-.scenarios-list {
-    position: absolute;
-    left: -390px; /* Было -480px, сдвигаем на 60px вправо, чтобы карточки стали полностью видны */
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
     top: 50%;
     transform: translateY(-50%) rotate(16deg);
     width: 760px; 
@@ -153,18 +103,10 @@ body {
     transform-origin: center center !important;
 }
 
-<<<<<<< HEAD
 /* СТИЛИЗАЦИЯ КАРТОЧЕК СЮЖЕТОВ В СТИЛЕ GLASSMORPHISM */
 .scenario-item {
     position: absolute;
     width: 300px;
-=======
-
-/* СТИЛИЗАЦИЯ УВЕЛИЧЕННЫХ КАРТОЧЕК СЮЖЕТОВ В СТИЛЕ GLASSMORPHISM */
-.scenario-item {
-    position: absolute;
-    width: 340px !important; /* Увеличили ширину карточки для читаемости */
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
     right: 20px;
     transform-origin: -460px center !important; 
     background: rgba(15, 11, 28, 0.75) !important; /* Глубокое премиальное стекло */
@@ -172,32 +114,20 @@ body {
     -webkit-backdrop-filter: blur(12px) !important;
     border: 1px solid rgba(255, 255, 255, 0.05) !important;
     border-radius: 14px !important;
-<<<<<<< HEAD
     padding: 15px !important;
-=======
-    padding: 20px !important; /* Увеличили внутренние отступы, чтобы текст не прилипал */
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
     cursor: pointer;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6) !important;
     opacity: 0.35 !important; /* Приглушение крайних неактивных карточек */
     transition: border-color 0.3s, box-shadow 0.3s, background 0.3s, opacity 0.3s !important;
 }
 
-<<<<<<< HEAD
-=======
-/* Углы поворота карточек для вашей JS-карусели */
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
 .scenario-item:nth-child(1) { transform: rotate(-36deg) !important; }
 .scenario-item:nth-child(2) { transform: rotate(-18deg) !important; }
 .scenario-item:nth-child(3) { transform: rotate(0deg) !important; }
 .scenario-item:nth-child(4) { transform: rotate(18deg) !important; }
 .scenario-item:nth-child(5) { transform: rotate(36deg) !important; }
 
-<<<<<<< HEAD
 .scenario-item:hover:not(.locked) {
-=======
-.scenario-item:hover:not(.locked):not(:nth-child(4)):not(:nth-child(5)) {
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
     border-color: rgba(168, 85, 247, 0.4) !important;
     background: rgba(22, 16, 41, 0.85) !important;
     opacity: 0.7 !important;
@@ -211,7 +141,6 @@ body {
 }
 
 .scenario-item.locked { opacity: 0.15 !important; cursor: not-allowed; }
-<<<<<<< HEAD
 .scenario-item h3 { margin: 6px 0 4px 0 !important; font-size: 15px !important; font-weight: 700 !important; color: #ffffff !important; }
 .scenario-item p { margin: 0 !important; font-size: 11.5px !important; color: #94a3b8 !important; line-height: 1.4 !important; }
 
@@ -225,61 +154,6 @@ body {
 .difficulty-hard { background: rgba(239, 68, 68, 0.12) !important; color: #ef4444 !important; border: 1px solid rgba(239, 68, 68, 0.2) !important; }
 /* ==========================================================================
    ПОЛНАЯ ЗАМЕНА CSS: ЧАСТЬ 2 — ПРАВАЯ ПАНЕЛЬ И ДОРОГАЯ КНОПКА СПРАВА ВНИЗУ
-=======
-
-/* КРАСИВОЕ СЕРОЕ ЗАГЛУШЕНИЕ ДЛЯ ОСТАЛЬНЫХ ДВУХ СЦЕНАРИЕВ (COMING SOON) */
-.scenario-item:nth-child(4),
-.scenario-item:nth-child(5) {
-    opacity: 0.2 !important;
-    filter: grayscale(0.9);
-    cursor: not-allowed !important;
-    pointer-events: none; /* Полностью блокирует клики и ховеры, не ломая колесо */
-}
-
-.scenario-item h3 { 
-    margin: 10px 0 6px 0 !important; 
-    font-size: 18px !important; /* Увеличили размер заголовка */
-    font-weight: 700 !important; 
-    color: #ffffff !important; 
-}
-
-.scenario-item p { 
-    margin: 0 !important; 
-    font-size: 13px !important; /* Увеличили размер текста описания */
-    color: #94a3b8 !important; 
-    line-height: 1.5 !important; 
-}
-
-
-/* УВЕЛИЧЕННЫЕ БЕЙДЖИ СЛОЖНОСТИ ДЛЯ ТЗ */
-.item-header { display: flex !important; justify-content: space-between !important; align-items: center !important; width: 100% !important; }
-
-.badge { 
-    font-size: 10px !important; /* Бейджи стали крупнее */
-    text-transform: uppercase !important; 
-    font-weight: 700 !important; 
-    padding: 4px 8px !important; /* Добавили внутренней площади */
-    border-radius: 5px !important; 
-    letter-spacing: 0.5px;
-}
-
-.status-open { background: rgba(34, 197, 94, 0.15) !important; color: #22c55e !important; }
-.status-lock { background: rgba(239, 68, 68, 0.15) !important; color: #ef4444 !important; }
-
-.difficulty-easy { background: rgba(56, 189, 248, 0.12) !important; color: #38bdf8 !important; border: 1px solid rgba(56, 189, 248, 0.2) !important; }
-.difficulty-medium { background: rgba(251, 191, 36, 0.12) !important; color: #fbbf24 !important; border: 1px solid rgba(251, 191, 36, 0.2) !important; }
-
-/* Принудительный агрессивный красный цвет для ХАРДКОРА */
-.difficulty-hard { 
-    background: rgba(239, 68, 68, 0.16) !important; 
-    color: #ff4545 !important; 
-    border: 1px solid rgba(239, 68, 68, 0.4) !important; 
-}
-
-
-/* ==========================================================================
-   ПОЛНАЯ ЗАМЕНА CSS: ЧАСТЬ 3 — ПРАВАЯ ПАНЕЛЬ, КНОПКА И МОБИЛЬНЫЙ АДАПТИВ
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
    ========================================================================== */
 
 .right-panel {
@@ -287,13 +161,8 @@ body {
     padding: 40px 50px;
     display: flex;
     flex-direction: column;
-<<<<<<< HEAD
     overflow-y: auto;
     position: relative; /* Критично для фиксации кнопки в углу панели */
-=======
-    overflow-y: auto; /* Скролл только внутри контента дерева */
-    position: relative;
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
@@ -329,13 +198,8 @@ body {
 .simulation-start-zone {
     width: 100% !important;
     display: flex !important;
-<<<<<<< HEAD
     justify-content: flex-end !important; /* Насильно двигаем КНОПКУ ВПРАВО */
     margin-top: auto !important; /* Насильно двигаем КНОПКУ ВНИЗ */
-=======
-    justify-content: flex-end !important; /* Насильно двигаем кнопку вправо */
-    margin-top: auto !important; /* Насильно прижимаем кнопку к самому низу панели */
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
     padding-top: 20px !important;
     border-top: 1px solid rgba(255, 255, 255, 0.04) !important;
     background: transparent !important;
@@ -347,11 +211,7 @@ body {
     border: 1px solid rgba(168, 85, 247, 0.5) !important; 
     color: #ffffff !important;
     padding: 14px 40px !important;
-<<<<<<< HEAD
     border-radius: 30px !important; /* Круглая аккуратная форма */
-=======
-    border-radius: 30px !important; /* Идеально круглая аккуратная форма капсулы */
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
     font-size: 13px !important;
     font-weight: 700 !important;
     text-transform: uppercase !important;
@@ -368,7 +228,6 @@ body {
     transform: translateY(-2px) !important;
 }
 
-<<<<<<< HEAD
 /* ==========================================================================
    АДАПТИВНОСТЬ ПОД ТЕЛЕФОНЫ (ГОРИЗОНТАЛЬНАЯ ЛЕНТА СВАЙПОВ)
    ========================================================================== */
@@ -386,113 +245,4 @@ body {
     .tree-header h2 { font-size: 20px !important; }
     .simulation-start-zone { justify-content: center !important; padding-top: 15px; }
     .primary-start-btn { width: 100% !important; text-align: center !important; }
-=======
-@media screen and (max-width: 900px) {
-    body { 
-        overflow-y: auto !important; 
-    }
-    
-    .split-container { 
-        flex-direction: column !important; 
-        height: auto !important; 
-        max-width: 100% !important;
-    }
-    
-    /* Сбрасываем жесткую ширину левой панели */
-    .left-panel { 
-        width: 100% !important; 
-        min-width: 100% !important; 
-        height: 180px !important; /* Немного увеличили высоту, чтобы карточки не сжимались */
-        border-right: none !important; 
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important; 
-        padding: 40px 15px 15px 15px !important; 
-        justify-content: center !important; 
-        overflow: hidden !important; 
-    }
-    
-    .section-title { 
-        top: 10px !important; 
-        left: 50% !important; 
-        transform: translateX(-50%) !important; 
-        font-size: 11px !important; 
-    }
-    
-    /* Превращаем колесо в чистую, ровную горизонтальную ленту */
-    .scenarios-list { 
-        position: relative !important; 
-        left: 0 !important; 
-        top: 0 !important; 
-        transform: none !important; /* Убиваем поворот всего колеса */
-        width: 100% !important; 
-        height: auto !important; 
-        border-radius: 0 !important; 
-        border: none !important; 
-        flex-direction: row !important; 
-        gap: 16px !important; 
-        overflow-x: auto !important; /* Разрешаем нативный горизонтальный скролл */
-        justify-content: flex-start !important;
-        padding: 10px 20px !important;
-    }
-    
-    .scenarios-list::-webkit-scrollbar { 
-        display: none !important; /* Прячем некрасивый системный ползунок */
-    }
-    
-    /* Сбрасываем абсолютно все 3D-трансформации и точки вращения карточек */
-    .scenario-item { 
-        position: relative !important; 
-        right: auto !important;
-        top: auto !important;
-        flex: 0 0 280px !important; /* Фиксированная ширина карточки в ленте скролла */
-        width: 280px !important;
-        padding: 12px !important; 
-        opacity: 1 !important; /* Делаем видимыми на мобилке */
-        transform: none !important; /* Убиваем индивидуальные повороты JS-карусели */
-        transform-origin: center center !important; /* Возвращаем дефолтную точку */
-    }
-    
-    /* Жесткое принудительное отключение поворотов для всех дочерних элементов */
-    .scenario-item:nth-child(1), 
-    .scenario-item:nth-child(2), 
-    .scenario-item:nth-child(3), 
-    .scenario-item:nth-child(4), 
-    .scenario-item:nth-child(5) { 
-        transform: none !important; 
-    }
-    
-    /* Разрешаем клики и свайпы по элементам "Скоро" на мобилке, чтобы лента прокручивалась */
-    .scenario-item:nth-child(4), 
-    .scenario-item:nth-child(5) { 
-        pointer-events: auto !important; 
-        opacity: 0.4 !important; /* Оставляем их слегка затемненными */
-    }
-    
-    .scenario-item p { 
-        display: none !important; /* Скрываем длинные описания на мобилке ради компактности */
-    }
-    
-    /* Правая панель */
-    .right-panel { 
-        padding: 25px 16px !important; 
-        width: 100% !important; 
-        overflow-x: auto !important; 
-    }
-    
-    .tree-header h2 { 
-        font-size: 20px !important; 
-    }
-    
-    .simulation-start-zone { 
-        justify-content: center !important; 
-        padding-top: 15px !important; 
-        padding-bottom: 20px !important;
-    }
-    
-    .primary-start-btn { 
-        width: 100% !important; 
-        text-align: center !important; 
-    }
-}
-
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
 }

@@ -19,10 +19,6 @@
             <div class="scenarios-list">
                 
                 <!-- Сюжет 1 (ЛЕГКИЙ) -->
-    <main class="split-container">
-        <section class="left-panel">
-            <h2 class="section-title">Сценарии обучения</h2>
-            <div class="scenarios-list">
                 <div id="item_crisis" class="scenario-item active" onclick="loadStoryTree('crisis')">
                     <div class="item-header">
                         <span class="badge status-open">Доступно</span>
@@ -47,10 +43,6 @@
                     <div class="item-header">
                         <span class="badge status-open">Доступно</span>
                         <span class="badge difficulty-medium">Средняя сложность</span>
-                <div id="item_check" class="scenario-item" onclick="loadStoryTree('check')">
-                    <div class="item-header">
-                        <span class="badge status-open">Доступно</span>
-                        <span class="badge difficulty-hard">Хардкор</span>
                     </div>
                     <h3>Повышение чека</h3>
                     <p>Обоснование индексации стоимости техподдержки на следующий год.</p>
@@ -60,9 +52,6 @@
                 <div id="item_budget" class="scenario-item" onclick="loadStoryTree('budget')">
                     <div class="item-header">
                         <span class="badge status-open">Доступно</span>
-                <div id="item_budget" class="scenario-item" onclick="loadStoryTree('budget')">
-                    <div class="item-header">
-                        <span class="badge status-lock">В разработке</span>
                         <span class="badge difficulty-hard">Хардкор</span>
                     </div>
                     <h3>Правки бюджета</h3>
@@ -73,9 +62,6 @@
                 <div id="item_final" class="scenario-item" onclick="loadStoryTree('final')">
                     <div class="item-header">
                         <span class="badge status-open">Доступно</span>
-                <div id="item_final" class="scenario-item" onclick="loadStoryTree('final')">
-                    <div class="item-header">
-                        <span class="badge status-lock">В разработке</span>
                         <span class="badge difficulty-hard">Хардкор</span>
                     </div>
                     <h3>Финальный контракт</h3>
@@ -86,8 +72,6 @@
         </section>
 
         <!-- ПРАВАЯ ПАНЕЛЬ: ДЕРЕВО СЮЖЕТА -->
-            </div>
-        </section>
         <section class="right-panel">
             <div class="tree-header">
                 <span class="chapter-tag">Глава 01 // Симуляция</span>
@@ -101,7 +85,6 @@
                         </div> <!-- Конец блока story-tree-flow -->
 
             <!-- ПРАВИЛЬНАЯ ЗОНА КНОПКИ ЗАПУСКА -->
-            <div class="story-tree-flow" id="treeFlowZone"></div>
             <div class="simulation-start-zone" style="width: 100%; display: flex; justify-content: flex-end; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.04); margin-top: auto;">
                 <button class="primary-start-btn" id="startSimBtn" onclick="startActiveSimulation()">Начать симуляцию</button>
             </div>
@@ -112,6 +95,3 @@
 </body>
 </html>
 
-    <script src="../src/js/menu/carousel.js"></script>
-</body>
-</html>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 console.log("Confession JS успешно подключен!");
 const btnLogin = document.getElementById('btn-login');
 const btnRegister = document.getElementById('btn-register');
@@ -11,3 +12,6 @@ btnLogin.addEventListener('click', () => {
 btnRegister.addEventListener('click', () => {
   window.location.href = 'pages/login.html#register';
 });
+=======
+console.log("Confession JS успешно подключен!");
+>>>>>>> parent of ff0eed4 (Merge branch 'main' of https://github.com/uscucsss/Quantise_hackathon)

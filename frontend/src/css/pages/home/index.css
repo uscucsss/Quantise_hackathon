@@ -142,10 +142,6 @@ main {
     font-weight: 900; 
     background: linear-gradient(to right, #ffffff 40%, #e9d5ff 100%);
     -webkit-background-clip: text;
-<<<<<<< HEAD
-=======
-    background-clip: text;
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
     -webkit-text-fill-color: transparent;
     margin-top: 0; 
     margin-bottom: 30px; 
@@ -176,10 +172,6 @@ main {
     cursor: pointer; 
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
     box-shadow: 0 4px 20px rgba(124, 58, 237, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-<<<<<<< HEAD
-=======
-    text-decoration: none;
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
 }
 .play-btn:hover { 
     transform: translateY(-3px); 
@@ -281,25 +273,15 @@ footer {
     }
 
     .main-heading {
-<<<<<<< HEAD
         font-size: 9vw !important; /* Шрифт подстраивается под ширину любого телефона */
         max-size: 48px; /* Ограничение, чтобы на планшетах не стал слишком огромным */
-=======
-        font-size: min(9vw, 48px) !important; /* Шрифт подстраивается под ширину любого телефона */
-        /* max-size: 48px; */ /* Ограничение, чтобы на планшетах не стал слишком огромным */
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
         white-space: normal !important;
         word-break: break-word !important;
     }
 
     .description-text {
-<<<<<<< HEAD
         font-size: 4vw !important; /* Текст описания тоже становится "резиновым" */
         max-size: 16px;
-=======
-        font-size: min(4vw, 16px) !important; /* Текст описания тоже становится "резиновым" */
-        /* max-size: 16px; */
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
         line-height: 1.5 !important;
     }
 

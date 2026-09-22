@@ -148,9 +148,12 @@ function startActiveSimulation() {
 document.addEventListener("DOMContentLoaded", function() {
     loadStoryTree('crisis'); // Стартуем с легкого уровня по центру
 });
+<<<<<<< HEAD
     // Проверяем, определен ли текущий активный сценарий
     const scenario = typeof activeStoryId !== 'undefined' ? activeStoryId : 'crisis';
     
     // Перенаправляем на новую страницу игры в той же папке
     window.location.href = `scene1.html?scenario=${scenario}`;
 }
+=======
+>>>>>>> parent of ff0eed4 (Merge branch 'main' of https://github.com/uscucsss/Quantise_hackathon)
