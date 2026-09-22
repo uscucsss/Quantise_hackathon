@@ -1,0 +1,497 @@
+/* ==========================================================================
+   01. ГЛОБАЛЬНЫЕ СБРОСЫ И НАСТРОЙКИ СИМУЛЯТОРА
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0; 
+    padding: 0;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+html, body {
+    width: 100%; 
+    height: 100%;
+    overflow: hidden;
+    background-color: #010103;
+    color: #ffffff;
+}
+
+/* ==========================================================================
+   02. ФИКС ИСЧЕЗНОВЕНИЯ: КНОПКА И ВЫДВИЖНАЯ ВКЛАДКА (ЖЕСТКАЯ ИЗОЛЯЦИЯ ОТ 3D)
+   ========================================================================== */
+.menu-trigger-btn {
+    position: fixed;
+    top: 30px; 
+    left: 40px;
+    width: 50px; 
+    height: 50px;
+    background: rgba(13, 13, 33, 0.85) !important;
+    border: 2px solid #c084fc !important; 
+    border-radius: 12px;
+    cursor: pointer;
+    
+    /* 
+       ИСПРАВЛЕНО: Мы полностью изолируем кнопку от 3D-искажений браузера, 
+       вынося её на изолированный аппаратно-ускоренный слой. Она больше не пропадёт.
+    */
+    transform: translateZ(0) !important; 
+    z-index: 99999 !important; 
+    
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 15px rgba(192, 132, 252, 0.3);
+}
+
+.menu-trigger-btn:hover {
+    background: #6d28d9 !important;
+    box-shadow: 0 0 20px #c084fc !important;
+    transform: translateZ(0) scale(1.05) !important;
+}
+
+.trigger-icon { 
+    position: relative; 
+    width: 20px; 
+    height: 2px; 
+    background-color: #ffffff; 
+    transition: background-color 0.3s ease; 
+}
+
+.trigger-icon::before, 
+.trigger-icon::after { 
+    content: ''; 
+    position: absolute; 
+    width: 20px; 
+    height: 2px; 
+    background-color: #ffffff; 
+    left: 0; 
+    transition: transform 0.3s ease; 
+}
+.trigger-icon::before { top: -6px; }
+.trigger-icon::after { top: 6px; }
+
+.menu-trigger-btn.menu-open .trigger-icon { background-color: transparent; }
+.menu-trigger-btn.menu-open .trigger-icon::before { transform: translateY(6px) rotate(45deg); }
+.menu-trigger-btn.menu-open .trigger-icon::after { transform: translateY(-6px) rotate(-45deg); }
+
+/* ВЫДВИЖНОЙ СТЕКЛЯННЫЙ SIDEBAR ПОВЕРХ 3D */
+.side-navigation-panel {
+    position: fixed; 
+    top: 0; 
+    left: -320px; 
+    width: 320px; 
+    height: 100vh;
+    background: rgba(10, 10, 26, 0.9) !important; 
+    border-right: 1px solid rgba(192, 132, 252, 0.25);
+    backdrop-filter: blur(30px) !important; 
+    -webkit-backdrop-filter: blur(30px) !important; 
+    
+    /* ИСПРАВЛЕНО: Панель сидит строго под кнопкой, но гарантированно над 3D комнатой */
+    transform: translateZ(0) !important;
+    z-index: 99998 !important; 
+    
+    /* pointer-events отключает клики сквозь закрытую панель */
+    pointer-events: none;
+    visibility: visible !important;
+    
+    padding: 120px 30px 40px 30px; 
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-shadow: 20px 0 60px rgba(0, 0, 0, 0.8);
+}
+
+.side-navigation-panel.panel-open { 
+    transform: translateX(320px) !important; 
+    pointer-events: auto !important;
+}
+
+.side-menu-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: #c084fc; margin-bottom: 30px; font-weight: 800; }
+.side-menu-actions { display: flex; flex-direction: column; gap: 14px; }
+.side-action-btn { width: 100%; padding: 16px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer; color: #ffffff; transition: all 0.2s ease-in-out; text-align: center; }
+.btn-exit { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); }
+.btn-exit:hover { background: rgba(255, 59, 59, 0.15); border-color: #ff3b3b; box-shadow: 0 0 15px rgba(255, 59, 59, 0.2); }
+.btn-save { background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%); border: 1px solid rgba(255, 255, 255, 0.05); }
+.btn-save:hover { background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%); box-shadow: 0 0 15px rgba(192, 132, 252, 0.4); }
+
+/* ==========================================================================
+   03. ГЕОМЕТРИЯ КУБА С КРАСИВОЙ СВЕТЛОЙ ПОДСВЕТКОЙ СТЕН
+   ========================================================================== */
+.view-3d-container {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    perspective: 1200px;
+    overflow: hidden;
+    /* ИСПРАВЛЕНО: Изолируем 3D слой в отдельный z-index ниже меню */
+    z-index: 5; 
+}
+
+.scene-3d {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    transform-style: preserve-3d;
+    transform-origin: 50vw 50vh;
+    transform: translateZ(0px) rotateX(0deg) rotateY(0deg);
+}
+
+.wall {
+    position: absolute;
+    width: calc(100vh + 4px);
+    height: calc(100vh + 4px);
+    background: linear-gradient(135deg, #110b29 0%, #080814 100%);
+    transform-style: preserve-3d;
+    border: 3px solid #c084fc; 
+    box-shadow: inset 0 0 70px rgba(192, 132, 252, 0.45);
+}
+
+.wall-back {
+    width: 100vw; height: 100vh; left: 0; top: 0; 
+    transform: translateZ(-1000px);
+    background: linear-gradient(135deg, #241452 0%, #0a0a1f 100%);
+    border: 4px solid #c084fc; 
+    box-shadow: inset 0 0 120px rgba(192, 132, 252, 0.7), inset 0 0 200px #000000;
+}
+
+.wall-left { width: 1000px; height: 100vh; left: 0; top: 0; transform-origin: left center; transform: rotateY(90deg); }
+.wall-right { width: 1000px; height: 100vh; right: 0; top: 0; transform-origin: right center; transform: rotateY(-90deg); }
+
+.wall-floor {
+    width: 100vw; height: 1000px; left: 0; bottom: 0; 
+    transform-origin: center bottom;
+    transform: rotateX(90deg);
+    background: 
+        linear-gradient(rgba(192, 132, 252, 0.25) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(192, 132, 252, 0.25) 1px, transparent 1px),
+        radial-gradient(circle at center, #351459 0%, #070714 100%); 
+    background-size: 50px 50px;
+    box-shadow: inset 0 60px 120px rgba(192, 132, 252, 0.55);
+}
+
+.wall-roof { 
+    width: 100vw; height: 1000px; left: 0; top: 0; 
+    transform-origin: center top;
+    transform: rotateX(-90deg); 
+    background: linear-gradient(to bottom, #2b1154 0%, #060612 100__);
+    box-shadow: inset 0 -60px 120px rgba(192, 132, 252, 0.55);
+}
+/* ==========================================================================
+   04. ГИГАНТСКИЙ 3D РОБОТ: ПРЯМОЙ ВЗГЛЯД НА ИГРОКА (2/3 ВЫСОТЫ ЭКРАНА)
+   ========================================================================== */
+.robot-3d-object {
+    position: absolute;
+    width: 540px; 
+    height: 750px;
+    left: 2vw; 
+    bottom: -8vh !important; /* Уверенное заземление подиума на пол */
+    transform: translateZ(-200px);
+    transform-style: preserve-3d;
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+}
+
+/* Сборка головы-монитора (480x340x200) */
+.cube-head {
+    position: absolute;
+    width: 480px; 
+    height: 340px; 
+    left: 70px; 
+    top: 0px; 
+    transform-style: preserve-3d;
+    transform: translateZ(80px) rotateY(15deg); /* Фронтальный, строгий взгляд */
+}
+
+.face-head {
+    position: absolute;
+    background: #06060f;
+    border: 5px solid #c084fc;
+    box-shadow: inset 0 0 30px rgba(192, 132, 252, 0.6);
+}
+
+.head-front { width: 480px; height: 340px; transform: translateZ(100px); overflow: hidden; display: flex; justify-content: center; align-items: center; padding: 32px; }
+.head-back  { width: 480px; height: 340px; transform: translateZ(-100px) rotateY(180deg); }
+.head-left  { width: 200px; height: 340px; left: 140px; transform: translateX(-240px) rotateY(-90deg); }
+.head-right { width: 200px; height: 340px; left: 140px; transform: translateX(240px) rotateY(90deg); }
+.head-top   { width: 480px; height: 200px; top: 70px; transform: translateY(-170px) rotateX(90deg); }
+.head-bottom{ width: 480px; height: 200px; top: 70px; transform: translateY(170px) rotateX(-90deg); }
+
+/* Высококонтрастная OLED-матрица дисплея */
+.monitor-screen {
+    width: 100%; 
+    height: 100%;
+    background-color: #0b0214;
+    border-radius: 12px;
+    border: 3px solid #c084fc;
+    box-shadow: inset 0 0 50px #000000, 0 0 25px rgba(192, 132, 252, 0.4);
+    display: flex; 
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+    position: relative;
+}
+
+.screen-matrix-bg { position: absolute; width: 100%; height: 100%; background-image: radial-gradient(rgba(192, 132, 252, 0.2) 1px, transparent 1px); background-size: 4px 4px; opacity: 0.95; }
+.crt-scanlines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 65%, rgba(0, 0, 0, 0.4) 35%); background-size: 100% 6px; pointer-events: none; z-index: 2; }
+.robot-face-expression { font-family: 'Courier New', Courier, monospace; width: 90%; display: flex; flex-direction: column; z-index: 3; }
+
+/* Сверхчеткие, центрированные фиолетовые логи ИИ */
+.ai-text-output {
+    font-size: 1.5rem; 
+    font-weight: 800; 
+    line-height: 1.5; 
+    color: #c084fc; 
+    word-wrap: break-word; 
+    text-align: left !important; 
+    text-shadow: 0 0 8px #c084fc, 0 0 20px rgba(192, 132, 252, 0.6); 
+    animation: monitorFlicker 0.25s infinite alternate ease-in-out;
+}
+
+/* Сборка объемного тела (420x360x160) */
+.cube-body { 
+    position: absolute; 
+    width: 420px; 
+    height: 360px; 
+    left: 60px; 
+    top: 370px; 
+    transform-style: preserve-3d; 
+}
+
+.face-body { 
+    position: absolute; 
+    background: linear-gradient(to bottom, #121220, #040409); 
+    border: 4px solid #c084fc; 
+    box-shadow: inset 0 0 40px rgba(192, 132, 252, 0.3); 
+}
+
+.body-front { width: 420px; height: 360px; transform: translateZ(80px); display: flex; justify-content: center; align-items: center; }
+.body-back  { width: 420px; height: 360px; transform: translateZ(-80px) rotateY(180deg); }
+.body-left  { width: 160px; height: 360px; left: 130px; transform: translateX(-210px) rotateY(-90deg); }
+.body-right { width: 160px; height: 360px; left: 130px; transform: translateX(210px) rotateY(90deg); }
+.body-top   { width: 420px; height: 160px; top: 100px; transform: translateY(-180px) rotateX(90deg); }
+.body-bottom{ width: 420px; height: 160px; top: 100px; transform: translateY(180px) rotateX(-90deg); }
+
+/* Реактор на груди */
+.core-reactor { 
+    width: 70px; 
+    height: 70px; 
+    background: radial-gradient(circle, #c084fc 0%, transparent 70%); 
+    border: 3px solid #c084fc; 
+    border-radius: 50%; 
+    box-shadow: 0 0 25px #c084fc; 
+    animation: corePulse 1.5s infinite alternate ease-in-out; 
+}
+
+/* Объемный подиум-подставка */
+.robot-stand-base {
+    position: absolute;
+    width: 340px; height: 160px;
+    left: 100px; top: 670px;
+    transform-style: preserve-3d;
+}
+.face-stand {
+    position: absolute;
+    background: linear-gradient(to bottom, #090914, #030308);
+    border: 3px solid #7c3aed;
+    box-shadow: inset 0 0 20px rgba(192, 132, 252, 0.4);
+}
+.stand-front { 
+    width: 340px; height: 160px; transform: translateZ(70px); 
+    box-shadow: inset 0 0 20px rgba(192, 132, 252, 0.4), 0 15px 35px #9d4edd, 0 25px 60px rgba(157, 78, 221, 0.6); 
+}
+.stand-back  { width: 340px; height: 160px; transform: translateZ(-70px) rotateY(180deg); }
+.stand-left  { width: 140px; height: 160px; left: 100px; transform: translateX(-170px) rotateY(-90deg); }
+.stand-right { width: 140px; height: 160px; left: 100px; transform: translateX(170px) rotateY(90deg); }
+.stand-top   { width: 340px; height: 140px; top: 10px; transform: translateY(-80px) rotateX(90deg); }
+
+/* ==========================================================================
+   05. HUD ИНТЕРФЕЙС УПРАВЛЕНИЯ (ПРИПОДНЯТЫЙ СТАТИЧНЫЙ СТЕК)
+   ========================================================================== */
+.hud-interface {
+    position: absolute;
+    bottom: 0; 
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    padding: 40px;
+    background: transparent !important; 
+}
+
+.interface-viewport {
+    max-width: 1500px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr; 
+    gap: 40px;
+    align-items: flex-end;
+}
+
+.control-panel-right {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    margin-bottom: 4vh; 
+}
+
+.tactics-box { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 18px; 
+}
+
+/* ВЫСОКИЕ КНОПКИ ВЫБОРА (СТАТИЧНЫЕ) */
+.tactic-button {
+    background: linear-gradient(135deg, rgba(109, 40, 217, 0.4) 0%, rgba(76, 29, 149, 0.4) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 14px !important;
+    padding: 34px 28px; 
+    text-align: left;
+    cursor: pointer;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transform: none !important; 
+    box-shadow: none !important;
+    transition: background-color 0.3s ease, border-color 0.3s ease, opacity 0.3s ease !important;
+}
+
+.tactic-button:hover {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.5) 0%, rgba(91, 33, 182, 0.5) 100%) !important;
+    border-color: #c084fc !important;
+}
+
+/* Механика скрытого текста директив */
+.tactic-text-hidden {
+    max-height: 0;
+    opacity: 0;
+    font-size: 1.0rem; 
+    line-height: 1.5;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.95);
+    transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    overflow: hidden;
+    margin-top: 0;
+}
+
+.tactic-button.revealed {
+    background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%) !important;
+    border-color: #c084fc !important;
+    box-shadow: 0 0 15px rgba(192, 132, 252, 0.3) !important;
+}
+
+.tactic-button.revealed .tactic-text-hidden {
+    max-height: 140px;
+    opacity: 1;
+    margin-top: 10px;
+}
+
+.tactics-box.has-chosen .tactic-button:not(.revealed) { opacity: 0.35; }
+.tactics-box.has-chosen .tactic-button:not(.revealed):hover { opacity: 0.65; }
+
+.tactic-role { font-size: 0.75rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
+.role-analytics  { color: #00ff88; text-shadow: 0 0 8px rgba(0, 255, 136, 0.6); }
+.role-fighter    { color: #ff3b3b; text-shadow: 0 0 8px rgba(255, 59, 59, 0.6); }
+.role-diplomat   { color: #00b4d8; text-shadow: 0 0 8px rgba(0, 180, 216, 0.6); }
+.role-charismatic { color: #ffb800; text-shadow: 0 0 8px rgba(255, 184, 0, 0.6); }
+
+/* КНОПКА ФИКСАЦИИ ВЫБОРА */
+.confirm-btn {
+    width: 100%;
+    padding: 20px; 
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.95rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.02);
+    cursor: not-allowed;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.confirm-btn.ready-to-submit {
+    background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(109, 40, 217, 0.4);
+    animation: confirmPulse 2s infinite alternate ease-in-out;
+}
+
+.confirm-btn.ready-to-submit:hover {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    box-shadow: 0 0 25px rgba(192, 132, 252, 0.6);
+    transform: translateY(-1px);
+}
+.confirm-btn.ready-to-submit:active { transform: scale(0.99); }
+
+/* ==========================================================================
+   06. СТАБИЛЬНЫЕ СИСТЕМНЫЕ АНИМАЦИИ И МОБИЛЬНЫЙ БЛОКИРОВЩИК
+   ========================================================================== */
+.orientation-blocker-overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: radial-gradient(circle at center, #1b0c3a 0%, #020206 100%);
+    z-index: 999999 !important; justify-content: center; align-items: center; text-align: center; padding: 30px;
+}
+
+@media (max-width: 950px) and (orientation: portrait) {
+    .orientation-blocker-overlay { display: flex; }
+    .blocker-content h2 { font-size: 1.1rem; font-weight: 900; letter-spacing: 2px; color: #c084fc; text-shadow: 0 0 10px rgba(192, 132, 252, 0.6); margin-top: 20px; margin-bottom: 10px; }
+    .blocker-content p { font-size: 0.85rem; color: rgba(255, 255, 255, 0.6); line-height: 1.4; max-width: 280px; margin: 0 auto; }
+
+
+    /* Анимированная CSS иконка вращающегося телефона */
+    .phone-rotate-icon {
+        width: 40px; height: 70px;
+        border: 3px solid #ffffff;
+        border-radius: 6px;
+        margin: 0 auto;
+        position: relative;
+        animation: rotateDevice 2.5s infinite ease-in-out;
+    }
+    .phone-rotate-icon::after {
+        content: ''; position: absolute;
+        bottom: 4px; left: calc(50% - 3px);
+        width: 6px; height: 6px;
+        background-color: #ffffff; border-radius: 50%;
+    }
+}
+
+/* 3. Оптимизируем масштаб 3D-комнаты, когда телефон перевернут ПРАВИЛЬНО (Horizontal/Landscape) */
+@media (max-width: 950px) and (orientation: landscape) {
+    .scene-3d {
+        transform: scale(0.62) translateZ(-150px) !important; /* Корректируем глубину кадра */
+    }
+    .robot-3d-object {
+        transform: scale(0.68) translateZ(-200px) !important;
+        left: 0vw !important;
+        bottom: -15vh !important; /* Идеальная посадка подиума на мелких экранах */
+    }
+    .interface-viewport {
+        grid-template-columns: 1fr !important; /* Убираем пустую левую колонку */
+    }
+    .tactics-box {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important; /* Кнопки компактно встают 2х2 */
+        gap: 10px !important;
+    }
+    .tactic-button {
+        padding: 16px 20px !important;
+    }
+    .tactic-text-hidden {
+        font-size: 0.8rem !important;
+    }
+    .confirm-btn {
+        padding: 14px !important;
+        font-size: 0.85rem !important;
+    }
+}
+
+@keyframes rotateDevice {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(90deg); }
+    100% { transform: rotate(90deg); }
+}
