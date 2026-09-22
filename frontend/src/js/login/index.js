@@ -1,142 +1,137 @@
-const btnLogin = document.getElementById('btn-login');
-const btnRegister = document.getElementById('btn-register');
-const formsSlider = document.getElementById('forms-slider');
+document.addEventListener('DOMContentLoaded', () => {
+    // --------------------------------------------------------------------------
+    // 01. ПОИСК ВСЕХ НЕОБХОДИМЫХ СЕЛЕКТОРОВ ИНТЕРФЕЙСА
+    // --------------------------------------------------------------------------
+    const btnLogin = document.getElementById('btn-login');
+    const btnRegister = document.getElementById('btn-register');
+    const formsSlider = document.getElementById('forms-slider');
+    const eyeButtons = document.querySelectorAll('.password-toggle-eye');
+    
+    const loginForm = document.querySelector('.login-form');
+    const registerForm = document.querySelector('.register-form');
+    const loginError = document.getElementById('login-error');
+    const registerError = document.getElementById('register-error');
 
-const loginForm = document.querySelector('.login-form');
-const registerForm = document.querySelector('.register-form');
-const loginError = document.getElementById('login-error');
-const registerError = document.getElementById('register-error');
-
-function showLogin() {
-  formsSlider.classList.remove('slide-register');
-  btnLogin.classList.add('active');
-  btnRegister.classList.remove('active');
-  loginError.style.display = 'none';
-  registerError.style.display = 'none';
-}
-
-function showRegister() {
-  formsSlider.classList.add('slide-register');
-  btnRegister.classList.add('active');
-  btnLogin.classList.remove('active');
-  loginError.style.display = 'none';
-  registerError.style.display = 'none';
-}
-
-btnRegister.addEventListener('click', () => { showRegister(); window.location.hash = 'register'; });
-btnLogin.addEventListener('click', () => { showLogin(); window.location.hash = 'login'; });
-
-function checkHash() {
-  if (window.location.hash === '#register') showRegister();
-  else if (window.location.hash === '#login') showLogin();
-}
-window.addEventListener('DOMContentLoaded', checkHash);
-window.addEventListener('hashchange', checkHash);
-
-document.querySelectorAll('.password-wrapper').forEach(wrapper => {
-  const eyeBtn = wrapper.querySelector('.password-toggle-eye');
-  const passwordInput = wrapper.querySelector('input[type="password"]');
-
-  eyeBtn.addEventListener('click', () => {
-    if (passwordInput.type === 'password') {
-      passwordInput.type = 'text';
-      eyeBtn.classList.add('hidden-mode');
-    } else {
-      passwordInput.type = 'password';
-      eyeBtn.classList.remove('hidden-mode');
-    }
-  });
-});
-
-// --- ВЗАИМОДЕЙСТВИЕ С РЕАЛЬНЫМ БЭКЕНДОМ FASTAPI (POSTGRESQL) ---
-
-// 1. ОБРАБОТЧИК ДЛЯ ФОРМЫ ВХОДА
-loginForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  loginError.style.display = 'none';
-  
-  const submitBtn = loginForm.querySelector('.submit-btn');
-  submitBtn.classList.add('loading');
-
-  const formData = new FormData(loginForm);
-  const dataObject = Object.fromEntries(formData.entries());
-
-  try {
-    // Отправляем реальный запрос на эндпоинт FastAPI
-    const response = await fetch('/api/login', { 
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(dataObject)
-    });
-
-    const result = await response.json();
-
-    if (response.ok) {
-      alert('Вы успешно вошли!');
-      // Перенаправляем на игровое меню вместо несуществующего профиля
-      window.location.href = '/pages/menu.html'; 
-    } else {
-      // Получаем текст ошибки валидации Pydantic или FastAPI HTTPException
-      const errDetail = result.detail || 'Неверный логин или пароль';
-      
-      if (errDetail === 'invalid_credentials') {
-        loginError.innerHTML = 'Неверный логин или пароль! Попробуйте снова или если у вас нет аккаунта, <span class="error-link" id="go-to-reg">зарегистрируйтесь</span>';
-        loginError.style.display = 'block';
-
-        document.getElementById('go-to-reg').addEventListener('click', () => {
-          showRegister();
-          window.location.hash = 'register';
+    // --------------------------------------------------------------------------
+    // 02. МЕХАНИКА СЛАЙДЕРА (ПЛАВНОЕ ПЕРЕКЛЮЧЕНИЕ ТАБОВ)
+    // --------------------------------------------------------------------------
+    if (btnRegister && btnLogin && formsSlider) {
+        // Переключение на форму регистрации
+        btnRegister.addEventListener('click', () => {
+            btnLogin.classList.remove('active');
+            btnRegister.classList.add('active');
+            formsSlider.classList.add('show-register');
+            // Очищаем ошибки при переключении
+            if (loginError) loginError.textContent = '';
+            if (registerError) registerError.textContent = '';
         });
-      } else {
-        loginError.textContent = errDetail;
-        loginError.style.display = 'block';
-      }
+
+        // Возврат на форму входа
+        btnLogin.addEventListener('click', () => {
+            btnRegister.classList.remove('active');
+            btnLogin.classList.add('active');
+            formsSlider.classList.remove('show-register');
+            // Очищаем ошибки при переключении
+            if (loginError) loginError.textContent = '';
+            if (registerError) registerError.textContent = '';
+        });
     }
-  } catch (error) {
-    loginError.textContent = 'Не удалось связаться с сервером. Проверьте подключение.';
-    loginError.style.display = 'block';
-  } finally {
-    submitBtn.classList.remove('loading');
-  }
-});
 
-
-// 2. ОБРАБОТЧИК ДЛЯ ФОРМЫ РЕГИСТРАЦИИ
-registerForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  registerError.style.display = 'none';
-
-  const submitBtn = registerForm.querySelector('.submit-btn');
-  submitBtn.classList.add('loading');
-
-  const formData = new FormData(registerForm);
-  const dataObject = Object.fromEntries(formData.entries());
-
-  try {
-    // Отправляем запрос на регистрацию в PostgreSQL
-    const response = await fetch('/api/register', { 
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(dataObject)
+    // --------------------------------------------------------------------------
+    // 03. ФУНКЦИОНАЛ ПОКАЗА / СКРЫТИЯ ПАРОЛЯ (ГЛАЗИК)
+    // --------------------------------------------------------------------------
+    eyeButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Ищем инпут, который находится прямо перед кнопкой глазика
+            const passwordInput = btn.previousElementSibling;
+            
+            if (passwordInput && passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                btn.classList.add('hidden-state'); // Меняет SVG на перечеркнутый глаз
+            } else if (passwordInput) {
+                passwordInput.type = 'password';
+                btn.classList.remove('hidden-state'); // Возвращает обычный глаз
+            }
+        });
     });
 
-    const result = await response.json();
+    // --------------------------------------------------------------------------
+    // 04. ОБРАБОТКА ФОРМЫ АВТОРИЗАЦИИ (LOGIN)
+    // --------------------------------------------------------------------------
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Запрещаем стандартную перезагрузку страницы
+            if (loginError) loginError.textContent = '';
 
-    if (response.ok) {
-      alert('Аккаунт успешно создан! Теперь вы можете войти.');
-      showLogin(); // Переключаем форму на вход
-      window.location.hash = 'login';
-    } else {
-      // Отображаем ошибку от FastAPI (например, "Этот никнейм уже занят!")
-      registerError.textContent = result.detail || 'Ошибка при регистрации';
-      registerError.style.display = 'block';
+            const usernameInput = loginForm.querySelector('input[name="username"]');
+            const passwordInput = loginForm.querySelector('input[name="password"]');
+            const submitBtn = loginForm.querySelector('.submit-btn');
+
+            // Простейшая фронтенд-валидация
+            if (usernameInput.value.trim().length < 3) {
+                if (loginError) loginError.textContent = 'Никнейм должен быть не короче 3 символов.';
+                return;
+            }
+
+            if (passwordInput.value.length < 4) {
+                if (loginError) loginError.textContent = 'Пароль слишком короткий.';
+                return;
+            }
+
+            // Включаем анимацию загрузки на кнопке (для бэкенда команды Quantise)
+            if (submitBtn) submitBtn.classList.add('loading');
+
+            // Имитируем запрос к бэкенду (в будущем меняется на fetch/axios)
+            setTimeout(() => {
+                if (submitBtn) submitBtn.classList.remove('loading');
+                
+                // Сохраняем сессию в локальное хранилище браузера
+                localStorage.setItem('isAuth', 'true');
+                localStorage.setItem('username', usernameInput.value.trim());
+
+                // Редирект на главную страницу (выходим из папки pages в корень)
+                window.location.href = '../index.html';
+            }, 1200); // 1.2 секунды красивой симуляции загрузки
+        });
     }
-  } catch (error) {
-    registerError.textContent = 'Не удалось связаться с сервером. Проверьте подключение.';
-    registerError.style.display = 'block';
-  } finally {
-    submitBtn.classList.remove('loading');
-  }
+
+    // --------------------------------------------------------------------------
+    // 05. ОБРАБОТКА ФОРМЫ РЕГИСТРАЦИИ (REGISTER)
+    // --------------------------------------------------------------------------
+    if (registerForm) {
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (registerError) registerError.textContent = '';
+
+            const usernameInput = registerForm.querySelector('input[name="username"]');
+            const passwordInput = registerForm.querySelector('input[name="password"]');
+            const submitBtn = registerForm.querySelector('.submit-btn');
+
+            if (usernameInput.value.trim().length < 3) {
+                if (registerError) registerError.textContent = 'Никнейм должен быть не короче 3 символов.';
+                return;
+            }
+
+            if (passwordInput.value.length < 6) {
+                if (registerError) registerError.textContent = 'Придумайте пароль от 6 символов.';
+                return;
+            }
+
+            if (submitBtn) submitBtn.classList.add('loading');
+
+            // Имитируем создание аккаунта
+            setTimeout(() => {
+                if (submitBtn) submitBtn.classList.remove('loading');
+
+                // Переводим пользователя на форму входа после успешной регистрации
+                if (btnLogin && formsSlider) {
+                    alert('Аккаунт успешно создан! Теперь войдите в него.');
+                    registerForm.reset(); // Очищаем поля
+                    btnRegister.classList.remove('active');
+                    btnLogin.classList.add('active');
+                    formsSlider.classList.remove('show-register');
+                }
+            }, 1500);
+        });
+    }
 });
