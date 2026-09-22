@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const ARCHETYPES = ["БОЕЦ", "АНАЛИТИК", "ДИПЛОМАТ", "ХАРИЗМА"];
 
 const interviewSteps = {
@@ -98,8 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (valEl) valEl.textContent = `${playerMetrics[key]}%`;
         }
     }
-
-=======
 ﻿let currentSessionId = null;
 let activeScenarioId = "crisis"; // Значение по умолчанию, если в URL ничего нет
 let currentOptions = {}; // Сюда сохраняем 4 текста развилок от ИИ
@@ -132,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Эффект печатной машинки
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
     function typeWriterBoss(text, element, speed = 8, callback) {
         element.textContent = ''; 
         let i = 0;
@@ -148,7 +144,6 @@ document.addEventListener('DOMContentLoaded', () => {
         type();
     }
 
-<<<<<<< HEAD
     if (mainSubmitBtn) {
         mainSubmitBtn.addEventListener('click', () => {
             if (nextStepTarget) {
@@ -235,7 +230,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateMetricsDOM();
     loadQuestion('question_1');
 });
-=======
     // Функция, которая берет 4 варианта от ИИ и создает под них интерактивные карточки
     function renderDynamicCards(options) {
         choicesContainer.innerHTML = '';
@@ -351,4 +345,3 @@ document.addEventListener('DOMContentLoaded', () => {
     // Первый автоматический запуск при входе на страницу, чтобы ИИ выдал приветственный наезд
     makeTurn(true);
 });
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
