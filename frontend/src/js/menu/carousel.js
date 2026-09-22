@@ -142,18 +142,15 @@ window.addEventListener('wheel', function(event) {
 }, { passive: false });
 
 function startActiveSimulation() {
-<<<<<<< HEAD
     window.location.href = `chat.html?scenario=${activeStoryId}`;
 }
 
 document.addEventListener("DOMContentLoaded", function() {
     loadStoryTree('crisis'); // Стартуем с легкого уровня по центру
 });
-=======
     // Проверяем, определен ли текущий активный сценарий
     const scenario = typeof activeStoryId !== 'undefined' ? activeStoryId : 'crisis';
     
     // Перенаправляем на новую страницу игры в той же папке
     window.location.href = `scene1.html?scenario=${scenario}`;
 }
->>>>>>> d4f6d46ff6385b97c52b0398b75ca628b8d04f36
