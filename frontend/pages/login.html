@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация — CONFESSION</title>
+    <link rel="stylesheet" href="../src/css/login/index.css">
+    <link rel="stylesheet" href="../src/css/login/form.css">
+</head>
+<body>
+       <header class="site-header">
+        <div class="header-container">
+            <div class="header-left">
+                <!-- Строка 15: Изменено на ../index.html -->
+                <a href="../index.html" class="logo">CONFESSION</a>
+            </div>
+            <div></div>
+            <div class="header-right">
+                <!-- Строка 20: Изменено на ../index.html -->
+                <a href="../index.html" class="nav-home-btn">На главную</a>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="auth-container">
+            <div class="auth-header">
+                <button type="button" id="btn-login" class="auth-toggle-btn active">Вход</button>
+                <button type="button" id="btn-register" class="auth-toggle-btn">Регистрация</button>
+            </div>
+            <div class="auth-body">
+                <div class="forms-slider" id="forms-slider">
+                    
+                    <!-- Форма Входа -->
+                    <form class="auth-form login-form">
+                        <h3>Войти в аккаунт</h3>
+                        <input type="text" name="username" placeholder="Никнейм" required>
+                        <div class="password-wrapper">
+                            <input type="password" name="password" placeholder="Пароль" required>
+                            <button type="button" class="password-toggle-eye" aria-label="Показать/скрыть пароль"></button>
+                        </div>
+                        <div class="error-container" id="login-error"></div>
+                        <button type="submit" class="submit-btn">
+                            <span class="btn-text">Войти</span>
+                        </button>
+                    </form>
+
+                    <!-- Форма Регистрации -->
+                    <form class="auth-form register-form">
+                        <h3>Регистрация</h3>
+                        <input type="text" name="username" placeholder="Никнейм" required>
+                        <div class="password-wrapper">
+                            <input type="password" name="password" placeholder="Пароль" required>
+                            <button type="button" class="password-toggle-eye" aria-label="Показать/скрыть пароль"></button>
+                        </div>
+                        <div class="error-container" id="register-error"></div>
+                        <button type="submit" class="submit-btn">
+                            <span class="btn-text">Создать аккаунт</span>
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="site-footer">
+        <p>Разработка команды Quantise.</p>
+    </footer>
+    <script src="../src/js/login/index.js"></script>
+</body>
+</html>

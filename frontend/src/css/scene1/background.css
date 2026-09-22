@@ -1,0 +1,35 @@
+.animated-bg {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; background-color: #0c0817;
+    background-image: 
+        radial-gradient(circle at 75% 25%, rgba(139, 92, 246, 0.25) 0%, transparent 50%), 
+        radial-gradient(circle at 20% 75%, rgba(59, 130, 246, 0.22) 0%, transparent 60%),  
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),                
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 50px 50px, 50px 50px;
+    animation: backgroundShift 20s infinite ease-in-out alternate; overflow: hidden;
+}
+
+.bg-glow-particle { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 70%); filter: blur(20px); animation: floatingGlow 12s infinite ease-in-out; pointer-events: none; }
+.particle-1 { width: 600px; height: 600px; top: -10%; left: -10%; animation-duration: 14s; }
+.particle-2 { width: 500px; height: 500px; bottom: -5%; right: 10%; background: radial-gradient(circle, rgba(59, 130, 246, 0.06) 0%, transparent 70%); animation-duration: 18s; }
+
+.nano-particle { position: absolute; background: linear-gradient(135deg, #c4b5fd, #60a5fa); border-radius: 50%; opacity: 0; bottom: -20px; animation: floatUpward 10s infinite linear; pointer-events: none; box-shadow: 0 0 10px #a78bfa; }
+.p1 { left: 10%; width: 4px; height: 4px; animation-duration: 12s; animation-delay: 0s; }
+.p2 { left: 25%; width: 6px; height: 6px; animation-duration: 15s; animation-delay: 2s; }
+.p3 { left: 45%; width: 3px; height: 3px; animation-duration: 9s;  animation-delay: 4s; }
+.p4 { left: 60%; width: 5px; height: 5px; animation-duration: 14s; animation-delay: 1s; }
+.p5 { left: 75%; width: 4px; height: 4px; animation-duration: 11s; animation-delay: 6s; }
+.p6 { left: 90%; width: 6px; height: 6px; animation-duration: 16s; animation-delay: 3s; }
+.p7 { left: 35%; width: 5px; height: 5px; animation-duration: 13s; animation-delay: 7s; }
+.p8 { left: 80%; width: 3px; height: 3px; animation-duration: 10s; animation-delay: 5s; }
+
+@keyframes backgroundShift {
+    0% { background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%; }
+    50% { background-position: 15px -15px, -15px 15px, 0% 0%, 0% 0%; }
+    100% { background-position: -15px 15px, 15px -15px, 0% 0%, 0% 0%; }
+}
+@keyframes floatingGlow { 0%, 100% { transform: scale(1) translate(0, 0); } 50% { transform: scale(1.1) translate(-4%, 3%); } }
+@keyframes floatUpward { 0% { transform: translateY(0); opacity: 0; } 15%, 85% { opacity: 0.8; } 100% { transform: translateY(-105vh); opacity: 0; } }
+
+.neon-orbit { animation: spinOrbit 30s infinite linear; }
+@keyframes spinOrbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
