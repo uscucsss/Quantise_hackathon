@@ -1,280 +1,161 @@
-/* Общие сбросы стилей */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #193bd4 0%, #7021c0 100%);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-/* --- АДАПТИВНАЯ ШАПКА САЙТА --- */
-.site-header {
-  background-color: #1f0170;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  padding: 15px 20px;
-}
-
-.header-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo {
-  font-size: 20px;
-  font-weight: bold;
-  color: #ffffff;
-  text-decoration: none;
-}
-
-.nav-home-btn {
-  display: inline-block;
-  text-decoration: none;
-  background-color: #007bff;
-  color: #fff;
-  padding: 8px 18px;
-  border-radius: 5px;
-  font-size: 15px;
-  font-weight: 500;
-  transition: background-color 0.2s;
-}
-
-.nav-home-btn:hover {
-  background-color: #0056b3;
-}
-
-/* --- ОСНОВНОЙ КОНТЕНТ --- */
-.main-content {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px 20px;
-}
-
-/* --- БЛОК АВТОРИЗАЦИИ --- */
 .auth-container {
-  width: 100%;
-  max-width: 400px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+    width: 100% !important;
+    max-width: 440px !important;
+    background: rgba(13, 13, 33, 0.65) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5) !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
 }
 
 .auth-header {
-  display: flex;
-  border-bottom: 1px solid #eee;
+    display: flex !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    background: rgba(3, 3, 14, 0.4) !important;
 }
 
 .auth-toggle-btn {
-  flex: 1;
-  padding: 15px;
-  background: none;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  color: #666;
-  transition: all 0.3s ease;
-  outline: none;
+    flex: 1 !important;
+    padding: 20px !important;
+    background: none !important;
+    border: none !important;
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 1.5px !important;
+    text-transform: uppercase !important;
+    color: rgba(255, 255, 255, 0.3) !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    outline: none !important;
+}
+
+.auth-toggle-btn:hover {
+    color: rgba(255, 255, 255, 0.7) !important;
 }
 
 .auth-toggle-btn.active {
-  color: #007bff;
-  font-weight: bold;
-  border-bottom: 2px solid #007bff;
-  background-color: #fafafa;
+    color: #ffffff !important;
+    border-bottom: 2px solid #6d28d9 !important;
+    text-shadow: 0 0 10px rgba(109, 40, 217, 0.6) !important;
 }
 
 .auth-body {
-  width: 100%;
-  overflow: hidden;
+    overflow: hidden !important;
+    width: 100% !important;
 }
 
 .forms-slider {
-  display: flex;
-  width: 200%;
-  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex !important;
+    width: 200% !important; 
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important;
 }
 
-.forms-slider.slide-register {
-  transform: translateX(-50%);
+.forms-slider.show-register {
+    transform: translateX(-50%) !important;
 }
 
 .auth-form {
-  width: 50%;
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+    width: 50% !important; 
+    padding: 40px !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.auth-form::before {
+    content: "ИНТЕРАКТИВНАЯ ПЛАТФОРМА" !important;
+    font-size: 0.6rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 2px !important;
+    color: #7c3aed !important;
+    text-align: center !important;
+    margin-bottom: 8px !important;
+    display: block !important;
 }
 
 .auth-form h3 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 5px;
+    font-size: 1.5rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    text-align: center !important;
+    margin-bottom: 30px !important;
+    color: #ffffff !important;
 }
 
-.auth-form input {
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
-  width: 100%;
-  outline: none;
+input[type="text"],
+input[type="password"] {
+    width: 100% !important;
+    padding: 16px 18px !important;
+    margin-bottom: 18px !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+    font-size: 0.95rem !important;
+    color: #ffffff !important;
+    background-color: rgba(5, 5, 18, 0.5) !important;
+    outline: none !important;
 }
 
-.auth-form input:focus {
-  border-color: #007bff;
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: rgba(109, 40, 217, 0.6) !important;
+    box-shadow: 0 0 15px rgba(109, 40, 217, 0.2) !important;
 }
 
-/* Контейнер для пароля и глазика */
 .password-wrapper {
-  position: relative;
-  width: 100%;
+    position: relative !important;
+    width: 100% !important;
 }
 
 .password-wrapper input {
-  padding-right: 40px; /* Оставляем место под глазик */
+    padding-right: 48px !important;
 }
 
-/* Кастомный глазик на CSS */
 .password-toggle-eye {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 12px;
-  border: 2px solid #666;
-  border-radius: 50% 50%;
-  background: none;
-  cursor: pointer;
-  outline: none;
+    position: absolute !important;
+    right: 16px !important;
+    top: 26px !important;
+    transform: translateY(-50%) !important;
+    background: none !important;
+    border: none !important;
+    width: 20px !important;
+    height: 20px !important;
+    opacity: 0.3 !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://w3.org' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E") !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
 }
 
-/* Зрачок глаза */
-.password-toggle-eye::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 6px;
-  height: 6px;
-  background-color: #666;
-  border-radius: 50%;
-}
-
-/* Перечеркивание глаза, когда пароль скрыт */
-.password-toggle-eye.hidden-mode::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 22px;
-  height: 2px;
-  background-color: #666;
-  transform: translate(-50%, -50%) rotate(45deg);
-}
-
-/* Вывод ошибок */
-.error-container {
-  color: #dc3545;
-  font-size: 13px;
-  line-height: 1.4;
-  text-align: center;
-  background-color: #fde8e8;
-  padding: 10px;
-  border-radius: 5px;
-  display: none;
-}
-
-.error-link {
-  color: #007bff;
-  text-decoration: underline;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-/* Кнопка отправки */
+/* Кнопка отправки формы — Точная копия "НАЧАТЬ СИМУЛЯЦИЮ" */
 .submit-btn {
-  position: relative;
-  padding: 12px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.2s;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    width: 100% !important;
+    background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%) !important; /* Тот же градиент */
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 14px !important;
+    border-radius: 8px !important; /* Тот же радиус скругления */
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease-in-out !important;
+    margin-top: 10px !important;
+    box-shadow: 0 4px 15px rgba(109, 40, 217, 0.3) !important;
 }
 
 .submit-btn:hover {
-  background-color: #0056b3;
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%) !important;
+    box-shadow: 0 0 20px rgba(109, 40, 217, 0.5) !important;
+    transform: translateY(-1px) !important;
 }
 
-/* --- АНИМАЦИЯ ЗАГРУЗКИ (СПИННЕР) --- */
-.spinner {
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: #fff;
-  animation: spin 1s ease-in-out infinite;
-  display: none; /* Скрыт по умолчанию */
-}
-
-/* Класс состояния загрузки */
-.submit-btn.loading .btn-text {
-  display: none; /* Прячем текст */
-}
-
-.submit-btn.loading .spinner {
-  display: block; /* Показываем крутилку */
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* --- ПОДВАЛ САЙТА --- */
-.site-footer {
-  background-color: #333;
-  color: #aaa;
-  text-align: center;
-  padding: 15px 20px;
-  font-size: 14px;
-}
-
-/* --- МЕДИА-ЗАПРОСЫ (МОБИЛЬНАЯ АДАПТАЦИЯ) --- */
-@media (max-width: 480px) {
-  .header-container {
-    padding: 5px 0;
-  }
-  .logo {
-    font-size: 20px;
-  }
-  .nav-home-btn {
-    padding: 6px 12px;
-    font-size: 14px;
-  }
-  .main-content {
-    padding: 20px 10px;
-  }
-  .auth-form {
-    padding: 20px 15px;
-  }
+.error-container {
+    color: #ff3b3b !important;
+    font-size: 0.85rem !important;
+    margin-bottom: 12px !important;
+    min-height: 18px !important;
 }
