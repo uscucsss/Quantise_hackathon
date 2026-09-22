@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Симуляция — CONFESSION</title>
+    <link rel="stylesheet" href="../src/css/scene2/index.css">
+</head>
+<body class="simulation-body">
+
+    <!-- БЛОКИРУЮЩИЙ МОБИЛЬНЫЙ БАННЕР ОРИЕНТАЦИИ (СВЕРХУ ВСЕХ) -->
+    <div class="orientation-blocker-overlay">
+        <div class="blocker-content">
+            <div class="phone-rotate-icon"></div>
+            <h2>ТРЕБУЕТСЯ ПЕРЕВОРОТ ЭКРАНА</h2>
+            <p>Для активации Ситуационного Центра 2.0 разверните устройство горизонтально</p>
+        </div>
+    </div>
+
+    <!-- КНОПКА ВЫЗОВА ВЫДВИЖНОЙ ВКЛАДКИ (СТРОГО НА САМОМ ВЕРХНЕМ СЛОЕ) -->
+    <button type="button" id="menu-toggle-btn" class="menu-trigger-btn" aria-label="Открыть меню">
+        <span class="trigger-icon"></span>
+    </button>
+
+    <!-- ВЫДВИЖНАЯ ВКЛАДКА МЕНЮ (GLASSMORPHIC SIDEBAR) -->
+    <div id="side-menu-panel" class="side-navigation-panel">
+        <div class="side-menu-content">
+            <h3 class="side-menu-title">Система заблокирована</h3>
+            <div class="side-menu-actions">
+                <button type="button" class="side-action-btn btn-exit" id="action-exit">Выйти</button>
+                <button type="button" class="side-action-btn btn-save" id="action-save-exit">Сохранить и выйти</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОНОЛИТНЫЙ 3D ТЕАТР -->
+    <div class="view-3d-container">
+        <div class="scene-3d">
+            
+            <!-- ГРАНИ КОМНАТЫ С СВЕТЛЫМ ФИОЛЕТОВЫМ НЕОНОМ -->
+            <div class="wall wall-back"></div>  
+            <div class="wall wall-left"></div>  
+            <div class="wall wall-right"></div> 
+            <div class="wall wall-floor"></div> 
+            <div class="wall wall-roof"></div>  
+
+            <!-- 3D-ОБЪЕКТ: РОБОТ НА ПЕРЕДНЕМ ПЛАНЕ -->
+            <div class="robot-3d-object">
+                
+                <!-- ОБЪЕМНАЯ ГОЛОВА-МОНИТОР -->
+                <div class="cube-head">
+                    <div class="face-head head-front">
+                        <div class="crt-scanlines"></div>
+                        <div class="monitor-screen">
+                            <div class="screen-matrix-bg"></div>
+                            <div class="robot-face-expression">
+                                <div class="ai-text-output" id="robotFace">
+                                    Загрузка систем...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="face-head head-back"></div>
+                    <div class="face-head head-left"></div>
+                    <div class="face-head head-right"></div>
+                    <div class="face-head head-top"></div>
+                    <div class="face-head head-bottom"></div>
+                </div>
+
+                <!-- ОБЪЕМНОЕ ТЕЛО (КОРПУС АНДРОИДА) -->
+                <div class="cube-body">
+                    <div class="face-body body-front">
+                        <div class="core-reactor"></div>
+                    </div>
+                    <div class="face-body body-back"></div>
+                    <div class="face-body body-left"></div>
+                    <div class="face-body body-right"></div>
+                    <div class="face-body body-top"></div>
+                    <div class="face-body body-bottom"></div>
+                </div>
+
+                <!-- ОБЪЕМНЫЙ ПОДИУМ-ПОДСТАВКА -->
+                <div class="robot-stand-base">
+                    <div class="face-stand stand-front"></div>
+                    <div class="face-stand stand-back"></div>
+                    <div class="face-stand stand-left"></div>
+                    <div class="face-stand stand-right"></div>
+                    <div class="face-stand stand-top"></div>
+                </div>
+
+            </div> <!-- Конец 3D-робота -->
+
+        </div>
+    </div>
+
+    <!-- HUD ИНТЕРФЕЙС РОЛЕВЫХ ТАКТИК -->
+    <div class="hud-interface">
+        <div class="interface-viewport">
+            <div></div> 
+            
+            <!-- Правая управляющая консоль -->
+            <div class="control-panel-right">
+                <section class="tactics-box">
+                    
+                    <!-- Tactics 1: Аналитик -->
+                    <button class="tactic-button" data-tactic="analytics">
+                        <span class="tactic-role role-analytics">[ АНАЛИТИК ]</span>
+                        <span class="tactic-text-hidden" id="text-analytics">...</span>
+                    </button>
+                    
+                    <!-- Tactics 2: Боец -->
+                    <button class="tactic-button" data-tactic="fighter">
+                        <span class="tactic-role role-fighter">[ БОЕЦ ]</span>
+                        <span class="tactic-text-hidden" id="text-fighter">...</span>
+                    </button>
+
+                    <!-- Tactics 3: Дипломат -->
+                    <button class="tactic-button" data-tactic="diplomat">
+                        <span class="tactic-role role-diplomat">[ ДИПЛОМАТ ]</span>
+                        <span class="tactic-text-hidden" id="text-diplomat">...</span>
+                    </button>
+
+                    <!-- Tactics 4: Харизматик -->
+                    <button class="tactic-button" data-tactic="charismatic">
+                        <span class="tactic-role role-charismatic">[ ХАРИЗМАТИК ]</span>
+                        <span class="tactic-text-hidden" id="text-charismatic">...</span>
+                    </button>
+
+                </section>
+
+                <!-- КНОПКА ПОДТВЕРЖДЕНИЯ ВЫБОРА -->
+                <button type="button" id="confirm-selection-btn" class="confirm-btn" disabled>
+                    <span class="confirm-btn-text">Подтвердить выбор</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../src/js/scene2/index.js"></script>
+</body>
+</html>
