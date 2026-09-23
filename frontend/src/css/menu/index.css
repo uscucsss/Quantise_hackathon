@@ -89,7 +89,7 @@ body {
 
 .scenarios-list {
     position: absolute;
-    left: -480px; 
+    left: -400px; 
     top: 50%;
     transform: translateY(-50%) rotate(16deg);
     width: 760px; 
