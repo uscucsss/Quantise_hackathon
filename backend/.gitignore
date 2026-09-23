@@ -13,3 +13,5 @@ env/
 # Настройки редакторов и системные файлы
 .idea/
 .DS_Store
+*.iml
+.idea_modules/
