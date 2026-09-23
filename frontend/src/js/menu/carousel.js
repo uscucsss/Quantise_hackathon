@@ -1,4 +1,4 @@
-// База данных разветвленных горизонтальных графов розвилок
+// База данных разветвленных горизонтальных графов развилок
 const storiesData = {
     crisis: {
         title: "Кризис-менеджмент (Дерево развилок)",
@@ -141,10 +141,30 @@ window.addEventListener('wheel', function(event) {
     }
 }, { passive: false });
 
+
+// --- ИНТЕГРАЦИОННОЕ ОБНОВЛЕНИЕ ШАГА 2 ---
 function startActiveSimulation() {
-    window.location.href = `chat.html?scenario=${activeStoryId}`;
+    let targetScenarioJsonId = "deadline_crisis"; // Дефолтный Антон для сдвига дедлайнов
+
+    if (activeStoryId === "crisis") {
+        targetScenarioJsonId = "crisis_management"; 
+    } else if (activeStoryId === "check") {
+        targetScenarioJsonId = "price_increase"; 
+    }
+
+    // ИСПРАВЛЕНО: Теперь перенаправляем строго на scene2.html!
+    window.location.href = `/pages/scene2.html?scenario=${targetScenarioJsonId}`;
 }
+
+
+
 
 document.addEventListener("DOMContentLoaded", function() {
     loadStoryTree('crisis'); // Стартуем с легкого уровня по центру
+    
+    // Вешаем клик на вашу кнопку старта (обычно у вас в HTML стоит onclick="startActiveSimulation()")
+    const playBtn = document.querySelector('.start-simulation-btn') || document.getElementById('start-game-btn');
+    if (playBtn) {
+        playBtn.addEventListener('click', startActiveSimulation);
+    }
 });
