@@ -1,0 +1,206 @@
+/* ==========================================================================
+   01. ГЛОБАЛЬНЫЕ СБРОСЫ И НАСТРОЙКИ СТАТИСТИКИ
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0; padding: 0;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Идеальный глубокий матовый фон со смещенным градиентом в точности по вашему референсу */
+body.dashboard-body {
+    width: 100%;
+    min-height: 100vh;
+    background: radial-gradient(circle at 50% 45%, #181432 0%, #0d0a1a 45%, #05040a 100%) !important;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    padding: 40px 20px;
+    position: relative;
+}
+
+/* Мягкий рассеянный фиолетовый импульс строго за панелью дашборда */
+.bg-glow-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: #6d28d9;
+    filter: blur(150px);
+    opacity: 0.15;
+    top: calc(50% - 300px); 
+    left: calc(50% - 300px);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ==========================================================================
+   02. СТИЛИЗАЦИЯ КОНСОЛИ ДАШБОРДА И КАРТОЧЕК KPI (2 КОЛОНКИ)
+   ========================================================================== */
+.dashboard-wrapper {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 900px;
+    background: rgba(14, 13, 26, 0.75) !important;
+    border: 2px solid rgba(192, 132, 252, 0.35) !important; /* Светлая сиреневая рамка в тон */
+    border-radius: 20px;
+    padding: 45px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8), 0 0 40px rgba(157, 78, 221, 0.1);
+}
+
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+.header-title {
+    font-size: 2.2rem;
+    font-weight: 900;
+    letter-spacing: 4px;
+    color: #ffffff;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    margin-bottom: 8px;
+}
+.header-subtitle {
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #c084fc;
+    text-shadow: 0 0 8px rgba(192, 132, 252, 0.3);
+}
+
+/* Сетка карточек метрик выстроена ровно в две симметричные колонки */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-bottom: 45px;
+}
+.metric-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+.metric-card:hover {
+    background: rgba(192, 132, 252, 0.03);
+    border-color: rgba(192, 132, 252, 0.25);
+}
+.metric-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.35);
+    font-weight: 700;
+}
+.metric-value {
+    font-size: 2.0rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+.metric-value small { font-size: 1.0rem; color: rgba(255, 255, 255, 0.35); }
+/* ==========================================================================
+   03. ПРОФИЛЬ ПЕРЕГОВОРЩИКА И СВЕТЯЩИЕСЯ ПРОГРЕСС-БАРЫ
+   ========================================================================== */
+.profile-section {
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 40px;
+}
+.section-title {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 25px;
+    font-weight: 800;
+}
+.skills-container { display: flex; flex-direction: column; gap: 22px; }
+.skill-item { display: flex; flex-direction: column; gap: 8px; }
+.skill-info { display: flex; justify-content: space-between; align-items: center; }
+.skill-name { font-size: 0.8rem; font-weight: 800; letter-spacing: 1.5px; }
+.skill-percent { font-size: 0.9rem; font-weight: 700; color: rgba(255, 255, 255, 0.5); }
+
+.skill-bar-bg {
+    width: 100%; height: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 20px; overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.01);
+}
+.skill-bar { height: 100%; border-radius: 20px; width: 0; }
+
+/* Привязка уникальной неоновой глитч-эмиссии для каждого класса */
+.bar-analytics { background: #00ff88; box-shadow: 0 0 10px #00ff88; animation: fillBar 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.bar-fighter   { background: #ff3b3b; box-shadow: 0 0 10px #ff3b3b; animation: fillBar 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s; }
+.bar-diplomat  { background: #00b4d8; box-shadow: 0 0 10px #00b4d8; animation: fillBar 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.4s; }
+.bar-charismatic { background: #ffb800; box-shadow: 0 0 10px #ffb800; animation: fillBar 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.6s; }
+
+/* ==========================================================================
+   04. СТИЛИЗАЦИЯ ПОДВАЛА ДАШБОРДА И ДВУХ СТАТИЧНЫХ КНОПОК
+   ========================================================================== */
+.dashboard-footer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Две симметричные колонки для кнопок контроля */
+    gap: 20px;
+    width: 100%;
+}
+
+.dashboard-btn {
+    width: 100%;
+    padding: 18px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.dashboard-btn:active { transform: scale(0.99); }
+
+/* Кнопка "Переиграть" (Матовая с фиолетовым неоновым ободком) */
+.btn-replay {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(192, 132, 252, 0.25);
+    color: rgba(255, 255, 255, 0.8);
+}
+.btn-replay:hover {
+    background: rgba(192, 132, 252, 0.1);
+    border-color: #c084fc;
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(192, 132, 252, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Кнопка "В меню" (Насыщенный фиолетовый кибер-градиент) */
+.btn-return {
+    background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    box-shadow: 0 4px 20px rgba(109, 40, 217, 0.3);
+}
+.btn-return:hover {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    box-shadow: 0 0 25px rgba(192, 132, 252, 0.4);
+    transform: translateY(-2px);
+}
+
+@keyframes fillBar { from { width: 0; } }
+
+@media (max-width: 768px) {
+    .dashboard-wrapper { padding: 25px; }
+    .header-title { font-size: 1.6rem; letter-spacing: 2px; }
+    .metrics-grid { grid-template-columns: 1fr; gap: 15px; }
+    .metric-card { padding: 18px; }
+    .metric-value { font-size: 1.6rem; }
+    .dashboard-footer { grid-template-columns: 1fr; gap: 12px; }
+    .dashboard-btn { padding: 15px; }
+}
