@@ -266,17 +266,17 @@ async def chat_step(state: GameState, db: Session = Depends(get_db)):
         db.commit()
     return {
         "session_id": session_id,
-        "speaker": "Антон",
+        # ИСПРАВЛЕНО: Теперь на Сцену 3 летит красивое очищенное имя из скобок
+        "speaker": scenario["name"].split("(")[1].replace(")", "").upper() if "(" in scenario["name"] else "КЛИЕНТ",
         "client_replica": client_replica,
         "feedback": feedback,
         "new_stress": new_stress,
         "new_agreement": new_agreement,
         "game_status": current_status,
-        "current_stage": current_stage_id, # ВОЗВРАЩАЕМ ТЕКУЩИЙ ШАГ
+        "current_stage": current_stage_id,
         "options": options,
         "radar_metrics": radar_metrics
     }
-
 
 
 # --- ИНТЕГРАЦИЯ И СЛИЯНИЕ С ФРОНТЕНДОМ ---

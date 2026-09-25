@@ -70,11 +70,15 @@
     font-weight: 500;
 }
 
-/* Плавное исчезновение */
+
+/* Плавное исчезновение и полное отключение кликов */
 .preloader-overlay.fade-away {
     opacity: 0;
     visibility: hidden;
+    pointer-events: none !important;
+    z-index: -1000 !important;
 }
+
 
 @keyframes spinLoader {
     0% { transform: rotate(0deg); }

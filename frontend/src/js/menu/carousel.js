@@ -1,4 +1,4 @@
-// База данных разветвленных горизонтальных графов розвилок
+// База данных разветвленных горизонтальных графов развилок
 const storiesData = {
     crisis: {
         title: "Кризис-менеджмент (Дерево развилок)",
@@ -86,24 +86,20 @@ const storyIds = ['crisis', 'deadline', 'check', 'budget', 'final'];
 let currentActiveIndex = 0;
 let activeStoryId = "crisis";
 
-// Новые точные углы сжатия дуги
 const rotationAngles = { crisis: 36, deadline: 18, check: 0, budget: -18, final: -36 };
 
 function loadStoryTree(storyId) {
-    const mainStartBtn = document.getElementById('startSimBtn');
+    const mainStartBtn = document.getElementById('startSimBtn') || document.querySelector('.main-action-btn');
     const rightPanel = document.querySelector('.right-panel');
     const scenariosList = document.querySelector('.scenarios-list');
     const titleElement = document.getElementById('currentStoryTitle');
     const treeZone = document.getElementById('treeFlowZone');
 
-    // 1. ПРОВЕРКА НАЛИЧИЯ ДАННЫХ ДЛЯ ОБЫЧНЫХ СЦЕНАРИЕВ
-    // Если это закрытые модули, которых нет в базе, мы НЕ делаем вылет из функции, а даем карусели прокрутиться
     const isLocked = (storyId === 'budget' || storyId === 'final');
 
     if (!storiesData[storyId] && !isLocked) return;
 
-    // 2. ВОЗВРАЩАЕМ ПАШИНУ МАТЕМАТИКУ ИНДЕКСОВ И ВРАЩЕНИЯ (Колесо больше не заклинит)
-    activeStory = storyId;
+    activeStoryId = storyId; // Исправлено: пишем в глобальный activeStoryId
     currentActiveIndex = storyIds.indexOf(storyId);
 
     if (rotationAngles[storyId] !== undefined && scenariosList) {
@@ -114,21 +110,19 @@ function loadStoryTree(storyId) {
     const targetCard = document.getElementById(`item_${storyId}`);
     if (targetCard) targetCard.classList.add('active');
 
-    // 3. БЛОК УПРАВЛЕНИЯ КНОПКОЙ И ДЕРЕВОМ (Разделяем логику открытых и закрытых)
     if (isLocked) {
         if (titleElement) titleElement.innerText = "МОДУЛЬ В РАЗРАБОТКЕ";
-        if (treeZone) treeZone.innerHTML = ''; // Очищаем дерево
+        if (treeZone) treeZone.innerHTML = ''; 
         
         if (mainStartBtn) {
             mainStartBtn.innerText = "В РАЗРАБОТКЕ";
             mainStartBtn.disabled = true;
-            mainStartBtn.style.background = "#2a2440"; // Серый цвет
+            mainStartBtn.style.background = "#2a2440"; 
             mainStartBtn.style.color = "rgba(255,255,255,0.2)";
-            mainStartBtn.style.cursor = "pointer";
-            mainStartBtn.onclick = null;
+            mainStartBtn.style.cursor = "not-allowed";
+            mainStartBtn.style.pointerEvents = "none";
         }
     } else {
-        // Логика плавного переключения для ОТКРЫТЫХ сценариев
         if (rightPanel) rightPanel.classList.add('fade-out');
 
         setTimeout(() => {
@@ -140,30 +134,21 @@ function loadStoryTree(storyId) {
             if (mainStartBtn) {
                 mainStartBtn.innerText = "НАЧАТЬ СИМУЛЯЦИЮ";
                 mainStartBtn.disabled = false;
-                mainStartBtn.style.background = ""; // Возвращаем фиолетовый из CSS
+                mainStartBtn.style.background = ""; 
                 mainStartBtn.style.color = "";
                 mainStartBtn.style.cursor = "pointer";
-                
-                // Перенаправление на нужные страницы
-                mainStartBtn.onclick = () => {
-                    if (storyId === 'final') {
-                        window.location.href = 'scene1.html'; // Твой готовый дашборд
-                    } else {
-                        window.location.href = `${storyId}.html`;
-                    }
-                };
+                mainStartBtn.style.pointerEvents = "auto";
             }
         }, 200);
     }
 }
-    // Подсветка активной карточки
-    document.querySelectorAll('.scenario-item').forEach(item => item.classList.remove('active'));
+
 // ПЕРЕХВАТЧИК КОЛЕСИКА МЫШИ ДЛЯ РАДИАЛЬНОГО ВРАЩЕНИЯ
 window.addEventListener('wheel', function(event) {
     const leftPanel = document.querySelector('.left-panel');
     if (!leftPanel || !leftPanel.contains(event.target)) return;
 
-    event.preventDefault(); // Блокируем скролл сайта
+    event.preventDefault(); 
 
     if (event.deltaY > 0) {
         if (currentActiveIndex < storyIds.length - 1) {
@@ -178,50 +163,27 @@ window.addEventListener('wheel', function(event) {
     }
 }, { passive: false });
 
+// --- УНИВЕРСАЛЬНЫЙ РОУТЕР ДЛЯ СЦЕНЫ 3 ---
 function startActiveSimulation() {
-    window.location.href = `chat.html?scenario=${activeStoryId}`;
+    let targetScenarioJsonId = "deadline_crisis"; // По умолчанию Антон
+
+    if (activeStoryId === "crisis") {
+        targetScenarioJsonId = "crisis_management"; // Сложный Михаил (Кризис)
+    } else if (activeStoryId === "check") {
+        targetScenarioJsonId = "price_increase"; // Средняя Елена (Повышение чека)
+    }
+
+    // НАМЕРТВО отправляем все 3 сценария на scene3.html
+    window.location.href = `/pages/scene3.html?scenario=${targetScenarioJsonId}`;
 }
 
+
 document.addEventListener("DOMContentLoaded", function() {
-    loadStoryTree('crisis'); // Стартуем с легкого уровня по центру
-});
-// Автоматический блокиратор кнопки для закрытых сценариев
-setInterval(() => {
-    // 1. Находим Пашину кнопку "Начать симуляцию" по тексту
-    const startBtn = document.querySelector('.main-action-btn') || document.querySelector('button'); 
-    const titleElement = document.getElementById('currentStoryTitle');
-
-    if (!startBtn || !titleElement) return;
-
-    // 2. Если заголовок сменился на статус разработки
-    if (titleElement.innerText.includes("В РАЗРАБОТКЕ")) {
-        startBtn.innerText = "В РАЗРАБОТКЕ";
-        startBtn.disabled = true;
-        
-        // Отключаем клики и красим в строгий серый цвет
-        startBtn.style.pointerEvents = "none";
-        startBtn.style.background = "rgba(255, 255, 255, 0.05)";
-        startBtn.style.color = "rgba(255, 255, 255, 0.2)";
-        startBtn.style.border = "1px solid rgba(255, 255, 255, 0.05)";
-        startBtn.style.boxShadow = "none";
-        startBtn.style.cursor = "not-allowed";
-    } else {
-        // Если сценарий открыт — возвращаем оригинальный рабочий фиолетовый вид Паши
-        startBtn.innerText = "НАЧАТЬ СИМУЛЯЦИЮ";
-        startBtn.disabled = false;
-        startBtn.style.pointerEvents = "auto";
-        startBtn.style.background = ""; // Возвращает фиолетовый цвет из CSS
-        startBtn.style.color = "";
-        startBtn.style.border = "";
-        startBtn.style.boxShadow = "";
-        startBtn.style.cursor = "pointer";
-        
-        // Привязываем переход на нашу новую шикарную фиолетовую сцену при выборе финального контракта
-        startBtn.onclick = () => {
-            if (titleElement.innerText.includes("Финальный контракт")) {
-                window.location.href = "scene1.html"; // Твой готовый дашборд
-            }
-        };
+    loadStoryTree('crisis'); // Стартуем с кризиса
+    
+    // Вешаем обработчик клика на главную кнопку ОДИН РАЗ и намертво
+    const startBtn = document.getElementById('startSimBtn') || document.querySelector('.main-action-btn');
+    if (startBtn) {
+        startBtn.addEventListener('click', startActiveSimulation);
     }
-}, 100); // Проверка работает непрерывно каждые 100 миллисекунд
-
+});
