@@ -1,12 +1,12 @@
 .auth-container {
     width: 100% !important;
     max-width: 440px !important;
-    background: rgba(13, 13, 33, 0.65) !important;
-    border: 1px solid rgba(255, 255, 255, 0.06) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
+    background: rgba(11, 11, 28, 0.75) !important; /* Сделали стекло матовым и глубоким */
+    border: 1px solid rgba(255, 255, 255, 0.08) !important; /* Четкая грань ERP-терминала */
+    backdrop-filter: blur(30px) !important;
+    -webkit-backdrop-filter: blur(30px) !important;
     border-radius: 16px !important;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6) !important;
     overflow: hidden !important;
     display: flex !important;
     flex-direction: column !important;
@@ -14,8 +14,8 @@
 
 .auth-header {
     display: flex !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-    background: rgba(3, 3, 14, 0.4) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    background: rgba(3, 3, 14, 0.5) !important;
 }
 
 .auth-toggle-btn {
@@ -25,22 +25,25 @@
     border: none !important;
     font-size: 0.8rem !important;
     font-weight: 700 !important;
-    letter-spacing: 1.5px !important;
+    letter-spacing: 2px !important;
     text-transform: uppercase !important;
-    color: rgba(255, 255, 255, 0.3) !important;
+    color: rgba(255, 255, 255, 0.35) !important;
     cursor: pointer !important;
-    transition: all 0.3s ease !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
     outline: none !important;
+    border-bottom: 2px solid transparent !important;
+    margin-bottom: -1px !important;
 }
 
 .auth-toggle-btn:hover {
-    color: rgba(255, 255, 255, 0.7) !important;
+    color: rgba(255, 255, 255, 0.8) !important;
 }
 
+/* Красивая неоновая нить под активным табом */
 .auth-toggle-btn.active {
     color: #ffffff !important;
-    border-bottom: 2px solid #6d28d9 !important;
-    text-shadow: 0 0 10px rgba(109, 40, 217, 0.6) !important;
+    border-bottom: 2px solid #a14fff !important; 
+    text-shadow: 0 0 10px rgba(161, 79, 255, 0.5) !important;
 }
 
 .auth-body {
@@ -51,7 +54,7 @@
 .forms-slider {
     display: flex !important;
     width: 200% !important; 
-    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1) !important;
 }
 
 .forms-slider.show-register {
@@ -65,44 +68,49 @@
     flex-direction: column !important;
 }
 
+/* Наш фирменный ИИ маркер над заголовком */
 .auth-form::before {
     content: "ИНТЕРАКТИВНАЯ ПЛАТФОРМА" !important;
     font-size: 0.6rem !important;
     font-weight: 800 !important;
     letter-spacing: 2px !important;
-    color: #7c3aed !important;
+    color: #a14fff !important;
     text-align: center !important;
     margin-bottom: 8px !important;
     display: block !important;
 }
 
 .auth-form h3 {
-    font-size: 1.5rem !important;
+    font-size: 1.3rem !important;
     font-weight: 800 !important;
     text-transform: uppercase !important;
-    letter-spacing: 1px !important;
+    letter-spacing: 2px !important;
     text-align: center !important;
     margin-bottom: 30px !important;
     color: #ffffff !important;
 }
 
+/* Прокачиваем инпуты, убираем плоскость */
 input[type="text"],
 input[type="password"] {
     width: 100% !important;
     padding: 16px 18px !important;
     margin-bottom: 18px !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    border-radius: 12px !important;
-    font-size: 0.95rem !important;
+    border-radius: 8px !important; /* Утонченный ERP-радиус под стиль 3 сцены */
+    font-size: 0.9rem !important;
     color: #ffffff !important;
-    background-color: rgba(5, 5, 18, 0.5) !important;
+    background-color: rgba(4, 4, 15, 0.8) !important; /* Плотный глубокий темный фон полей */
+    transition: all 0.25s ease !important;
     outline: none !important;
 }
 
+/* Сочное разгорание фиолетового неона при заполнении */
 input[type="text"]:focus,
 input[type="password"]:focus {
-    border-color: rgba(109, 40, 217, 0.6) !important;
-    box-shadow: 0 0 15px rgba(109, 40, 217, 0.2) !important;
+    border-color: #a14fff !important;
+    box-shadow: 0 0 15px rgba(161, 79, 255, 0.25), inset 0 0 8px rgba(161, 79, 255, 0.05) !important;
+    background-color: rgba(12, 8, 28, 0.85) !important;
 }
 
 .password-wrapper {
@@ -116,8 +124,8 @@ input[type="password"]:focus {
 
 .password-toggle-eye {
     position: absolute !important;
-    right: 16px !important;
-    top: 26px !important;
+    right: 18px !important;
+    top: 24px !important;
     transform: translateY(-50%) !important;
     background: none !important;
     border: none !important;
@@ -127,20 +135,20 @@ input[type="password"]:focus {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://w3.org' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E") !important;
     background-size: contain !important;
     background-repeat: no-repeat !important;
+    cursor: pointer !important;
 }
 
-/* Кнопка отправки формы — Точная копия "НАЧАТЬ СИМУЛЯЦИЮ" */
 .submit-btn {
     width: 100% !important;
-    background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%) !important; /* Тот же градиент */
+    background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%) !important; 
     color: #ffffff !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    padding: 14px !important;
-    border-radius: 8px !important; /* Тот же радиус скругления */
-    font-size: 0.8rem !important;
+    padding: 15px !important;
+    border-radius: 8px !important; 
+    font-size: 0.85rem !important;
     font-weight: 700 !important;
     text-transform: uppercase !important;
-    letter-spacing: 1px !important;
+    letter-spacing: 1.5px !important;
     cursor: pointer !important;
     transition: all 0.2s ease-in-out !important;
     margin-top: 10px !important;
@@ -149,7 +157,7 @@ input[type="password"]:focus {
 
 .submit-btn:hover {
     background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%) !important;
-    box-shadow: 0 0 20px rgba(109, 40, 217, 0.5) !important;
+    box-shadow: 0 0 22px rgba(124, 58, 237, 0.5) !important;
     transform: translateY(-1px) !important;
 }
 

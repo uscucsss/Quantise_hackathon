@@ -77,12 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (loginError) loginError.textContent = 'Пароль слишком короткий.';
                 return;
             }
-            if (response.ok) {
-                alert('Вы успешно вошли!');
-                localStorage.setItem('user_id', result.user_id); // ЗАПОМИНАЕМ ИГРОКА
-                window.location.href = '/pages/menu.html'; 
-              }
-              
 
             // Включаем анимацию загрузки на кнопке (для бэкенда команды Quantise)
             if (submitBtn) submitBtn.classList.add('loading');

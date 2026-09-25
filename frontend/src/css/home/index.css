@@ -216,7 +216,7 @@ main {
 
 @keyframes pulseAnimation {
     0% { transform: scale(1); box-shadow: 0 0 80px rgba(168, 85, 247, 0.35); }
-    50% { transform: scale(1.04); box-shadow: 0 0 100px rgba(99, 102, 241, 0.5); }
+    50% { transform: scale(1.15); box-shadow: 0 0 100px rgba(99, 102, 241, 0.5); }
     100% { transform: scale(1); box-shadow: 0 0 80px rgba(168, 85, 247, 0.35); }
 }
 
@@ -299,3 +299,23 @@ footer {
         display: none !important; /* На смартфонах графику скрываем, на планшетах вернем */
     }
 }
+/* Мягкая неоновая подложка, убирающая пустоту справа */
+body::after {
+    content: '';
+    position: fixed;
+    bottom: -10%;
+    right: -5%;
+    width: 60vw;
+    height: 60vh;
+    background: radial-gradient(circle, rgba(138, 43, 226, 0.15) 0%, rgba(6, 6, 12, 0) 70%);
+    border-radius: 50%;
+    z-index: -1; /* Намертво уходит под текст и кнопки */
+    pointer-events: none;
+    filter: blur(80px); /* Максимально размываем, чтобы получить эффект дорогой дымки */
+}
+
+/* На случай, если у сферы Паши нет плавного перехода */
+.sphere-wrapper, .main-sphere-class {
+    will-change: transform; /* Подсказываем браузеру оптимизировать анимацию */
+}
+
