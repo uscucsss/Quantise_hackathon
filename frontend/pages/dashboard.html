@@ -3,22 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Дашборд Статистики — CONFESSION</title>
+    <title>Дашборд Статистики | CONFESSION</title>
     <link rel="stylesheet" href="../src/css/dashboard/index.css">
 </head>
 <body class="dashboard-body">
-
-    <!-- ФОНОВЫЕ СВЕТОВЫЕ КИБЕРПАНК-ИМПУЛЬСЫ (КАК НА РЕФЕРЕНСЕ) -->
     <div class="bg-glow-glow"></div>
-
     <div class="dashboard-wrapper">
-        <!-- ЗАГОЛОВОК ДАШБОРДА -->
         <header class="dashboard-header">
             <h1 class="header-title">СТАТИСТИКА ПРОХОЖДЕНИЯ</h1>
             <p class="header-subtitle">АНАЛИЗ ОПЕРАЦИОННОЙ ЭФФЕКТИВНОСТИ QUANTISE</p>
         </header>
-
-        <!-- БЛОК 1: ОСНОВНЫЕ МЕТРИКИ КВЕСТА (2 СИММЕТРИЧНЫЕ КОЛОНКИ) -->
         <section class="metrics-grid">
             <div class="metric-card">
                 <span class="metric-label">Время сессии</span>
@@ -26,17 +20,12 @@
             </div>
             <div class="metric-card">
                 <span class="metric-label">Уровень стабильности</span>
-                <!-- ЖЕСТКАЯ ЗАГЛУШКА УДАЛЕНА. ТЕКСТ УПРАВЛЯЕТСЯ СТРОГО ИЗ JS -->
                 <span class="metric-value" id="stability-value-label">...</span>
             </div>
         </section>
-
-        <!-- БЛОК 2: ПРОФИЛЬ ПЕРЕГОВОРЩИКА (РОЛЕВАЯ МОДЕЛЬ ИЗ LOCALSTORAGE) -->
         <section class="profile-section">
             <h2 class="section-title">Профиль переговорщика</h2>
-            
             <div class="skills-container">
-                <!-- Аналитик -->
                 <div class="skill-item">
                     <div class="skill-info">
                         <span class="skill-name" style="color: #00ff88;">[ АНАЛИТИК ]</span>
@@ -44,8 +33,6 @@
                     </div>
                     <div class="skill-bar-bg"><div class="skill-bar bar-analytics"></div></div>
                 </div>
-
-                <!-- Боец -->
                 <div class="skill-item">
                     <div class="skill-info">
                         <span class="skill-name" style="color: #ff3b3b;">[ БОЕЦ ]</span>
@@ -53,8 +40,6 @@
                     </div>
                     <div class="skill-bar-bg"><div class="skill-bar bar-fighter"></div></div>
                 </div>
-
-                <!-- Дипломат -->
                 <div class="skill-item">
                     <div class="skill-info">
                         <span class="skill-name" style="color: #00b4d8;">[ ДИПЛОМАТ ]</span>
@@ -62,8 +47,6 @@
                     </div>
                     <div class="skill-bar-bg"><div class="skill-bar bar-diplomat"></div></div>
                 </div>
-
-                <!-- Харизматик -->
                 <div class="skill-item">
                     <div class="skill-info">
                         <span class="skill-name" style="color: #ffb800;">[ ХАРИЗМАТИК ]</span>
@@ -73,21 +56,15 @@
                 </div>
             </div>
         </section>
-
-        <!-- КНОПКИ УПРАВЛЕНИЯ В ПОДВАЛЕ (В ДВЕ КОЛОНКИ) -->
         <footer class="dashboard-footer">
-            <!-- Кнопка экстренного перезапуска и очистки метрик -->
             <button type="button" id="replay-game-btn" class="dashboard-btn btn-replay">
                 <span>Переиграть</span>
             </button>
-            
-            <!-- Кнопка выхода в корень -->
             <button type="button" id="back-to-menu-btn" class="dashboard-btn btn-return">
                 <span>В меню</span>
             </button>
         </footer>
     </div>
-
     <script src="../src/js/dashboard/index.js"></script>
 </body>
 </html>

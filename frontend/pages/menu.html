@@ -9,7 +9,7 @@
 <body>
     <header class="app-header">
         <div class="logo">CONFESSION</div>
-<a href="../index.html" class="exit-menu-btn">НАЗАД В ГЛАВНОЕ МЕНЮ</a>
+        <a href="../index.html" class="exit-menu-btn">НАЗАД В ГЛАВНОЕ МЕНЮ</a>
     </header>
     <main class="split-container">
         <section class="left-panel">
@@ -39,26 +39,22 @@
                     <h3>Повышение чека</h3>
                     <p>Обоснование индексации стоимости техподдержки на следующий год.</p>
                 </div>
-<div id="item_budget" class="scenario-item" onclick="loadStoryTree('budget')" style="pointer-events: auto !important; cursor: pointer;">
-    <div class="item-header">
-        <span class="badge status-lock">В разработке</span>
-        <span class="badge difficulty-hard">Хардкор</span>
-    </div>
-    <h3>Правки бюджета</h3>
-    <p>Заказчик требует срезать стоимость разработки на 30%. Удержите маржу.</p>
-</div>
-
-<!-- Строка 53: Сценарий 5 (Финальный контракт) -->
-<div id="item_final" class="scenario-item" onclick="loadStoryTree('final')" style="pointer-events: auto !important; cursor: pointer;">
-    <div class="item-header">
-        <span class="badge status-lock">В разработке</span>
-        <span class="badge difficulty-hard">Хардкор</span>
-    </div>
-    <h3>Финальный контракт</h3>
-    <p>Защита жестких условий SLA перед генеральным директором компании.</p>
-</div>
-
-
+                <div id="item_budget" class="scenario-item" onclick="loadStoryTree('budget')" style="pointer-events: auto !important; cursor: pointer;">
+                    <div class="item-header">
+                        <span class="badge status-lock">В разработке</span>
+                        <span class="badge difficulty-hard">Хардкор</span>
+                    </div>
+                    <h3>Правки бюджета</h3>
+                    <p>Заказчик требует срезать стоимость разработки на 30%. Удержите маржу.</p>
+                </div>
+                <div id="item_final" class="scenario-item" onclick="loadStoryTree('final')" style="pointer-events: auto !important; cursor: pointer;">
+                    <div class="item-header">
+                        <span class="badge status-lock">В разработке</span>
+                        <span class="badge difficulty-hard">Хардкор</span>
+                    </div>
+                    <h3>Финальный контракт</h3>
+                    <p>Защита жестких условий SLA перед генеральным директором компании.</p>
+                </div>
             </div>
         </section>
         <section class="right-panel">
@@ -69,10 +65,8 @@
             </div>
             <div class="story-tree-flow" id="treeFlowZone"></div>
             <div class="simulation-start-zone" style="width: 100%; display: flex; justify-content: flex-end; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.04); margin-top: auto;">
-    <!-- ТЕГ <a href> УДАЛЕН. ТЕПЕРЬ КНОПКА СЛУШАЕТ НАШ JS-РАЗДЕЛИТЕЛЬ -->
-    <button class="primary-start-btn" id="startSimBtn">НАЧАТЬ СИМУЛЯЦИЮ</button>
-</div>
-
+                <button class="primary-start-btn" id="startSimBtn">НАЧАТЬ СИМУЛЯЦИЮ</button>
+            </div>
         </section>
     </main>
     <script src="../src/js/menu/carousel.js"></script>
