@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль | CONFESSION</title>
+    <link rel="stylesheet" href="/frontend/src/css/profile/profile.css">
+</head>
+<body>
+    <header class="navbar">
+        <a href="/frontend/index.html" class="logo">CONFESSION</a>
+        <a href="/frontend/index.html" class="btn-nav-active">НА ГЛАВНУЮ</a>
+    </header>
+    <div class="profile-container">
+        <aside class="auth-style-card profile-card">
+            <div class="badge-platform">ИНТЕРАКТИВНАЯ ПЛАТФОРМА</div>
+            <h1 class="card-title">ДАННЫЕ ПРОФИЛЯ</h1>
+            <div class="info-display-group">
+                <span class="field-label">НИКНЕЙМ</span>
+                <div class="profile-value-field" id="user-nickname">Загрузка...</div>
+            </div>
+            <div class="info-display-group">
+                <span class="field-label">ТЕКУЩИЙ ПАРОЛЬ</span>
+                <div class="password-field-container">
+                    <input type="password" id="user-password" value="" readonly autocomplete="off">
+                    <button type="button" id="toggle-password" class="toggle-btn" title="Показать/скрыть">
+                        <svg id="eye-icon" xmlns="http://w3.org" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="account-actions-row">
+                <button id="logout-button" class="action-link link-logout">ВЫЙТИ ИЗ АККАУНТА</button>
+                <button id="delete-account-button" class="action-link link-delete">Удалить аккаунт</button>
+            </div>
+        </aside>
+        <main class="auth-style-card stats-container">
+            <div class="badge-platform">АНАЛИТИЧЕСКИЙ МОДУЛЬ</div>
+            <h1 class="card-title">СТАТИСТИКА ПРОХОЖДЕНИЯ</h1>
+            <div class="card-subtitle">АНАЛИЗ ОПЕРАЦИОННОЙ ЭФФЕКТИВНОСТИ</div>
+            <div class="global-stats-panel">
+                <div class="metric-block-item">
+                    <span class="m-label">ПОБЕДЫ</span>
+                    <span class="m-count" id="total-wins">0</span>
+                </div>
+                <div class="metric-block-item">
+                    <span class="m-label">НЕЙТРАЛЬНО</span>
+                    <span class="m-count" id="total-draws">0</span>
+                </div>
+                <div class="metric-block-item">
+                    <span class="m-label">ПОРАЖЕНИЯ</span>
+                    <span class="m-count" id="total-losses">0</span>
+                </div>
+            </div>
+            <div class="negotiator-profile-box">
+                <h2 class="profile-box-title">ОБЩАЯ СТВТИСТИКА ПРОХОЖДЕНИЙ</h2>
+                <div class="skill-row">
+                    <div class="skill-info">
+                        <span class="skill-name name-analyst">[ АНАЛИТИК ]</span>
+                        <span class="skill-percentage" id="pct-analyst">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill fill-analyst" id="bar-analyst" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="skill-row">
+                    <div class="skill-info">
+                        <span class="skill-name name-fighter">[ БОЕЦ ]</span>
+                        <span class="skill-percentage" id="pct-fighter">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill fill-fighter" id="bar-fighter" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="skill-row">
+                    <div class="skill-info">
+                        <span class="skill-name name-diplomat">[ ДИПЛОМАТ ]</span>
+                        <span class="skill-percentage" id="pct-diplomat">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill fill-diplomat" id="bar-diplomat" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="skill-row">
+                    <div class="skill-info">
+                        <span class="skill-name name-charismatic">[ ХАРИЗМАТИК ]</span>
+                        <span class="skill-percentage" id="pct-charismatic">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill fill-charismatic" id="bar-charismatic" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <footer class="footer">
+        <p>Разработка команды Quantise.</p>
+    </footer>
+    <script src="/frontend/src/js/profile/profile.js"></script>
+</body>
+</html>
