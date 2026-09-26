@@ -1,3 +1,5 @@
+//https://docs.google.com/document/d/16R4tewOn8N9vn74iG5B14q5oIjZLKiezJsVzn5NTjqk/edit?usp=sharing 
+// кир.ха, на, чекни, там часть бред например про ссылки, но с состальным можно работать
 const API_URL = "https://quantise-game.ru"; 
 
 document.addEventListener('DOMContentLoaded', () => {
