@@ -1,11 +1,12 @@
+
 .auth-container {
     width: 100% !important;
     max-width: 440px !important;
-    background: rgba(11, 11, 28, 0.75) !important; /* Сделали стекло матовым и глубоким */
-    border: 1px solid rgba(255, 255, 255, 0.08) !important; /* Четкая грань ERP-терминала */
+    background: rgba(11, 11, 28, 0.75) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.08) !important; 
     backdrop-filter: blur(30px) !important;
     -webkit-backdrop-filter: blur(30px) !important;
-    border-radius: 16px !important;
+    border-radius: 8px !important; 
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6) !important;
     overflow: hidden !important;
     display: flex !important;
@@ -35,11 +36,10 @@
     margin-bottom: -1px !important;
 }
 
-.auth-toggle-btn:hover {
-    color: rgba(255, 255, 255, 0.8) !important;
+.auth-toggle-btn:hover:not(.active) {
+    color: rgba(255, 255, 255, 0.85) !important;
 }
 
-/* Красивая неоновая нить под активным табом */
 .auth-toggle-btn.active {
     color: #ffffff !important;
     border-bottom: 2px solid #a14fff !important; 
@@ -68,7 +68,7 @@
     flex-direction: column !important;
 }
 
-/* Наш фирменный ИИ маркер над заголовком */
+
 .auth-form::before {
     content: "ИНТЕРАКТИВНАЯ ПЛАТФОРМА" !important;
     font-size: 0.6rem !important;
@@ -76,7 +76,7 @@
     letter-spacing: 2px !important;
     color: #a14fff !important;
     text-align: center !important;
-    margin-bottom: 8px !important;
+    margin-bottom: 12px !important; 
     display: block !important;
 }
 
@@ -90,22 +90,21 @@
     color: #ffffff !important;
 }
 
-/* Прокачиваем инпуты, убираем плоскость */
 input[type="text"],
 input[type="password"] {
     width: 100% !important;
     padding: 16px 18px !important;
     margin-bottom: 18px !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    border-radius: 8px !important; /* Утонченный ERP-радиус под стиль 3 сцены */
+    border-radius: 6px !important; 
     font-size: 0.9rem !important;
     color: #ffffff !important;
-    background-color: rgba(4, 4, 15, 0.8) !important; /* Плотный глубокий темный фон полей */
+    background-color: rgba(4, 4, 15, 0.8) !important; 
     transition: all 0.25s ease !important;
     outline: none !important;
 }
 
-/* Сочное разгорание фиолетового неона при заполнении */
+
 input[type="text"]:focus,
 input[type="password"]:focus {
     border-color: #a14fff !important;
@@ -138,27 +137,38 @@ input[type="password"]:focus {
     cursor: pointer !important;
 }
 
+
 .submit-btn {
     width: 100% !important;
     background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%) !important; 
     color: #ffffff !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     padding: 15px !important;
-    border-radius: 8px !important; 
+    border-radius: 6px !important; 
     font-size: 0.85rem !important;
     font-weight: 700 !important;
     text-transform: uppercase !important;
     letter-spacing: 1.5px !important;
     cursor: pointer !important;
-    transition: all 0.2s ease-in-out !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
     margin-top: 10px !important;
     box-shadow: 0 4px 15px rgba(109, 40, 217, 0.3) !important;
 }
 
-.submit-btn:hover {
+.submit-btn:hover:not(:disabled) {
     background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%) !important;
     box-shadow: 0 0 22px rgba(124, 58, 237, 0.5) !important;
     transform: translateY(-1px) !important;
+}
+
+.submit-btn:disabled {
+    background: rgba(109, 40, 217, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    color: rgba(255, 255, 255, 0.25) !important;
+    opacity: 0.35 !important;
+    box-shadow: none !important;
+    cursor: not-allowed !important;
+    transform: none !important;
 }
 
 .error-container {
@@ -167,3 +177,136 @@ input[type="password"]:focus {
     margin-bottom: 12px !important;
     min-height: 18px !important;
 }
+
+.legal-form-wrapper {
+    margin-top: 12px !important; 
+    margin-bottom: 18px !important;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.legal-checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    user-select: none;
+}
+
+.legal-agree-checkbox {
+    width: 14px;
+    height: 14px;
+    accent-color: #a855f7;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.legal-policy-link {
+    color: #a855f7;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.legal-policy-link:hover {
+    text-decoration: underline;
+    color: #6d28d9;
+}
+
+.legal-modal-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(3, 1, 14, 0.0) !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    z-index: -1 !important;
+    opacity: 0;
+    pointer-events: none;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), 
+                backdrop-filter 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                z-index 0s 0.35s;
+}
+
+.legal-modal-overlay.active {
+    z-index: 999999 !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    background: rgba(3, 1, 14, 0.8) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), 
+                backdrop-filter 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.legal-modal-window {
+    background: #0f0b1c !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    width: 90%;
+    max-width: 580px;
+    border-radius: 6px;
+    color: #ffffff !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+    box-sizing: border-box;
+    overflow: hidden;
+    transform: scale(0.92) translateY(10px);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.legal-modal-overlay.active .legal-modal-window {
+    transform: scale(1) translateY(0px) !important;
+}
+
+.legal-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.legal-modal-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #a855f7 !important;
+    font-weight: 700;
+}
+
+.legal-modal-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.4) !important;
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+
+.legal-modal-close:hover {
+    color: #ef4444 !important;
+}
+
+.legal-modal-body {
+    padding: 26px 30px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.75) !important;
+    max-height: 360px;
+    overflow-y: auto;
+    text-align: left;
+}
+
+.legal-modal-body::-webkit-scrollbar { width: 4px; }
+.legal-modal-body::-webkit-scrollbar-thumb { background: rgba(168, 85, 247, 0.4); border-radius: 2px; }
+.legal-modal-body p { margin: 0 0 16px 0; }
+.legal-modal-body strong { color: #ffffff !important; }
