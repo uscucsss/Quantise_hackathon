@@ -28,10 +28,10 @@ html, body {
 }
 
 .header-container {
-    max-width: 100% !important; /* Разрешаем шапке использовать всю ширину экрана */
-    padding: 24px 60px !important; /* Премиальные отступы для баланса элементов */
+    max-width: 100% !important; 
+    padding: 24px 60px !important; 
     display: flex !important;
-    justify-content: space-between !important; /* Разносит бренд влево, а кнопку вправо */
+    justify-content: space-between !important; 
     align-items: center !important;
 }
 
@@ -44,29 +44,30 @@ html, body {
     text-transform: uppercase;
 }
 
-/* Кнопка "На главную" — Точный дизайн с главной страницы, перебивающий дефолтный овал */
 .nav-home-btn,
 header .nav-home-btn,
 .header-right .nav-home-btn {
-    background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%) !important; /* Глубокий градиент */
-    color: #ffffff !important;
+    background: transparent !important; 
+    border: none !important;             
+    color: rgba(255, 255, 255, 0.4) !important; 
     text-decoration: none !important;
-    padding: 12px 26px !important;
-    border-radius: 6px !important; /* Строгое скругление 6px под стиль ERP вместо овала */
-    font-size: 0.8rem !important;
+    padding: 8px 12px !important;
+    font-size: 0.75rem !important;
     font-weight: 700 !important;
     text-transform: uppercase !important;
     letter-spacing: 1.5px !important;
     display: inline-block !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition: color 0.2s ease !important; 
+    box-shadow: none !important;
+    transform: none !important;
 }
 
 .nav-home-btn:hover,
 .header-right .nav-home-btn:hover {
-    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%) !important;
-    box-shadow: 0 0 20px rgba(109, 40, 217, 0.5) !important; /* Мягкое неоновое свечение */
-    transform: translateY(-1px) !important;
+    background: transparent !important;
+    color: #ffffff !important; 
+    box-shadow: none !important;
+    transform: none !important;
 }
 
 .main-content {
@@ -75,4 +76,33 @@ header .nav-home-btn,
     justify-content: center;
     align-items: center;
     padding: 40px 20px;
+}
+
+@media screen and (max-width: 768px) {
+    .nav-home-btn,
+    header .nav-home-btn,
+    .header-right .nav-home-btn {
+        display: none !important;
+    }
+
+    .header-container {
+        justify-content: center !important;
+        padding: 16px 20px !important;
+    }
+
+    .logo::before {
+        content: "\2039\00a0" !important;
+        color: #a855f7 !important; 
+        font-weight: 300 !important;
+        font-size: 1.8rem !important; 
+        line-height: 1 !important;
+        display: inline-block !important;
+        vertical-align: top !important;
+        margin-top: -1px !important;    
+        transition: transform 0.2s ease !important;
+    }
+    
+    .logo:hover::before {
+        transform: translateX(-2px) !important;
+    }
 }
