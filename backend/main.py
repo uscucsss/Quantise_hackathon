@@ -110,26 +110,53 @@ async def chat_step(state: GameState, db: Session = Depends(get_db)):
     is_guest = (state.user_id is None or state.user_id == 0)
 
     # 1. Логика сессии и шкал
+    is_guest = (state.user_id is None or state.user_id == 0)
+
+    # 1. Логика сессии и шкал (Исправленная синхронизация для облачной СУБД)
     if is_guest:
-        session_id = state.session_id or str(uuid.uuid4())
+        # Для гостей генерируем или сохраняем ID сессии в памяти
+        session_id = state.session_id if (state.session_id and state.session_id != "null") else str(uuid.uuid4())
         guest_stress = state.stress if state.stress is not None else 20
         guest_agreement = state.agreement if state.agreement is not None else 30
         stage_id = state.current_stage or "step_1_greeting"
         current_status = "in_progress"
         db_session = None
     else:
-        if not state.session_id:
+        # ИСПРАВЛЕНО: Строго проверяем строковое значение "null", которое может прилететь от JS
+        if not state.session_id or state.session_id == "null":
             session_id = str(uuid.uuid4())
-            db_session = GameSession(id=session_id, user_id=state.user_id, stress=20, agreement=30,
-                                     status="in_progress", current_stage="step_1_greeting")
+            db_session = GameSession(
+                id=session_id,
+                user_id=state.user_id,
+                stress=20,
+                agreement=30,
+                status="in_progress",
+                current_stage="step_1_greeting"
+            )
             db.add(db_session)
-            db.commit()
-            db.refresh(db_session)
+            try:
+                db.commit()
+                db.refresh(db_session)
+            except Exception as db_err:
+                db.rollback()
+                print(f"[QUANTISE DB ERROR]: Сбой создания сессии: {str(db_err)}")
         else:
             session_id = state.session_id
             db_session = db.query(GameSession).filter(GameSession.id == session_id).first()
+
+            # Аварийный фолбек: если фронт прислал старый UUID, которого нет в новой БД Render
             if not db_session:
-                raise HTTPException(status_code=404, detail="Сессия не найдена")
+                db_session = GameSession(
+                    id=session_id,
+                    user_id=state.user_id,
+                    stress=state.stress if state.stress is not None else 20,
+                    agreement=state.agreement if state.agreement is not None else 30,
+                    status="in_progress",
+                    current_stage=state.current_stage or "step_1_greeting"
+                )
+                db.add(db_session)
+                db.commit()
+                db.refresh(db_session)
 
         guest_stress = db_session.stress
         guest_agreement = db_session.agreement
@@ -195,6 +222,7 @@ async def chat_step(state: GameState, db: Session = Depends(get_db)):
             feedback = "Переговоры зашли в тупик."
 
     # 6. Генерация ответа ИИ
+    # 6. Генерация ответа ИИ (Отказоустойчивый гибридный модуль: Локальная Ollama -> Hugging Face -> Фолбек)
     if current_status == "in_progress":
         if not state.player_message:
             if state.scenario_id == "deadline_crisis":
@@ -212,20 +240,71 @@ async def chat_step(state: GameState, db: Session = Depends(get_db)):
                 "1. Отвечай СТРОГО на русском языке! Использовать иероглифы категорически запрещено!\n"
                 "2. Пиши супер-коротко: максимум 1-2 предложения. Никакого JSON!"
             )
-            payload = {
-                "model": MODEL_NAME,
-                "prompt": f"{system_prompt}\n\nПрошлое сообщение игрока ({state.chosen_archetype}): {state.player_message}\nОтвет строго на русском:",
-                "stream": False,
-                "options": {"temperature": 0.3, "top_p": 0.8}
-            }
 
+            # --- СТУЧИМСЯ В ЛОКАЛЬНУЮ OLLAMA (Приоритет) ---
+            client_replica = None
             try:
-                response = requests.post(OLLAMA_URL, json=payload, timeout=30)
-                client_replica = response.json().get("response", "Продолжайте.").strip()
-                if any(ord(char) > 0x4e00 and ord(char) < 0x9fff for char in client_replica):
-                    client_replica = "Я слышу ваши аргументы, но мне нужны конкретные гарантии прямо сейчас."
+                print("[QUANTISE AI]: Попытка обращения к локальной Ollama...")
+                payload = {
+                    "model": MODEL_NAME,
+                    "prompt": f"{system_prompt}\n\nПрошлое сообщение игрока ({state.chosen_archetype}): {state.player_message}\nОтвет строго на русском:",
+                    "stream": False,
+                    "options": {"temperature": 0.3, "top_p": 0.8}
+                }
+                # Ставим таймаут покороче (3.5 сек), чтобы в облаке Render игра не зависала при отсутствии Ollama
+                response = requests.post(OLLAMA_URL, json=payload, timeout=3.5)
+                if response.status_code == 200:
+                    client_replica = response.json().get("response", "").strip()
+                    print("[QUANTISE AI]: Успешный ответ получен от локальной Ollama!")
             except Exception as e:
-                raise HTTPException(status_code=500, detail=f"Ошибка Ollama: {str(e)}")
+                print(f"[QUANTISE AI]: Локальная Ollama недоступна. Ошибка: {str(e)}")
+
+            # --- СТУЧИМСЯ В ОБЛАЧНЫЙ HUGGING FACE INFERENCE API (Фолбек №1 для Render) ---
+            if not client_replica:
+                hf_token = os.getenv("HF_TOKEN", "").strip()
+                HF_API_URL = "https://huggingface.co"
+
+                if hf_token:
+                    try:
+                        print("[QUANTISE AI]: Переключение на облачный Hugging Face Inference API...")
+                        headers = {"Authorization": f"Bearer {hf_token}"}
+                        hf_payload = {
+                            "inputs": f"<|im_start|>system\nТы — жесткий ИИ-клиент в симуляторе переговоров. Отвечай строго на русском языке, лаконично (1-2 предложения), реагируя на стратегию игрока ({state.chosen_archetype}). {scenario['client_profile']}<|im_end|>\n<|im_start|>user\nИнструкция этапа: {stage_data['prompt']}. Сообщение переговорщика: {state.player_message}<|im_end|>\n<|im_start|>assistant\n",
+                            "parameters": {
+                                "max_new_tokens": 120,
+                                "temperature": 0.5,
+                                "return_full_text": False
+                            }
+                        }
+                        hf_res = requests.post(HF_API_URL, headers=headers, json=hf_payload, timeout=7.0)
+                        if hf_res.status_code == 200:
+                            result = hf_res.json()
+                            if isinstance(result, list) and len(result) > 0:
+                                client_replica = result[0].get("generated_text", "").strip()
+                                print("[QUANTISE AI]: Успешный ответ получен от Hugging Face API!")
+                        else:
+                            print(
+                                f"[QUANTISE AI ERROR]: Hugging Face вернул статус {hf_res.status_code}: {hf_res.text}")
+                    except Exception as hf_err:
+                        print(f"[QUANTISE AI CRITICAL]: Сбой Hugging Face API: {str(hf_err)}")
+                else:
+                    print("[QUANTISE AI WARN]: Переменная HF_TOKEN отсутствует в окружении. Облачный ИИ пропущен.")
+
+            # --- АВАРЯЙНАЯ ЗАГЛУШКА (Фолбек №2: Если легли и Ollama, и Hugging Face) ---
+            if not client_replica:
+                print("[QUANTISE AI]: Включение автономного текстового генератора ответов.")
+                fallback_replies = {
+                    "АНАЛИТИК": "Ваши цифры выглядят убедительно, но где гарантии соблюдения SLA в следующем квартале? Мне нужны четкие юридические фиксации.",
+                    "БОЕЦ": "Не нужно давить на меня штрафами! Мы тоже можем выставить встречные претензии. Давайте говорить на языке компромиссов, а не ультиматумов.",
+                    "ДИПЛОМАТ": "Я ценю ваше понимание нашей ситуации. Хорошо, мы готовы рассмотреть перенос дедлайна на две недели, но при условии фиксации текущей стоимости.",
+                    "ХАРИЗМА": "Хах, ладно, ваш подход мне нравится. Вы умеете убеждать. Давайте согласуем доп. соглашение, но сдвиг сроков будет финальным."
+                }
+                client_replica = fallback_replies.get(state.chosen_archetype,
+                                                      "Я услышал вашу позицию. Каковы ваши дальнейшие конкретные предложения по оптимизации проекта?")
+
+            # Валидация на китайские иероглифы (из твоего оригинального кода)
+            if any(ord(char) > 0x4e00 and ord(char) < 0x9fff for char in client_replica):
+                client_replica = "Я слышу ваши аргументы, но мне нужны конкретные гарантии прямо сейчас."
 
         options = stage_data["options"]
     else:
