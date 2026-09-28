@@ -4,13 +4,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const dashboardWrapper = document.querySelector('.dashboard-wrapper');
 
     // ==========================================================================
-    // 01. ВЫВОД ЖИВОГО УРОВНЯ СТАБИЛЬНОСТИ
+    // 01. ЖЕЛЕЗОБЕТОННЫЙ ВЫВОД ЖИВОГО УРОВНЯ СТАБИЛЬНОСТИ
     // ==========================================================================
     const stabilityLabel = document.getElementById('stability-value-label') || document.querySelector('.stability-value');
     if (stabilityLabel) {
+        // Чистый боевой сбор: Читаем живой скор из памяти браузера без заглушек
         const finalStability = parseInt(localStorage.getItem('confession_stability_score') || '100', 10);
         stabilityLabel.innerText = finalStability + '%';
 
+        // Динамически переключаем цвета на самом верхнем уровне приоритета
         if (finalStability <= 50) {
             stabilityLabel.style.setProperty('color', '#ff3b3b', 'important');
         } else if (finalStability < 80) {
@@ -21,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 02. МАТЕМАТИЧЕСКИЙ РАСЧЕТ И ИНЖЕКЦИЯ ПРОЦЕНТОВ РОЛЕЙ
+    // 02. ЧИСТЫЙ МАТЕМАТИЧЕСКИЙ РАСЧЕТ И ИНЖЕКЦИЯ ПРОЦЕНТОВ ИЗ LOCALSTORAGE
     // ==========================================================================
     const cAnalytics = parseInt(localStorage.getItem('confession_clicks_analytics') || '0', 10);
     const cFighter = parseInt(localStorage.getItem('confession_clicks_fighter') || '0', 10);
@@ -31,6 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalClicks = cAnalytics + cFighter + cDiplomat + cCharismatic;
     
     let pAnalytics = 0, pFighter = 0, pDiplomat = 0, pCharismatic = 0;
+    
+    // ЗАГЛУШКИ УДАЛЕНЫ: Если игра не сыграна, базовый баланс по 25%. Иначе — честный расчет!
     if (totalClicks === 0) {
         pAnalytics = 25; pFighter = 25; pDiplomat = 25; pCharismatic = 25;
     } else {
@@ -40,23 +44,31 @@ document.addEventListener('DOMContentLoaded', () => {
         pCharismatic = Math.round((cCharismatic / totalClicks) * 100);
     }
 
+    // ОРИГИНАЛЬНАЯ БЕЗБАГОВАЯ ФУНКЦИЯ ОБНОВЛЕНИЯ DOM
     function updateSkillDOM(barSelector, textSelector, value) {
-        const barEl = document.querySelector(barSelector) || document.getElementById(barSelector.replace('.', ''));
-        const textEl = document.querySelector(textSelector) || document.getElementById(textSelector.replace('.', ''));
-        
-        if (barEl) barEl.style.setProperty('width', value + '%', 'important');
-        if (textEl) {
-            textEl.textContent = value + '%';
-        } else if (barEl && barEl.closest('.skill-item')) {
-            const fallbackText = barEl.closest('.skill-item').querySelector('.skill-percent');
-            if (fallbackText) fallbackText.textContent = value + '%';
+        const barEl = document.querySelector(barSelector);
+        if (barEl) {
+            // Передаем живое значение в CSS-переменную для плавного роста кусков пирога
+            barEl.style.setProperty('--circle-pct', value, 'important');
         }
+        
+        // Определяем ID внутренних спанов для безопасного вывода цифр без затирания имен классов
+        let targetTextId = 'text-pct-analytics';
+        if (barSelector.includes('fighter')) targetTextId = 'text-pct-fighter';
+        if (barSelector.includes('diplomat')) targetTextId = 'text-pct-diplomat';
+        if (barSelector.includes('charismatic')) targetTextId = 'text-pct-charismatic';
+        
+        const textEl = document.getElementById(targetTextId);
+        if (textEl) textEl.textContent = ' ' + value + '%';
     }
 
-    updateSkillDOM('.bar-analytics', '#pct-analyst', pAnalytics);
-    updateSkillDOM('.bar-fighter', '#pct-fighter', pFighter);
-    updateSkillDOM('.bar-diplomat', '#pct-diplomat', pDiplomat);
-    updateSkillDOM('.bar-charismatic', '#pct-charismatic', pCharismatic);
+    // Запуск боевого рендеринга вынесен в микро-таймаут (50ms) для инициализации transition-анимации
+    setTimeout(() => {
+        updateSkillDOM('.bar-analytics', '.label-analytics', pAnalytics);
+        updateSkillDOM('.bar-fighter', '.label-fighter', pFighter);
+        updateSkillDOM('.bar-diplomat', '.label-diplomat', pDiplomat);
+        updateSkillDOM('.bar-charismatic', '.label-charismatic', pCharismatic);
+    }, 50);
 
     // ==========================================================================
     // 03. ОБРАБОТЧИКИ НАЖАТИЙ КНОПОК КОНТРОЛЯ
