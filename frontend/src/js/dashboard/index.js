@@ -4,23 +4,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const dashboardWrapper = document.querySelector('.dashboard-wrapper');
 
     // ==========================================================================
-    // 01. ЖЕЛЕЗОБЕТОННЫЙ ВЫВОД ЖИВОГО УРОВНЯ СТАБИЛЬНОСТИ
+    // 01. ВЫВОД ЖИВОГО УРОВНЯ СТАБИЛЬНОСТИ
     // ==========================================================================
-    const stabilityLabel = document.getElementById('stability-value-label');
+    const stabilityLabel = document.getElementById('stability-value-label') || document.querySelector('.stability-value');
     if (stabilityLabel) {
-        // Читаем живой скор из памяти браузера
         const finalStability = parseInt(localStorage.getItem('confession_stability_score') || '100', 10);
-        
-        // Принудительно вставляем живую цифру в тег
         stabilityLabel.innerText = finalStability + '%';
 
-        // Динамически переключаем цвета на самом верхнем уровне приоритета
         if (finalStability <= 50) {
-            stabilityLabel.style.setProperty('color', '#ff3b3b', 'important'); // Аварийный красный
+            stabilityLabel.style.setProperty('color', '#ff3b3b', 'important');
         } else if (finalStability < 80) {
-            stabilityLabel.style.setProperty('color', '#ffb800', 'important'); // Предупреждающий желтый
+            stabilityLabel.style.setProperty('color', '#ffb800', 'important');
         } else {
-            stabilityLabel.style.setProperty('color', '#00ff88', 'important'); // Штатный зеленый
+            stabilityLabel.style.setProperty('color', '#00ff88', 'important');
         }
     }
 
@@ -44,29 +40,23 @@ document.addEventListener('DOMContentLoaded', () => {
         pCharismatic = Math.round((cCharismatic / totalClicks) * 100);
     }
 
-    const barAnalytics = document.querySelector('.bar-analytics');
-    if (barAnalytics) {
-        barAnalytics.style.setProperty('width', pAnalytics + '%', 'important');
-        barAnalytics.closest('.skill-item').querySelector('.skill-percent').textContent = pAnalytics + '%';
+    function updateSkillDOM(barSelector, textSelector, value) {
+        const barEl = document.querySelector(barSelector) || document.getElementById(barSelector.replace('.', ''));
+        const textEl = document.querySelector(textSelector) || document.getElementById(textSelector.replace('.', ''));
+        
+        if (barEl) barEl.style.setProperty('width', value + '%', 'important');
+        if (textEl) {
+            textEl.textContent = value + '%';
+        } else if (barEl && barEl.closest('.skill-item')) {
+            const fallbackText = barEl.closest('.skill-item').querySelector('.skill-percent');
+            if (fallbackText) fallbackText.textContent = value + '%';
+        }
     }
 
-    const barFighter = document.querySelector('.bar-fighter');
-    if (barFighter) {
-        barFighter.style.setProperty('width', pFighter + '%', 'important');
-        barFighter.closest('.skill-item').querySelector('.skill-percent').textContent = pFighter + '%';
-    }
-
-    const barDiplomat = document.querySelector('.bar-diplomat');
-    if (barDiplomat) {
-        barDiplomat.style.setProperty('width', pDiplomat + '%', 'important');
-        barDiplomat.closest('.skill-item').querySelector('.skill-percent').textContent = pDiplomat + '%';
-    }
-
-    const barCharismatic = document.querySelector('.bar-charismatic');
-    if (barCharismatic) {
-        barCharismatic.style.setProperty('width', pCharismatic + '%', 'important');
-        barCharismatic.closest('.skill-item').querySelector('.skill-percent').textContent = pCharismatic + '%';
-    }
+    updateSkillDOM('.bar-analytics', '#pct-analyst', pAnalytics);
+    updateSkillDOM('.bar-fighter', '#pct-fighter', pFighter);
+    updateSkillDOM('.bar-diplomat', '#pct-diplomat', pDiplomat);
+    updateSkillDOM('.bar-charismatic', '#pct-charismatic', pCharismatic);
 
     // ==========================================================================
     // 03. ОБРАБОТЧИКИ НАЖАТИЙ КНОПОК КОНТРОЛЯ
@@ -78,17 +68,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 dashboardWrapper.style.opacity = '0';
                 dashboardWrapper.style.transform = 'scale(0.95)';
             }
-            // Стираем старую сессию и скоры стабильности для чистого перезапуска
             localStorage.removeItem('confession_stability_score');
             localStorage.removeItem('scene2_saved_step');
-            setTimeout(() => { window.location.href = './scene2.html'; }, 400);
+            setTimeout(() => { window.location.href = '/pages/scene3.html'; }, 400);
         });
     }
 
     if (returnBtn) {
         returnBtn.addEventListener('click', () => {
-            if (dashboardWrapper) { dashboardWrapper.style.transition = 'all 0.4s ease'; dashboardWrapper.style.opacity = '0'; }
-            setTimeout(() => { window.location.href = '../index.html'; }, 300);
+            if (dashboardWrapper) { 
+                dashboardWrapper.style.transition = 'all 0.4s ease'; 
+                dashboardWrapper.style.opacity = '0'; 
+            }
+            window.location.href = '/pages/menu.html';
         });
     }
 });

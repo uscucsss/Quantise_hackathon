@@ -407,3 +407,33 @@ body {
         font-size: 12px !important;
     }
 }
+/* Контейнер для выравнивания кнопок в одну линию */
+.header-controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Стилизация киберпанк-кнопки профиля */
+.profile-nav-trigger {
+    display: none; /* Скрыта по умолчанию, включается через JS при авторизации */
+    background: rgba(20, 15, 35, 0.8);
+    border: 1px solid #a855f7;
+    color: #a855f7;
+    padding: 10px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-family: monospace;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.profile-nav-trigger:hover {
+    background: #a855f7;
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+}
+

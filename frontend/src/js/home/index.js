@@ -26,3 +26,22 @@ document.addEventListener('mousemove', (e) => {
         sphereContainer.style.transition = 'transform 0.2s cubic-bezier(0.25, 1, 0.5, 1)';
     }
 });
+
+
+// Динамическая смена кнопок авторизованного пользователя на Главной
+document.addEventListener('DOMContentLoaded', () => {
+    const isAuth = localStorage.getItem('isAuth') === 'true';
+    const btnLogin = document.getElementById('btn-login');
+    const btnRegister = document.getElementById('btn-register');
+
+    if (isAuth && btnLogin) {
+        if (btnRegister) btnRegister.style.display = 'none'; // Скрываем регистрацию
+        btnLogin.innerText = 'ПЕРЕЙТИ В ПРОФИЛЬ';
+        btnLogin.style.background = 'linear-gradient(90deg, #a78bfa 0%, #7c3aed 100%)';
+        
+        btnLogin.onclick = (e) => {
+            e.preventDefault();
+            window.location.href = '/pages/profile.html';
+        };
+    }
+});

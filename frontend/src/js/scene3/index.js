@@ -47,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let bossTypewriterTimeout;
 
-    // ИСПРАВЛЕНО: Ключ терпения жестко синхронизирован с ответом бэкенда (patience)
     function updateMetricsDOM(metrics) {
         const mappings = [
             { key: 'agreement', barId: 'kpi-agree', valId: 'val-agree' },
@@ -128,19 +127,18 @@ document.addEventListener('DOMContentLoaded', () => {
         confirmBtn.setAttribute('disabled', 'true');
         confirmBtn.disabled = true;
         confirmBtn.innerText = isFirstRun ? 'СИНХРОНИЗАЦИЯ ИИ...' : 'СЧИТЫВАНИЕ ДИРЕКТИВЫ...';
-		    // СЧИТЫВАЕМ И ОБНОВЛЯЕМ ЛОКАЛЬНЫЕ КЛИКИ АРХЕТИПОВ ДЛЯ ДАШБОРДА РЕЗУЛЬТАТОВ
-		if (!isFirstRun && selectedArchetype) {
-			let storageKey = "confession_clicks_analytics";
-			if (selectedArchetype === "БОЕЦ") storageKey = "confession_clicks_fighter";
-			if (selectedArchetype === "ДИПЛОМАТ") storageKey = "confession_clicks_diplomat";
-			if (selectedArchetype === "ХАРИЗМА") storageKey = "confession_clicks_charismatic";
 
-			const pastClicks = parseInt(localStorage.getItem(storageKey) || "0", 10);
-			localStorage.setItem(storageKey, (pastClicks + 1).toString());
+        if (!isFirstRun && selectedArchetype) {
+            let storageKey = "confession_clicks_analytics";
+            if (selectedArchetype === "БОЕЦ") storageKey = "confession_clicks_fighter";
+            if (selectedArchetype === "ДИПЛОМАТ") storageKey = "confession_clicks_diplomat";
+            if (selectedArchetype === "ХАРИЗМА") storageKey = "confession_clicks_charismatic";
+
+            const pastClicks = parseInt(localStorage.getItem(storageKey) || "0", 10);
+            localStorage.setItem(storageKey, (pastClicks + 1).toString());
         
-        // До кучи обновляем текущий скор стабильности (100 - стресс клиента)
-			localStorage.setItem('confession_stability_score', (100 - currentStressVal).toString());
-    }
+            localStorage.setItem('confession_stability_score', (100 - currentStressVal).toString());
+        }
 
         const bodyData = {
             session_id: currentSessionId,
@@ -163,7 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 const data = await response.json();
 
-                // ИСПРАВЛЕНО: Убираем лоадер только после успешного разбора JSON данных
                 const preloader = document.getElementById('app-preloader') || document.querySelector('.preloader-overlay');
                 if (preloader) preloader.classList.add('fade-away');
                 
@@ -180,23 +177,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentStressVal = data.new_stress;
                 currentAgreementVal = data.new_agreement;
 
-                // ИСПРАВЛЕНО: Передаем корректное имя свойства patience
                 updateMetricsDOM({
                     agreement: data.new_agreement,
                     stress: data.new_stress,
                     profit: data.radar_metrics?.argumentation || 0,
                     patience: 100 - data.new_stress
                 });
-
+				
                 if (data.game_status !== "in_progress") {
                     if (speakerTag) speakerTag.textContent = `ИТОГ КВЕСТА // СЦЕНАРИЙ ЗАВЕРШЕН`;
                     speechContent.textContent = data.client_replica;
-                    confirmBtn.classList.add('selection-locked');
                     confirmBtn.innerText = data.game_status === "win" ? "МИССИЯ УСПЕШНА" : "КОНТРАКТ РАЗОРВАН";
                     
                     if (tacticsStack) {
-                        tacticsStack.innerHTML = `<div style="font-size:1.1rem;color:#a78bfa;text-align:center;width:100%;font-weight:700;padding:20px;">[ АНАЛИЗ РЕЗУЛЬТАТА ]: ${data.feedback}</div>`;
+                        tacticsStack.innerHTML = `<div style="font-size:1.1rem;color:#a78bfa;text-align:center;padding:20px;font-weight:700;">[ ИТОГОВЫЙ АНАЛИЗ ]: ${data.feedback}</div>`;
                     }
+
+                    setTimeout(() => {
+                        window.location.assign(window.location.origin + '/pages/dashboard.html'); 
+                    }, 3500);
                     return;
                 }
 

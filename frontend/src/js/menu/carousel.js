@@ -187,3 +187,30 @@ document.addEventListener("DOMContentLoaded", function() {
         startBtn.addEventListener('click', startActiveSimulation);
     }
 });
+
+// Автоматическое добавление кнопки Профиля на экран выбора сценариев
+document.addEventListener('DOMContentLoaded', () => {
+    const isAuthUser = localStorage.getItem('isAuth') === 'true';
+    if (isAuthUser) {
+        const profileBtn = document.createElement('button');
+        profileBtn.className = 'main-action-btn profile-nav-trigger';
+        profileBtn.innerHTML = `[ ПРОФИЛЬ ИГРОКА ]`;
+        profileBtn.style.position = 'fixed';
+        profileBtn.style.top = '20px';
+        profileBtn.style.right = '20px';
+        profileBtn.style.zIndex = '9999';
+        profileBtn.style.padding = '10px 20px';
+        profileBtn.style.border = '1px solid #a78bfa';
+        profileBtn.style.background = 'rgba(20, 15, 35, 0.8)';
+        profileBtn.style.color = '#a78bfa';
+        profileBtn.style.cursor = 'pointer';
+        profileBtn.style.fontFamily = 'monospace';
+        profileBtn.style.fontWeight = 'bold';
+
+        profileBtn.addEventListener('click', () => {
+            window.location.href = '/pages/profile.html';
+        });
+
+        document.body.appendChild(profileBtn);
+    }
+});

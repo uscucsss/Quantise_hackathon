@@ -50,31 +50,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --------------------------------------------------------------------------
-    // 04. ЖИВАЯ ОБРАБОТКА ФОРМЫ АВТОРИЗАЦИИ (РЕАЛЬНЫЙ БЭКЕНД)
+    // 04. ЖИВАЯ ОБРАБОТКА ФОРМЫ АВТОРИЗАЦИИ (ИСПРАВЛЕННАЯ)
     // --------------------------------------------------------------------------
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); 
+            e.preventDefault(); // Намертво блокируем стандартную отправку HTML
+            e.stopPropagation();
             if (loginError) loginError.textContent = '';
 
             const usernameInput = loginForm.querySelector('input[name="username"]');
             const passwordInput = loginForm.querySelector('input[name="password"]');
-            const submitBtn = loginForm.querySelector('.submit-btn');
-
-            if (usernameInput.value.trim().length < 3) {
-                if (loginError) loginError.textContent = 'Никнейм должен быть не короче 3 символов.';
-                return;
-            }
-
-            if (passwordInput.value.length < 4) {
-                if (loginError) loginError.textContent = 'Пароль слишком короткий.';
-                return;
-            }
-
-            if (submitBtn) submitBtn.classList.add('loading');
 
             try {
-                // ОТПРАВЛЯЕМ ЗАПРОС НА НАШ НАСТОЯЩИЙ API БЭКЕНДА
                 const response = await fetch('/api_v1/api/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -87,34 +74,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json();
 
                 if (response.ok) {
-                    // ЗАПОМИНАЕМ ТОКЕН ЮЗЕРА ДЛЯ СЦЕН И ДАШБОРДОВ
                     localStorage.setItem('user_id', result.user_id);
                     localStorage.setItem('username', usernameInput.value.trim());
-
-                    // ПРАВИЛЬНЫЙ РЕДИРЕКТ: перенаправляем строго в лобби выбора сценариев
-                    window.location.href = '/pages/menu.html';
+                    localStorage.setItem('isAuth', 'true');
+                    window.location.href = '/index.html';
                 } else {
-                    if (loginError) {
-                        loginError.textContent = result.detail === "invalid_credentials" 
-                            ? "Неверный никнейм или пароль." 
-                            : "Ошибка авторизации. Проверьте данные.";
-                    }
+                    // Выводим ошибку, если данные неверны. Перезагрузки не будет!
+                    if (loginError) loginError.textContent = result.detail || "Неверный логин или пароль.";
                 }
             } catch (error) {
-                if (loginError) loginError.textContent = "Не удалось связаться с сервером базы данных.";
+                if (loginError) loginError.textContent = "Сбой бэкенда! Проверьте соединение с PostgreSQL.";
                 console.error(error);
-            } finally {
-                if (submitBtn) submitBtn.classList.remove('loading');
             }
         });
     }
 
     // --------------------------------------------------------------------------
-    // 05. ЖИВАЯ ОБРАБОТКА ФОРМЫ РЕГИСТРАЦИИ (РЕАЛЬНЫЙ БЭКЕНД)
+    // 05. ЖИВАЯ ОБРАБОТКА ФОРМЫ РЕГИСТРАЦИИ (ИСПРАВЛЕННАЯ)
     // --------------------------------------------------------------------------
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+            e.preventDefault(); // ИСПРАВЛЕНО: Теперь намертво блокируем перезагрузку и тут!
+            e.stopPropagation();
             if (registerError) registerError.textContent = '';
 
             const usernameInput = registerForm.querySelector('input[name="username"]');
@@ -134,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (submitBtn) submitBtn.classList.add('loading');
 
             try {
-                // ОТПРАВЛЯЕМ ЗАПРОС НА СОЗДАНИЕ ЮЗЕРА В POSTGRES
                 const response = await fetch('/api_v1/api/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -157,6 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         formsSlider.classList.remove('show-register');
                     }
                 } else {
+                    // ИСПРАВЛЕНО: Выводим реальную причину ошибки от FastAPI (например, "Этот никнейм уже занят!")
                     if (registerError) registerError.textContent = result.detail || "Этот никнейм уже занят.";
                 }
             } catch (error) {

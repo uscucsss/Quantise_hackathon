@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const userId = localStorage.getItem('user_id');
     if (!userId || userId === '0' || userId === 'null') {
         alert("Доступ запрещен. Пожалуйста, войдите в аккаунт.");
-        window.location.href = "/frontend/index.html";
+        window.location.href = "/pages/login.html";
         return;
     }
     fetchRealProfileData(userId);
@@ -75,7 +75,7 @@ function initControls(userId) {
     document.getElementById('logout-button').addEventListener('click', (e) => {
         e.preventDefault();
         localStorage.removeItem('user_id'); 
-        window.location.href = "/frontend/pages/login.html#login"; 
+        window.location.href = "/pages/login.html#login"; 
     });
 
     document.getElementById('delete-account-button').addEventListener('click', async (e) => {
@@ -87,7 +87,7 @@ function initControls(userId) {
                 });
                 if (res.ok) {
                     localStorage.removeItem('user_id');
-                    window.location.href = "/frontend/pages/login.html#register";
+                    window.location.href = "/pages/login.html#register";
                 } else {
                     alert("Ошибка сервера при попытке удаления.");
                 }

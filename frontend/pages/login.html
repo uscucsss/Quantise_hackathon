@@ -26,7 +26,7 @@
                 <button type="button" id="btn-register" class="auth-toggle-btn">Регистрация</button>
             </div>
             <div class="auth-body">
-                <div class="forms-slider" id="forms-slider">
+                <div class="forms-slider" id="forms-slider" onsubmit="return false;">
                     
                     <form class="auth-form login-form">
                         <h3>Войти в аккаунт</h3>
@@ -49,7 +49,7 @@
                         </button>
                     </form>
                     
-                    <form class="auth-form register-form">
+                    <form class="auth-form register-form" onsubmit="return false;">
                         <h3>Создать аккаунт</h3>
                         <input type="text" name="username" placeholder="Никнейм" required>
                         <div class="password-wrapper">
@@ -90,46 +90,8 @@
         </div>
     </div>
 
-    <script src="../src/js/login/index.js"></script>
+    <script src="/src/js/login/index.js"></script>
 
-    <script>
-    function openPolicyModal(e) {
-        if (e) e.preventDefault();
-        const modal = document.getElementById('policy-modal');
-        if (modal) modal.classList.add('active');
-    }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const modal = document.getElementById('policy-modal');
-        const closeBtn = document.getElementById('close-policy');
-        
-        const loginForm = document.querySelector('.login-form');
-        const registerForm = document.querySelector('.register-form');
-
-        function setupValidation(form) {
-            if (!form) return;
-            const checkbox = form.querySelector('.legal-agree-checkbox');
-            const submitBtn = form.querySelector('.submit-btn');
-
-            if (checkbox && submitBtn) {
-                const updateBtn = () => {
-                    submitBtn.disabled = !checkbox.checked;
-                    submitBtn.style.opacity = checkbox.checked ? '1' : '0.3';
-                    submitBtn.style.cursor = checkbox.checked ? 'pointer' : 'not-allowed';
-                };
-                updateBtn();
-                checkbox.addEventListener('change', updateBtn);
-            }
-        }
-
-        setupValidation(loginForm);
-        setupValidation(registerForm);
-
-        if (modal) {
-            if (closeBtn) closeBtn.addEventListener('click', () => { modal.classList.remove('active'); });
-            modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); });
-        }
-    });
-    </script>
 </body>
 </html>
