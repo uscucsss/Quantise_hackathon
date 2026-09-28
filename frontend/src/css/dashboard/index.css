@@ -1,5 +1,5 @@
 /* ==========================================================================
-   01. ГЛОБАЛЬНЫЕ СБРОСЫ И НАСТРОЙКИ СТАТИСТИКИ
+   01. ГЛОБАЛЬНЫЕ СБРОСЫ И БЕЛАЯ ПОДСВЕТКА КОНТРАЖУРА НА ФОНЕ
    ========================================================================== */
 * {
     box-sizing: border-box;
@@ -7,200 +7,142 @@
     font-family: 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Идеальный глубокий матовый фон со смещенным градиентом в точности по вашему референсу */
 body.dashboard-body {
-    width: 100%;
-    min-height: 100vh;
-    background: radial-gradient(circle at 50% 45%, #181432 0%, #0d0a1a 45%, #05040a 100%) !important;
-    color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow-x: hidden;
-    padding: 40px 20px;
-    position: relative;
+    width: 100%; min-height: 100vh;
+    background: radial-gradient(circle at 50% 45%, #141126 0%, #090814 55%, #020205 100%) !important;
+    color: #ffffff; display: flex; justify-content: center; align-items: center; overflow-x: hidden; padding: 40px 20px; position: relative;
 }
 
-/* Мягкий рассеянный фиолетовый импульс строго за панелью дашборда */
 .bg-glow-glow {
-    position: absolute;
-    width: 600px; height: 600px;
-    background: #6d28d9;
-    filter: blur(150px);
-    opacity: 0.15;
-    top: calc(50% - 300px); 
-    left: calc(50% - 300px);
-    pointer-events: none;
-    z-index: 1;
+    position: absolute; width: 750px; height: 650px;
+    background: radial-gradient(circle, #ffffff 0%, rgba(255, 255, 255, 0.35) 35%, transparent 70%) !important;
+    filter: blur(140px) !important; opacity: 0.12 !important; top: calc(50% - 325px); left: calc(50% - 375px); pointer-events: none; z-index: 1;
 }
 
 /* ==========================================================================
-   02. СТИЛИЗАЦИЯ КОНСОЛИ ДАШБОРДА И КАРТОЧЕК KPI (2 КОЛОНКИ)
+   02. СТИЛИЗАЦИЯ КОНСОЛИ ДАШБОРДА И КАРТОЧЕК KPI
    ========================================================================== */
 .dashboard-wrapper {
-    position: relative;
-    z-index: 10;
-    width: 100%;
-    max-width: 900px;
-    background: rgba(14, 13, 26, 0.75) !important;
-    border: 2px solid rgba(192, 132, 252, 0.35) !important; /* Светлая сиреневая рамка в тон */
-    border-radius: 20px;
-    padding: 45px;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8), 0 0 40px rgba(157, 78, 221, 0.1);
+    position: relative; z-index: 10; width: 100%; max-width: 850px; background: rgba(10, 9, 18, 0.85) !important;
+    border: 1px solid rgba(192, 132, 252, 0.22) !important; border-radius: 20px; padding: 45px;
+    backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); box-shadow: 0 40px 90px rgba(0, 0, 0, 0.9);
 }
 
-.dashboard-header {
-    text-align: center;
-    margin-bottom: 40px;
-}
-.header-title {
-    font-size: 2.2rem;
-    font-weight: 900;
-    letter-spacing: 4px;
-    color: #ffffff;
-    text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-    margin-bottom: 8px;
-}
-.header-subtitle {
-    font-size: 0.8rem;
-    font-weight: 800;
-    letter-spacing: 3px;
-    color: #c084fc;
-    text-shadow: 0 0 8px rgba(192, 132, 252, 0.3);
-}
+.dashboard-header { text-align: center; margin-bottom: 40px; }
+.header-title { font-size: 2.2rem; font-weight: 900; letter-spacing: 5px; color: #ffffff; text-shadow: 0 0 15px rgba(255, 255, 255, 0.15); margin-bottom: 8px; }
+.header-subtitle { font-size: 0.75rem; font-weight: 800; letter-spacing: 3px; color: #c084fc; opacity: 0.8; }
 
-/* Сетка карточек метрик выстроена ровно в две симметричные колонки */
-.metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
-    margin-bottom: 45px;
-}
-.metric-card {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 14px;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    transition: border-color 0.3s ease, background-color 0.3s ease;
-}
-.metric-card:hover {
-    background: rgba(192, 132, 252, 0.03);
-    border-color: rgba(192, 132, 252, 0.25);
-}
-.metric-label {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: rgba(255, 255, 255, 0.35);
-    font-weight: 700;
-}
-.metric-value {
-    font-size: 2.0rem;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-}
-.metric-value small { font-size: 1.0rem; color: rgba(255, 255, 255, 0.35); }
-/* ==========================================================================
-   03. ПРОФИЛЬ ПЕРЕГОВОРЩИКА И СВЕТЯЩИЕСЯ ПРОГРЕСС-БАРЫ
-   ========================================================================== */
-.profile-section {
-    background: rgba(255, 255, 255, 0.01);
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: 16px;
-    padding: 30px;
-    margin-bottom: 40px;
-}
-.section-title {
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 2.5px;
-    color: rgba(255, 255, 255, 0.6);
-    margin-bottom: 25px;
-    font-weight: 800;
-}
-.skills-container { display: flex; flex-direction: column; gap: 22px; }
-.skill-item { display: flex; flex-direction: column; gap: 8px; }
-.skill-info { display: flex; justify-content: space-between; align-items: center; }
-.skill-name { font-size: 0.8rem; font-weight: 800; letter-spacing: 1.5px; }
-.skill-percent { font-size: 0.9rem; font-weight: 700; color: rgba(255, 255, 255, 0.5); }
-
-.skill-bar-bg {
-    width: 100%; height: 10px;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 20px; overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.01);
-}
-.skill-bar { height: 100%; border-radius: 20px; width: 0; }
-
-/* Привязка уникальной неоновой глитч-эмиссии для каждого класса */
-.bar-analytics { background: #00ff88; box-shadow: 0 0 10px #00ff88; animation: fillBar 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-.bar-fighter   { background: #ff3b3b; box-shadow: 0 0 10px #ff3b3b; animation: fillBar 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s; }
-.bar-diplomat  { background: #00b4d8; box-shadow: 0 0 10px #00b4d8; animation: fillBar 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.4s; }
-.bar-charismatic { background: #ffb800; box-shadow: 0 0 10px #ffb800; animation: fillBar 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.6s; }
+.metrics-grid { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 45px; }
+.metric-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 8px; }
+.metric-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: rgba(255, 255, 255, 0.3); font-weight: 700; }
+.metric-value { font-size: 2.2rem; font-weight: 900; letter-spacing: -0.5px; }
 
 /* ==========================================================================
-   04. СТИЛИЗАЦИЯ ПОДВАЛА ДАШБОРДА И ДВУХ СТАТИЧНЫХ КНОПОК
+   03. ГЕОМЕТРИЯ КРУГОВЫХ СЕКТОРОВ И ИНТЕРАКТИВНЫЕ ХОВЕРЫ
    ========================================================================== */
-.dashboard-footer {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Две симметричные колонки для кнопок контроля */
-    gap: 20px;
-    width: 100%;
+.profile-section { background: rgba(255, 255, 255, 0.005); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 16px; padding: 40px; margin-bottom: 40px; }
+.section-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 3px; color: rgba(255, 255, 255, 0.5); margin-bottom: 35px; font-weight: 800; text-align: center; }
+
+.wheel-chart-container {
+    position: relative; width: 380px; height: 380px; margin: 10px auto 20px auto;
+    display: flex; justify-content: center; align-items: center;
 }
 
-.dashboard-btn {
-    width: 100%;
-    padding: 18px;
-    border-radius: 12px;
-    font-size: 0.9rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+.conic-wheel-matrix {
+    position: relative; width: 280px; height: 280px; border-radius: 50%;
+    background: transparent; overflow: visible;
+    pointer-events: none; 
 }
+
+/* Базовый класс секторов */
+.pure-sector {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%;
+    transform-origin: center !important;
+    /* 🔥 ЖЕСТКОЕ ТРЕБОВАНИЕ: Стартовое состояние из нуля прописано в CSS базой */
+    transform: scale(0); 
+    /* Плавный переход для анимации появления (1.4s) и для ховеров (0.4s) */
+    transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease !important;
+}
+
+/* Сектора заперты строго в своих углах и считывают проценты из JS */
+.pure-sector.bar-analytics {
+    background: conic-gradient(from 0deg, #00ff88 0deg 90deg, transparent 90deg);
+    --base-scale: calc(var(--circle-pct, 0) / 100);
+    transform: scale(var(--base-scale));
+    filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.4));
+}
+.pure-sector.bar-fighter {
+    background: conic-gradient(from 90deg, #ff3b3b 0deg 90deg, transparent 90deg);
+    --base-scale: calc(var(--circle-pct, 0) / 100);
+    transform: scale(var(--base-scale));
+    filter: drop-shadow(0 0 10px rgba(255, 59, 59, 0.4));
+}
+.pure-sector.bar-diplomat {
+    background: conic-gradient(from 180deg, #00b4d8 0deg 90deg, transparent 90deg);
+    --base-scale: calc(var(--circle-pct, 0) / 100);
+    transform: scale(var(--base-scale));
+    filter: drop-shadow(0 0 10px rgba(0, 180, 216, 0.4));
+}
+.pure-sector.bar-charismatic {
+    background: conic-gradient(from 270deg, #ffb800 0deg 90deg, transparent 90deg);
+    --base-scale: calc(var(--circle-pct, 0) / 100);
+    transform: scale(var(--base-scale));
+    filter: drop-shadow(0 0 10px rgba(255, 184, 0, 0.4));
+}
+
+/* Наведение мыши: плавно увеличивает конкретную выбранную четверть круга */
+.label-analytics:hover ~ .conic-wheel-matrix .bar-analytics {
+    transform: scale(calc(var(--base-scale) + 0.07)) !important;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.95)) brightness(1.25) !important;
+}
+.label-fighter:hover ~ .conic-wheel-matrix .bar-fighter {
+    transform: scale(calc(var(--target-scale) + 0.07)) !important;
+    filter: drop-shadow(0 0 20px rgba(255, 59, 59, 0.95)) brightness(1.25) !important;
+}
+.label-diplomat:hover ~ .conic-wheel-matrix .bar-diplomat {
+    transform: scale(calc(var(--base-scale) + 0.07)) !important;
+    filter: drop-shadow(0 0 20px rgba(0, 180, 216, 0.95)) brightness(1.25) !important;
+}
+.label-charismatic:hover ~ .conic-wheel-matrix .bar-charismatic {
+    transform: scale(calc(var(--base-scale) + 0.07)) !important;
+    filter: drop-shadow(0 0 20px rgba(255, 184, 0, 0.95)) brightness(1.25) !important;
+}
+
+/* Разделительные оси четвертей */
+.radar-cross-axis { position: absolute; background: #0c0b1c; z-index: 5; pointer-events: none; }
+.radar-cross-axis.axis-v { top: 50px; left: 189px; width: 2px; height: 280px; }
+.radar-cross-axis.axis-h { top: 189px; left: 50px; width: 280px; height: 2px; }
+
+/* Текстовые метки в углах */
+.radar-abs-label { position: absolute; font-family: 'Segoe UI', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 2px; z-index: 30; cursor: pointer; }
+.label-analytics   { top: 20px;  right: 10px; color: #00ff88; text-shadow: 0 0 10px rgba(0, 255, 136, 0.5); }
+.label-fighter     { bottom: 20px; right: 30px; color: #ff3b3b; text-shadow: 0 0 10px rgba(255, 59, 59, 0.5); }
+.label-diplomat    { bottom: 20px; left: 10px;  color: #00b4d8; text-shadow: 0 0 10px rgba(0, 180, 216, 0.5); }
+.label-charismatic { top: 20px;  left: 5px;   color: #ffb800; text-shadow: 0 0 10px rgba(255, 184, 0, 0.5); }
+
+/* Высокотехнологичная матовая фиолетовая сфера */
+.neon-core-sphere {
+    position: absolute; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%) !important;
+    width: 52px; height: 52px; border-radius: 50%; z-index: 40; pointer-events: none;
+    background: radial-gradient(circle at 50% 50%, #2c1c52 0%, #11102b 100%);
+    border: 2px solid rgb(0, 0, 0);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4), inset 0 0 12px rgba(169, 88, 245, 0.25), 0 10px 20px rgba(0, 0, 0, 0.6);
+    animation: corePulse 3s ease-in-out infinite;
+}
+
+@keyframes corePulse {
+    0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 20px rgba(168, 85, 247, 0.4), inset 0 0 12px rgba(168, 85, 247, 0.25); border-color: rgba(192, 132, 252, 0.45); }
+    50% { transform: scale(1.03) translate(-48.5%, -48.5%); box-shadow: 0 0 28px rgba(192, 132, 252, 0.55), inset 0 0 16px rgba(192, 132, 252, 0.35); border-color: rgba(192, 132, 252, 0.7); filter: brightness(1.08); }
+    100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 20px rgba(168, 85, 247, 0.4), inset 0 0 12px rgba(168, 85, 247, 0.25); border-color: rgba(192, 132, 252, 0.45); }
+}
+
+/* ПОДВАЛ */
+.dashboard-footer { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; }
+.dashboard-btn { width: 100%; padding: 18px; border-radius: 12px; font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
 .dashboard-btn:active { transform: scale(0.99); }
+.btn-replay { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(192, 132, 252, 0.25); color: rgba(255, 255, 255, 0.8); }
+.btn-replay:hover { background: rgba(192, 132, 252, 0.08); border-color: #c084fc; color: #ffffff; box-shadow: 0 0 20px rgba(192, 132, 252, 0.3); transform: translateY(-2px); }
+.btn-return { background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%); border: 1px solid rgba(255, 255, 255, 0.08); color: #ffffff; box-shadow: 0 4px 20px rgba(109, 40, 217, 0.3); }
+.btn-return:hover { background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%); box-shadow: 0 0 25px rgba(192, 132, 252, 0.4); transform: translateY(-2px); }
 
-/* Кнопка "Переиграть" (Матовая с фиолетовым неоновым ободком) */
-.btn-replay {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(192, 132, 252, 0.25);
-    color: rgba(255, 255, 255, 0.8);
-}
-.btn-replay:hover {
-    background: rgba(192, 132, 252, 0.1);
-    border-color: #c084fc;
-    color: #ffffff;
-    box-shadow: 0 0 20px rgba(192, 132, 252, 0.3);
-    transform: translateY(-2px);
-}
-
-/* Кнопка "В меню" (Насыщенный фиолетовый кибер-градиент) */
-.btn-return {
-    background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #ffffff;
-    box-shadow: 0 4px 20px rgba(109, 40, 217, 0.3);
-}
-.btn-return:hover {
-    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
-    box-shadow: 0 0 25px rgba(192, 132, 252, 0.4);
-    transform: translateY(-2px);
-}
-
-@keyframes fillBar { from { width: 0; } }
-
-@media (max-width: 768px) {
-    .dashboard-wrapper { padding: 25px; }
-    .header-title { font-size: 1.6rem; letter-spacing: 2px; }
-    .metrics-grid { grid-template-columns: 1fr; gap: 15px; }
-    .metric-card { padding: 18px; }
-    .metric-value { font-size: 1.6rem; }
-    .dashboard-footer { grid-template-columns: 1fr; gap: 12px; }
-    .dashboard-btn { padding: 15px; }
-}
+@media (max-width: 768px) { .dashboard-wrapper { padding: 25px; } .header-title { font-size: 1.6rem; } .wheel-chart-container { width: 300px; height: 380px; } .dashboard-footer { grid-template-columns: 1fr; gap: 12px; } .dashboard-btn { padding: 15px; } }
