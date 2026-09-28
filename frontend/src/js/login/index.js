@@ -16,22 +16,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // 02. МЕХАНИКА СЛАЙДЕРА (ПЛАВНОЕ ПЕРЕКЛЮЧЕНИЕ ТАБОВ)
     // --------------------------------------------------------------------------
     if (btnRegister && btnLogin && formsSlider) {
-        // Переключение на форму регистрации
         btnRegister.addEventListener('click', () => {
             btnLogin.classList.remove('active');
             btnRegister.classList.add('active');
             formsSlider.classList.add('show-register');
-            // Очищаем ошибки при переключении
             if (loginError) loginError.textContent = '';
             if (registerError) registerError.textContent = '';
         });
 
-        // Возврат на форму входа
         btnLogin.addEventListener('click', () => {
             btnRegister.classList.remove('active');
             btnLogin.classList.add('active');
             formsSlider.classList.remove('show-register');
-            // Очищаем ошибки при переключении
             if (loginError) loginError.textContent = '';
             if (registerError) registerError.textContent = '';
         });
@@ -42,32 +38,29 @@ document.addEventListener('DOMContentLoaded', () => {
     // --------------------------------------------------------------------------
     eyeButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Ищем инпут, который находится прямо перед кнопкой глазика
             const passwordInput = btn.previousElementSibling;
-            
             if (passwordInput && passwordInput.type === 'password') {
                 passwordInput.type = 'text';
-                btn.classList.add('hidden-state'); // Меняет SVG на перечеркнутый глаз
+                btn.classList.add('hidden-state');
             } else if (passwordInput) {
                 passwordInput.type = 'password';
-                btn.classList.remove('hidden-state'); // Возвращает обычный глаз
+                btn.classList.remove('hidden-state');
             }
         });
     });
 
     // --------------------------------------------------------------------------
-    // 04. ОБРАБОТКА ФОРМЫ АВТОРИЗАЦИИ (LOGIN)
+    // 04. ЖИВАЯ ОБРАБОТКА ФОРМЫ АВТОРИЗАЦИИ (РЕАЛЬНЫЙ БЭКЕНД)
     // --------------------------------------------------------------------------
     if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // Запрещаем стандартную перезагрузку страницы
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); 
             if (loginError) loginError.textContent = '';
 
             const usernameInput = loginForm.querySelector('input[name="username"]');
             const passwordInput = loginForm.querySelector('input[name="password"]');
             const submitBtn = loginForm.querySelector('.submit-btn');
 
-            // Простейшая фронтенд-валидация
             if (usernameInput.value.trim().length < 3) {
                 if (loginError) loginError.textContent = 'Никнейм должен быть не короче 3 символов.';
                 return;
@@ -78,28 +71,49 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Включаем анимацию загрузки на кнопке (для бэкенда команды Quantise)
             if (submitBtn) submitBtn.classList.add('loading');
 
-            // Имитируем запрос к бэкенду (в будущем меняется на fetch/axios)
-            setTimeout(() => {
-                if (submitBtn) submitBtn.classList.remove('loading');
-                
-                // Сохраняем сессию в локальное хранилище браузера
-                localStorage.setItem('isAuth', 'true');
-                localStorage.setItem('username', usernameInput.value.trim());
+            try {
+                // ОТПРАВЛЯЕМ ЗАПРОС НА НАШ НАСТОЯЩИЙ API БЭКЕНДА
+                const response = await fetch('/api_v1/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: usernameInput.value.trim(),
+                        password: passwordInput.value
+                    })
+                });
 
-                // Редирект на главную страницу (выходим из папки pages в корень)
-                window.location.href = '../index.html';
-            }, 1200); // 1.2 секунды красивой симуляции загрузки
+                const result = await response.json();
+
+                if (response.ok) {
+                    // ЗАПОМИНАЕМ ТОКЕН ЮЗЕРА ДЛЯ СЦЕН И ДАШБОРДОВ
+                    localStorage.setItem('user_id', result.user_id);
+                    localStorage.setItem('username', usernameInput.value.trim());
+
+                    // ПРАВИЛЬНЫЙ РЕДИРЕКТ: перенаправляем строго в лобби выбора сценариев
+                    window.location.href = '/pages/menu.html';
+                } else {
+                    if (loginError) {
+                        loginError.textContent = result.detail === "invalid_credentials" 
+                            ? "Неверный никнейм или пароль." 
+                            : "Ошибка авторизации. Проверьте данные.";
+                    }
+                }
+            } catch (error) {
+                if (loginError) loginError.textContent = "Не удалось связаться с сервером базы данных.";
+                console.error(error);
+            } finally {
+                if (submitBtn) submitBtn.classList.remove('loading');
+            }
         });
     }
 
     // --------------------------------------------------------------------------
-    // 05. ОБРАБОТКА ФОРМЫ РЕГИСТРАЦИИ (REGISTER)
+    // 05. ЖИВАЯ ОБРАБОТКА ФОРМЫ РЕГИСТРАЦИИ (РЕАЛЬНЫЙ БЭКЕНД)
     // --------------------------------------------------------------------------
     if (registerForm) {
-        registerForm.addEventListener('submit', (e) => {
+        registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             if (registerError) registerError.textContent = '';
 
@@ -119,19 +133,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (submitBtn) submitBtn.classList.add('loading');
 
-            // Имитируем создание аккаунта
-            setTimeout(() => {
-                if (submitBtn) submitBtn.classList.remove('loading');
+            try {
+                // ОТПРАВЛЯЕМ ЗАПРОС НА СОЗДАНИЕ ЮЗЕРА В POSTGRES
+                const response = await fetch('/api_v1/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: usernameInput.value.trim(),
+                        password: passwordInput.value
+                    })
+                });
 
-                // Переводим пользователя на форму входа после успешной регистрации
-                if (btnLogin && formsSlider) {
-                    alert('Аккаунт успешно создан! Теперь войдите в него.');
-                    registerForm.reset(); // Очищаем поля
-                    btnRegister.classList.remove('active');
-                    btnLogin.classList.add('active');
-                    formsSlider.classList.remove('show-register');
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert('Аккаунт успешно создан в системе Quantise! Теперь войдите в него.');
+                    registerForm.reset();
+                    
+                    // Переводим слайдер обратно на вкладку LOGIN
+                    if (btnLogin && formsSlider) {
+                        btnRegister.classList.remove('active');
+                        btnLogin.classList.add('active');
+                        formsSlider.classList.remove('show-register');
+                    }
+                } else {
+                    if (registerError) registerError.textContent = result.detail || "Этот никнейм уже занят.";
                 }
-            }, 1500);
+            } catch (error) {
+                if (registerError) registerError.textContent = "Ошибка сети при попытке регистрации.";
+                console.error(error);
+            } finally {
+                if (submitBtn) submitBtn.classList.remove('loading');
+            }
         });
     }
 });

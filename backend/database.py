@@ -27,7 +27,10 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True, nullable=False)
     password_hash = Column(String, nullable=False)
+    # ДОБАВЛЕНО: Храним маску или исходный пароль для вывода в профиль (хакатоновское упрощение)
+    password_plain = Column(String, default="********")
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
 
 
 class GameSession(Base):

@@ -80,7 +80,9 @@ async def register_user(user_data: UserAuth, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Этот никнейм уже занят!")
 
     hashed = hash_password(user_data.password)
-    new_user = User(username=user_data.username, password_hash=hashed)
+    # ИСПРАВЛЕНО: Сохраняем и хэш, и открытый вид для личного кабинета
+    new_user = User(username=user_data.username, password_hash=hashed, password_plain=user_data.password)
+
     db.add(new_user)
     db.commit()
     return {"message": "Регистрация успешна!"}
@@ -282,6 +284,57 @@ async def chat_step(state: GameState, db: Session = Depends(get_db)):
 # --- ИНТЕГРАЦИЯ И СЛИЯНИЕ С ФРОНТЕНДОМ ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "frontend"))
+
+
+# --- API ЭНДПОИНТЫ ПРОФИЛЯ И СТАТИСТИКИ (ДЛЯ СЦЕНЫ И КАБИНЕТА) ---
+
+@app.get("/api_v1/user/profile/{user_id}")
+async def get_user_profile(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Пользователь не найден")
+
+    # Считываем все завершенные игры этого аккаунта
+    sessions = db.query(GameSession).filter(
+        GameSession.user_id == user_id,
+        GameSession.status != "in_progress"
+    ).all()
+
+    wins = sum(1 for s in sessions if s.status == "win")
+    losses = sum(1 for s in sessions if s.status == "lose")
+    draws = len(sessions) - wins - losses  # Все промежуточные или клинчи
+
+    total_games = len(sessions)
+
+    # Агрегируем средние радарные метрики за всю историю переговорщика
+    avg_stats = {
+        "analyst": int(sum(s.final_argumentation for s in sessions) / total_games) if total_games > 0 else 0,
+        "fighter": int(sum(s.final_politeness for s in sessions) / total_games) if total_games > 0 else 0,
+        "diplomat": int(sum(s.final_empathy for s in sessions) / total_games) if total_games > 0 else 0,
+        "charismatic": int(sum(s.final_flexibility for s in sessions) / total_games) if total_games > 0 else 0
+    }
+
+    return {
+        "nickname": user.username,
+        "password": user.password_plain,
+        "wins": wins,
+        "draws": draws,
+        "losses": losses,
+        "stats": avg_stats
+    }
+
+
+@app.delete("/api_v1/user/profile/{user_id}")
+async def delete_user_profile(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Пользователь не найден")
+
+    # Удаляем юзера (каскад очистит связанные сессии)
+    db.delete(user)
+    db.commit()
+    return {"message": "Аккаунт успешно ликвидирован."}
+
 
 if os.path.exists(FRONTEND_DIR):
     app.mount("/src", StaticFiles(directory=os.path.join(FRONTEND_DIR, "src")), name="src")

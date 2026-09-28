@@ -128,6 +128,19 @@ document.addEventListener('DOMContentLoaded', () => {
         confirmBtn.setAttribute('disabled', 'true');
         confirmBtn.disabled = true;
         confirmBtn.innerText = isFirstRun ? 'СИНХРОНИЗАЦИЯ ИИ...' : 'СЧИТЫВАНИЕ ДИРЕКТИВЫ...';
+		    // СЧИТЫВАЕМ И ОБНОВЛЯЕМ ЛОКАЛЬНЫЕ КЛИКИ АРХЕТИПОВ ДЛЯ ДАШБОРДА РЕЗУЛЬТАТОВ
+		if (!isFirstRun && selectedArchetype) {
+			let storageKey = "confession_clicks_analytics";
+			if (selectedArchetype === "БОЕЦ") storageKey = "confession_clicks_fighter";
+			if (selectedArchetype === "ДИПЛОМАТ") storageKey = "confession_clicks_diplomat";
+			if (selectedArchetype === "ХАРИЗМА") storageKey = "confession_clicks_charismatic";
+
+			const pastClicks = parseInt(localStorage.getItem(storageKey) || "0", 10);
+			localStorage.setItem(storageKey, (pastClicks + 1).toString());
+        
+        // До кучи обновляем текущий скор стабильности (100 - стресс клиента)
+			localStorage.setItem('confession_stability_score', (100 - currentStressVal).toString());
+    }
 
         const bodyData = {
             session_id: currentSessionId,
