@@ -1,0 +1,47 @@
+name: Build and Publish Docker Image to GHCR
+
+on:
+  push:
+    branches:
+      - main  # Пайплайн будет запускаться каждый раз, когда ты делаешь git push в ветку main
+
+env:
+  REGISTRY: ghcr.io
+  # Автоматически переводим имя репозитория в нижний регистр для GHCR
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }} # Токен генерируется гитхабом автоматически
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          # Указываем путь к твоему файлу (так как он написан строчными буквами, пишем dockerfile)
+          file: ./dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
