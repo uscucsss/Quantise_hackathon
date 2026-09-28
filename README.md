@@ -69,6 +69,36 @@ python -m uvicorn backend.main:app --reload
 После успешного запуска сервера откройте браузер и перейдите по адресу:
 👉 **`http://127.0.0.1:8000`** (вас встретит главная страница).
 
+## Способ установки №2: Запуск через Docker (GitHub Packages / Локально)
+
+Вы можете запустить готовую сборку приложения из нашего реестра контейнеров GitHub Packages или собрать её локально.
+
+### Вариант А: Запуск готового образа из GHCR
+```bash
+# 1. Авторизация в GitHub Packages (используйте ваш личный токен доступа PAT)
+echo "YOUR_GITHUB_TOKEN" | docker login ghcr.io -u YOUR_GITHUB_USERNAME --password-stdin
+
+# 2. Скачивание и запуск контейнера с прокидыванием переменных окружения
+docker run -d \
+  -p 8000:8000 \
+  --name quantise-app \
+  -e DB_USER="postgres" \
+  -e DB_PASSWORD="your_password" \
+  -e DB_HOST="host.docker.internal" \
+  -e DB_PORT="5432" \
+  -e DB_NAME="postgres" \
+  ghcr.io/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/quantise:latest
+```
+
+### Вариант Б: Локальная сборка контейнера
+```bash
+# Сборка образа из корня проекта
+docker build -t quantise-local .
+
+# Запуск локального контейнера
+docker run -d -p 8000:8000 --name quantise-instance quantise-local
+```
+
 ---
 
 ## 🔒 Безопасность и Режим гостя (UX фича)
