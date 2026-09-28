@@ -26,11 +26,13 @@
     <main class="simulator-main">
         <div class="top-nav-bar">
             <a href="/frontend/pages/menu.html" class="exit-lobby-btn">◀ ВЫХОД В ЛОББИ</a>
-            <div class="case-info-tag">КЕЙС #03 // ОПТИМИЗАЦИЯ ИЗДЕРЖЕК ПРОСТОЯ</div>
+            <div class="case-info-tag">КЕЙС №03: ОПТИМИЗАЦИЯ ИЗДЕРЖЕК ПРОСТОЯ</div>
         </div>
-        <div class="main-dashboard-layout">
+        <div class="main-dashboard-layout" id="crisis-dashboard-panel">
+            
             <section class="analytics-panel">
                 <h2 class="panel-title">МОНИТОРИНГ ТЕКУЩИХ KPI</h2>
+                
                 <div class="metrics-vertical-stack">
                     <div class="metric-row">
                         <div class="metric-meta"><span>СОГЛАСИЕ ЗАКАЗЧИКА</span><strong id="val-agree">0%</strong></div>
@@ -49,42 +51,24 @@
                         <div class="m-bar-bg"><div id="kpi-patience" class="m-bar"></div></div>
                     </div>
                 </div>
-                <div class="risk-assessment-box">
-                    <h3 class="box-sub-title">ОЦЕНКА СИСТЕМНЫХ РИСКОВ</h3>
-                    <div class="risk-grid">
-                        <div class="risk-item"><span>Технический риск:</span> <strong>НИЗКИЙ (12%)</strong></div>
-                        <div class="risk-item"><span>Юридический риск:</span> <strong>ВЫСОКИЙ (78%)</strong></div>
-                        <div class="risk-item"><span>Репутационный риск:</span> <strong>СРЕДНИЙ (45%)</strong></div>
+
+                <div class="case-meta-spec-box">
+                    <div class="spec-meta-item">
+                        <span class="spec-label">СЛОЖНОСТЬ СЕССИИ</span>
+                        <span class="spec-badge difficulty-medium">ВЫСОКАЯ</span>
                     </div>
                 </div>
             </section>
+
             <section class="decision-panel">
                 <div class="speech-box">
                     <div class="speaker-tag">СТАТУС: ПОСТУПИЛ ЗАПРОС ОТ ОТВЕТСТВЕННОГО ЛИЦА</div>
-                    <p class="speech-content" id="text-output">
-                        «Следование регламенту сохранило нам юридическую чистоту, но компания потеряла крупную сумму денег из-за простоя. Как именно вы планируете оптимизировать этот процесс в следующем квартале?»
-                    </p>
+                    <p class="speech-content" id="text-output">Загрузка данных...</p>
                 </div>
-                <div class="tactics-stack">
-                    <button class="tactic-item-btn" data-tactic="analytics">
-                        <span class="t-meta">СТРАТЕГИЯ 01 // АУДИТ И АВТОМАТИЗАЦИЯ</span>
-                        <p class="t-text">Предоставить детальный хронометраж простоев. Развернуть автоматические контрольные точки для оптимизации регламента.</p>
-                    </button>
-                    <button class="tactic-item-btn" data-tactic="force">
-                        <span class="t-meta">СТРАТЕГИЯ 02 // ПРАВОВАЯ ДОМИНАНТА</span>
-                        <p class="t-text">Зафиксировать текущие издержки как безальтернативную цену за полное отсутствие юридических и судебных рисков.</p>
-                    </button>
-                    <button class="tactic-item-btn" data-tactic="diplomacy">
-                        <span class="t-meta">СТРАТЕГИЯ 03 // ДИВЕРСИФИКАЦИЯ УБЫТКОВ</span>
-                        <p class="t-text">Предложить компромиссное разделение финансовых рисков. Ввести жесткие KPI на скорость реакции инженерной группы.</p>
-                    </button>
-                    <button class="tactic-item-btn" data-tactic="charisma">
-                        <span class="t-meta">СТРАТЕГИЯ 04 // СМЕЩЕНИЕ ФОКУСА</span>
-                        <p class="t-text">Перевести фокус переговоров на масштабирование обновленного процесса и прогнозируемую долгосрочную выгоду.</p>
-                    </button>
-                </div>
+                <div class="tactics-stack"></div>
                 <button id="confirm-btn" class="main-action-btn" disabled>ПРИМЕНИТЬ ВЫБРАННУЮ СТРАТЕГИЮ</button>
             </section>
+
         </div>
     </main>
     <script src="../src/js/scene3/index.js"></script>
