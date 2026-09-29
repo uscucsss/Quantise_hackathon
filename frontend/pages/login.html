@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Авторизация | CONFESSION</title>
-    <link rel="stylesheet" href="/src/css/login/index.css">
-    <link rel="stylesheet" href="/src/css/login/form.css">
+    <link rel="stylesheet" href="../src/css/login/index.css">
+    <link rel="stylesheet" href="../src/css/login/form.css">
 </head>
 <body>
     <header class="site-header">
         <div class="header-container">
             <div class="header-left">
-                <a href="/index.html" class="logo">CONFESSION</a>
+                <a href="../index.html" class="logo">CONFESSION</a>
             </div>
             <div></div>
             <div class="header-right">
-                <a href="/index.html" class="nav-home-btn">На главную</a>
+                <a href="../index.html" class="nav-home-btn">На главную</a>
             </div>
         </div>
     </header>
@@ -89,9 +89,29 @@
             </div>
         </div>
     </div>
+    <script>
+        function openPolicyModal(e) {
+            if (e) e.preventDefault();
+            const modal = document.getElementById('policy-modal');
+            if (modal) {
+                modal.classList.add('active');
+            }
+        }
 
-    <script src="/src/js/login/index.js"></script>
-
-
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('policy-modal');
+            const closeBtn = document.getElementById('close-policy');
+            
+            if (closeBtn && modal) {
+                closeBtn.addEventListener('click', () => {
+                    modal.classList.remove('active');
+                });
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) modal.classList.remove('active');
+                });
+            }
+        });
+    </script>
+    <script src="../src/js/login/index.js"></script>
 </body>
 </html>
