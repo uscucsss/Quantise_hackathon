@@ -407,16 +407,15 @@ body {
         font-size: 12px !important;
     }
 }
-/* Контейнер для выравнивания кнопок в одну линию */
+
 .header-controls {
     display: flex;
     gap: 12px;
     align-items: center;
 }
 
-/* Стилизация киберпанк-кнопки профиля */
 .profile-nav-trigger {
-    display: none; /* Скрыта по умолчанию, включается через JS при авторизации */
+    display: none; 
     background: rgba(20, 15, 35, 0.8);
     border: 1px solid #a855f7;
     color: #a855f7;
@@ -436,4 +435,3 @@ body {
     color: #ffffff;
     box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
 }
-

@@ -1,5 +1,4 @@
 :root {
-    /* Основная цветовая палитра */
     --bg-dark-edges: #07050f;
     --bg-glow-center: #2b214a;
     --card-bg: #110d1f;
@@ -9,8 +8,6 @@
     --text-muted: #625c7e;
     --text-purple: #8652ed;
     --border-radius: 16px;
-
-    /* Дополнительные цвета */
     --color-analyst: #00ffaa;
     --color-fighter: #ff3344;
     --color-diplomat: #00bfff;

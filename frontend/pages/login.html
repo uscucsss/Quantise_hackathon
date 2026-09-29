@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Авторизация | CONFESSION</title>
-    <link rel="stylesheet" href="../src/css/login/index.css">
-    <link rel="stylesheet" href="../src/css/login/form.css">
+    <link rel="stylesheet" href="/src/css/login/index.css">
+    <link rel="stylesheet" href="/src/css/login/form.css">
 </head>
 <body>
     <header class="site-header">
         <div class="header-container">
             <div class="header-left">
-                <a href="../index.html" class="logo">CONFESSION</a>
+                <a href="/index.html" class="logo">CONFESSION</a>
             </div>
             <div></div>
             <div class="header-right">
-                <a href="../index.html" class="nav-home-btn">На главную</a>
+                <a href="/index.html" class="nav-home-btn">На главную</a>
             </div>
         </div>
     </header>
@@ -27,7 +27,6 @@
             </div>
             <div class="auth-body">
                 <div class="forms-slider" id="forms-slider" onsubmit="return false;">
-                    
                     <form class="auth-form login-form">
                         <h3>Войти в аккаунт</h3>
                         <input type="text" name="username" placeholder="Никнейм" required>
@@ -36,19 +35,16 @@
                             <button type="button" class="password-toggle-eye" aria-label="Показать/скрыть пароль"></button>
                         </div>
                         <div class="error-container" id="login-error"></div>
-                        
                         <div class="legal-form-wrapper">
                             <label class="legal-checkbox-container">
                                 <input type="checkbox" class="legal-agree-checkbox" required>
                                 <span class="legal-notice-text">Я принимаю <a href="#" class="legal-policy-link" onclick="openPolicyModal(event)">Политику конфиденциальности</a></span>
                             </label>
                         </div>
-
                         <button type="submit" class="submit-btn">
                             <span class="btn-text">Войти</span>
                         </button>
                     </form>
-                    
                     <form class="auth-form register-form" onsubmit="return false;">
                         <h3>Создать аккаунт</h3>
                         <input type="text" name="username" placeholder="Никнейм" required>
@@ -57,24 +53,20 @@
                             <button type="button" class="password-toggle-eye" aria-label="Показать/скрыть пароль"></button>
                         </div>
                         <div class="error-container" id="register-error"></div>
-                        
                         <div class="legal-form-wrapper">
                             <label class="legal-checkbox-container">
                                 <input type="checkbox" class="legal-agree-checkbox" required>
                                 <span class="legal-notice-text">Я принимаю <a href="#" class="legal-policy-link" onclick="openPolicyModal(event)">Политику конфиденциальности</a></span>
                             </label>
                         </div>
-
                         <button type="submit" class="submit-btn">
                             <span class="btn-text">Регистрация</span>
                         </button>
                     </form>
-
                 </div>
             </div>
         </div>
     </main>
-    
     <div class="legal-modal-overlay" id="policy-modal">
         <div class="legal-modal-window">
             <div class="legal-modal-header">
@@ -97,7 +89,6 @@
                 modal.classList.add('active');
             }
         }
-
         document.addEventListener('DOMContentLoaded', () => {
             const modal = document.getElementById('policy-modal');
             const closeBtn = document.getElementById('close-policy');
@@ -112,6 +103,6 @@
             }
         });
     </script>
-    <script src="../src/js/login/index.js"></script>
+    <script src="/src/js/login/index.js"></script>
 </body>
 </html>

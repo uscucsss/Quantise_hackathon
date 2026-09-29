@@ -1,4 +1,3 @@
-// База данных разветвленных горизонтальных графов развилок
 const storiesData = {
     crisis: {
         title: "Кризис-менеджмент (Дерево развилок)",
@@ -99,7 +98,7 @@ function loadStoryTree(storyId) {
 
     if (!storiesData[storyId] && !isLocked) return;
 
-    activeStoryId = storyId; // Исправлено: пишем в глобальный activeStoryId
+    activeStoryId = storyId; 
     currentActiveIndex = storyIds.indexOf(storyId);
 
     if (rotationAngles[storyId] !== undefined && scenariosList) {
@@ -143,7 +142,6 @@ function loadStoryTree(storyId) {
     }
 }
 
-// ПЕРЕХВАТЧИК КОЛЕСИКА МЫШИ ДЛЯ РАДИАЛЬНОГО ВРАЩЕНИЯ
 window.addEventListener('wheel', function(event) {
     const leftPanel = document.querySelector('.left-panel');
     if (!leftPanel || !leftPanel.contains(event.target)) return;
@@ -163,32 +161,28 @@ window.addEventListener('wheel', function(event) {
     }
 }, { passive: false });
 
-// --- УНИВЕРСАЛЬНЫЙ РОУТЕР ДЛЯ СЦЕНЫ 3 ---
 function startActiveSimulation() {
-    let targetScenarioJsonId = "deadline_crisis"; // По умолчанию Антон
+    let targetScenarioJsonId = "deadline_crisis"; 
 
     if (activeStoryId === "crisis") {
-        targetScenarioJsonId = "crisis_management"; // Сложный Михаил (Кризис)
+        targetScenarioJsonId = "crisis_management"; 
     } else if (activeStoryId === "check") {
-        targetScenarioJsonId = "price_increase"; // Средняя Елена (Повышение чека)
+        targetScenarioJsonId = "price_increase"; 
     }
 
-    // НАМЕРТВО отправляем все 3 сценария на scene3.html
     window.location.href = `/pages/scene3.html?scenario=${targetScenarioJsonId}`;
 }
 
 
 document.addEventListener("DOMContentLoaded", function() {
-    loadStoryTree('crisis'); // Стартуем с кризиса
+    loadStoryTree('crisis'); 
     
-    // Вешаем обработчик клика на главную кнопку ОДИН РАЗ и намертво
     const startBtn = document.getElementById('startSimBtn') || document.querySelector('.main-action-btn');
     if (startBtn) {
         startBtn.addEventListener('click', startActiveSimulation);
     }
 });
 
-// Автоматическое добавление кнопки Профиля на экран выбора сценариев
 document.addEventListener('DOMContentLoaded', () => {
     const isAuthUser = localStorage.getItem('isAuth') === 'true';
     if (isAuthUser) {

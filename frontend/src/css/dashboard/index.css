@@ -1,6 +1,3 @@
-/* ==========================================================================
-   01. ГЛОБАЛЬНЫЕ СБРОСЫ И БЕЛАЯ ПОДСВЕТКА КОНТРАЖУРА НА ФОНЕ
-   ========================================================================== */
 * {
     box-sizing: border-box;
     margin: 0; padding: 0;
@@ -19,9 +16,6 @@ body.dashboard-body {
     filter: blur(140px) !important; opacity: 0.12 !important; top: calc(50% - 325px); left: calc(50% - 375px); pointer-events: none; z-index: 1;
 }
 
-/* ==========================================================================
-   02. СТИЛИЗАЦИЯ КОНСОЛИ ДАШБОРДА И КАРТОЧЕК KPI
-   ========================================================================== */
 .dashboard-wrapper {
     position: relative; z-index: 10; width: 100%; max-width: 850px; background: rgba(10, 9, 18, 0.85) !important;
     border: 1px solid rgba(192, 132, 252, 0.22) !important; border-radius: 20px; padding: 45px;
@@ -37,9 +31,6 @@ body.dashboard-body {
 .metric-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: rgba(255, 255, 255, 0.3); font-weight: 700; }
 .metric-value { font-size: 2.2rem; font-weight: 900; letter-spacing: -0.5px; }
 
-/* ==========================================================================
-   03. ГЕОМЕТРИЯ КРУГОВЫХ СЕКТОРОВ И ИНТЕРАКТИВНЫЕ ХОВЕРЫ
-   ========================================================================== */
 .profile-section { background: rgba(255, 255, 255, 0.005); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 16px; padding: 40px; margin-bottom: 40px; }
 .section-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 3px; color: rgba(255, 255, 255, 0.5); margin-bottom: 35px; font-weight: 800; text-align: center; }
 
@@ -54,17 +45,13 @@ body.dashboard-body {
     pointer-events: none; 
 }
 
-/* Базовый класс секторов */
 .pure-sector {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%;
     transform-origin: center !important;
-    /* 🔥 ЖЕСТКОЕ ТРЕБОВАНИЕ: Стартовое состояние из нуля прописано в CSS базой */
     transform: scale(0); 
-    /* Плавный переход для анимации появления (1.4s) и для ховеров (0.4s) */
     transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease !important;
 }
 
-/* Сектора заперты строго в своих углах и считывают проценты из JS */
 .pure-sector.bar-analytics {
     background: conic-gradient(from 0deg, #00ff88 0deg 90deg, transparent 90deg);
     --base-scale: calc(var(--circle-pct, 0) / 100);
@@ -90,7 +77,6 @@ body.dashboard-body {
     filter: drop-shadow(0 0 10px rgba(255, 184, 0, 0.4));
 }
 
-/* Наведение мыши: плавно увеличивает конкретную выбранную четверть круга */
 .label-analytics:hover ~ .conic-wheel-matrix .bar-analytics {
     transform: scale(calc(var(--base-scale) + 0.07)) !important;
     filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.95)) brightness(1.25) !important;
@@ -108,19 +94,16 @@ body.dashboard-body {
     filter: drop-shadow(0 0 20px rgba(255, 184, 0, 0.95)) brightness(1.25) !important;
 }
 
-/* Разделительные оси четвертей */
 .radar-cross-axis { position: absolute; background: #0c0b1c; z-index: 5; pointer-events: none; }
 .radar-cross-axis.axis-v { top: 50px; left: 189px; width: 2px; height: 280px; }
 .radar-cross-axis.axis-h { top: 189px; left: 50px; width: 280px; height: 2px; }
 
-/* Текстовые метки в углах */
 .radar-abs-label { position: absolute; font-family: 'Segoe UI', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 2px; z-index: 30; cursor: pointer; }
 .label-analytics   { top: 20px;  right: 10px; color: #00ff88; text-shadow: 0 0 10px rgba(0, 255, 136, 0.5); }
 .label-fighter     { bottom: 20px; right: 30px; color: #ff3b3b; text-shadow: 0 0 10px rgba(255, 59, 59, 0.5); }
 .label-diplomat    { bottom: 20px; left: 10px;  color: #00b4d8; text-shadow: 0 0 10px rgba(0, 180, 216, 0.5); }
 .label-charismatic { top: 20px;  left: 5px;   color: #ffb800; text-shadow: 0 0 10px rgba(255, 184, 0, 0.5); }
 
-/* Высокотехнологичная матовая фиолетовая сфера */
 .neon-core-sphere {
     position: absolute; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%) !important;
     width: 52px; height: 52px; border-radius: 50%; z-index: 40; pointer-events: none;
@@ -136,13 +119,58 @@ body.dashboard-body {
     100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 20px rgba(168, 85, 247, 0.4), inset 0 0 12px rgba(168, 85, 247, 0.25); border-color: rgba(192, 132, 252, 0.45); }
 }
 
-/* ПОДВАЛ */
-.dashboard-footer { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; }
-.dashboard-btn { width: 100%; padding: 18px; border-radius: 12px; font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-.dashboard-btn:active { transform: scale(0.99); }
-.btn-replay { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(192, 132, 252, 0.25); color: rgba(255, 255, 255, 0.8); }
-.btn-replay:hover { background: rgba(192, 132, 252, 0.08); border-color: #c084fc; color: #ffffff; box-shadow: 0 0 20px rgba(192, 132, 252, 0.3); transform: translateY(-2px); }
-.btn-return { background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%); border: 1px solid rgba(255, 255, 255, 0.08); color: #ffffff; box-shadow: 0 4px 20px rgba(109, 40, 217, 0.3); }
-.btn-return:hover { background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%); box-shadow: 0 0 25px rgba(192, 132, 252, 0.4); transform: translateY(-2px); }
+.dashboard-footer { 
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 20px; 
+    width: 100%; 
+}
 
-@media (max-width: 768px) { .dashboard-wrapper { padding: 25px; } .header-title { font-size: 1.6rem; } .wheel-chart-container { width: 300px; height: 380px; } .dashboard-footer { grid-template-columns: 1fr; gap: 12px; } .dashboard-btn { padding: 15px; } }
+.dashboard-btn { 
+    width: 100%; 
+    padding: 18px; 
+    border-radius: 12px; 
+    font-size: 0.9rem; 
+    font-weight: 800; 
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
+    cursor: pointer; 
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+}
+
+.dashboard-btn:active { transform: scale(0.99); }
+
+.btn-replay { 
+    background: rgba(255, 255, 255, 0.02); 
+    border: 1px solid rgba(192, 132, 252, 0.25); 
+    color: rgba(255, 255, 255, 0.8); 
+}
+
+.btn-replay:hover { 
+    background: rgba(192, 132, 252, 0.08); 
+    border-color: #c084fc; 
+    color: #ffffff; 
+    box-shadow: 0 0 20px rgba(192, 132, 252, 0.3); 
+    transform: translateY(-2px); 
+}
+
+.btn-return { 
+    background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%); 
+    border: 1px solid rgba(255, 255, 255, 0.08); 
+    color: #ffffff; 
+    box-shadow: 0 4px 20px rgba(109, 40, 217, 0.3); 
+}
+
+.btn-return:hover { 
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%); 
+    box-shadow: 0 0 25px rgba(192, 132, 252, 0.4); 
+    transform: translateY(-2px); 
+}
+
+@media (max-width: 768px) { 
+    .dashboard-wrapper { padding: 25px; } 
+    .header-title { font-size: 1.6rem; } 
+    .wheel-chart-container { width: 300px; height: 380px; } 
+    .dashboard-footer { grid-template-columns: 1fr; gap: 12px; } 
+    .dashboard-btn { padding: 15px; } 
+}

@@ -141,7 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const bodyData = {
-    // ИСПРАВЛЕНО: Если переменная обнулилась, берем сохраненный ID из памяти
    			session_id: currentSessionId || localStorage.getItem('confession_current_session_id'),
     		user_id: parseInt(localStorage.getItem('user_id')) || 0,
     		scenario_id: activeScenarioId,
@@ -173,7 +172,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     lockOverlay.style.pointerEvents = 'none';
                 }
 
-                // ИСПРАВЛЕНО: Сохраняем session_id намертво в память браузера, чтобы он не обнулялся при кликах!
 				currentSessionId = data.session_id;
 				localStorage.setItem('confession_current_session_id', data.session_id);
 				currentOptions = data.options;

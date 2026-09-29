@@ -1,9 +1,3 @@
-//https://docs.google.com/document/d/16R4tewOn8N9vn74iG5B14q5oIjZLKiezJsVzn5NTjqk/edit?usp=sharing 
-// кир.ха, на, чекни, там часть бред например про ссылки, но с состальным можно работать
-
-
-// НАСТРОЙКА URL БЭКЕНДА
-// Если запускаешь фронт и бэк на одном порту (например, через FastAPI static), то оставь просто "/api_v1". Если бэк на другом порту, напиши "http://127.0.0"
 const API_BASE_URL = "/api_v1"; 
 
 document.addEventListener('DOMContentLoaded', () => {

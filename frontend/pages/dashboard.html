@@ -4,54 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Дашборд Статистики | CONFESSION</title>
-    <link rel="stylesheet" href="../src/css/dashboard/index.css">
+    <link rel="stylesheet" href="/src/css/dashboard/index.css">
 </head>
 <body class="dashboard-body">
-
-    <!-- БЕЛЫЙ КИБЕРПАНК КОНТРАЖУР ЗА ОКНОМ -->
     <div class="bg-glow-glow"></div>
-
     <div class="dashboard-wrapper">
         <header class="dashboard-header">
             <h1 class="header-title">СТАТИСТИКА ПРОХОЖДЕНИЯ</h1>
             <p class="header-subtitle">АНАЛИЗ ОПЕРАЦИОННОЙ ЭФФЕКТИВНОСТИ QUANTISE</p>
         </header>
-
         <section class="metrics-grid">
             <div class="metric-card">
                 <span class="metric-label">Уровень стабильности</span>
                 <span class="metric-value" id="stability-value-label">...</span>
             </div>
         </section>
-
-        <!-- БЛОК 2: АВТОНОМНОЕ СЕГМЕНТИРОВАННОЕ КОЛЕСО ЧЕТВЕРТЯМИ -->
         <section class="profile-section">
             <h2 class="section-title">Профиль переговорщика</h2>
-            
             <div class="wheel-chart-container">
-                <!-- Каждому сектору-четверти выделен свой независимый парящий блок -->
                 <div class="conic-wheel-matrix">
                     <div id="pct-analyst" class="pure-sector bar-analytics"></div>
                     <div id="pct-fighter" class="pure-sector bar-fighter"></div>
                     <div id="pct-diplomat" class="pure-sector bar-diplomat"></div>
                     <div id="pct-charismatic" class="pure-sector bar-charismatic"></div>
                 </div>
-                
-                <!-- Защитные перекрестные оси, разделяющие стыки граней четвертей -->
                 <div class="radar-cross-axis axis-v"></div>
                 <div class="radar-cross-axis axis-h"></div>
-
-                <!-- ИСПРАВЛЕНО: Текстовые подписи возвращены обратно на экран по углам -->
                 <div class="radar-abs-label label-analytics">[ АНАЛИТИК ] <span id="text-pct-analytics"></span></div>
                 <div class="radar-abs-label label-fighter">[ БОЕЦ ] <span id="text-pct-fighter"></span></div>
                 <div class="radar-abs-label label-diplomat">[ ДИПЛОМАТ ] <span id="text-pct-diplomat"></span></div>
                 <div class="radar-abs-label label-charismatic">[ ХАРИЗМАТИК ] <span id="text-pct-charismatic"></span></div>
-
-                <!-- ИСПРАВЛЕНО: Сфера намертво заперта в центре через независимый тег -->
                 <div class="neon-core-sphere"></div>
             </div>
-
-            <!-- Невидимые теги для полной совместимости с оригинальным JS (не удалять!) -->
             <div style="display: none;">
                 <div class="label-analytics"></div>
                 <div class="label-fighter"></div>
@@ -61,7 +45,6 @@
                 <div id="dominant-percent-label"></div>
             </div>
         </section>
-
         <footer class="dashboard-footer">
             <button type="button" id="replay-game-btn" class="dashboard-btn btn-replay">
                 <span>Переиграть</span>

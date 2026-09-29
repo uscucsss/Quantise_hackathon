@@ -1,7 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --------------------------------------------------------------------------
-    // 01. ПОИСК ВСЕХ НЕОБХОДИМЫХ СЕЛЕКТОРОВ ИНТЕРФЕЙСА
-    // --------------------------------------------------------------------------
     const btnLogin = document.getElementById('btn-login');
     const btnRegister = document.getElementById('btn-register');
     const formsSlider = document.getElementById('forms-slider');
@@ -12,9 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginError = document.getElementById('login-error');
     const registerError = document.getElementById('register-error');
 
-    // --------------------------------------------------------------------------
-    // 02. МЕХАНИКА СЛАЙДЕРА (ПЛАВНОЕ ПЕРЕКЛЮЧЕНИЕ ТАБОВ)
-    // --------------------------------------------------------------------------
+
     if (btnRegister && btnLogin && formsSlider) {
         btnRegister.addEventListener('click', () => {
             btnLogin.classList.remove('active');
@@ -33,9 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --------------------------------------------------------------------------
-    // 03. ФУНКЦИОНАЛ ПОКАЗА / СКРЫТИЯ ПАРОЛЯ (ГЛАЗИК)
-    // --------------------------------------------------------------------------
     eyeButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             const passwordInput = btn.previousElementSibling;
@@ -49,12 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --------------------------------------------------------------------------
-    // 04. ЖИВАЯ ОБРАБОТКА ФОРМЫ АВТОРИЗАЦИИ (ИСПРАВЛЕННАЯ)
-    // --------------------------------------------------------------------------
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Намертво блокируем стандартную отправку HTML
+            e.preventDefault(); 
             e.stopPropagation();
             if (loginError) loginError.textContent = '';
 
@@ -79,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.setItem('isAuth', 'true');
                     window.location.href = '/index.html';
                 } else {
-                    // Выводим ошибку, если данные неверны. Перезагрузки не будет!
                     if (loginError) loginError.textContent = result.detail || "Неверный логин или пароль.";
                 }
             } catch (error) {
@@ -89,12 +77,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --------------------------------------------------------------------------
-    // 05. ЖИВАЯ ОБРАБОТКА ФОРМЫ РЕГИСТРАЦИИ (ИСПРАВЛЕННАЯ)
-    // --------------------------------------------------------------------------
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); // ИСПРАВЛЕНО: Теперь намертво блокируем перезагрузку и тут!
+            e.preventDefault(); 
             e.stopPropagation();
             if (registerError) registerError.textContent = '';
 
@@ -130,14 +115,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('Аккаунт успешно создан в системе Quantise! Теперь войдите в него.');
                     registerForm.reset();
                     
-                    // Переводим слайдер обратно на вкладку LOGIN
                     if (btnLogin && formsSlider) {
                         btnRegister.classList.remove('active');
                         btnLogin.classList.add('active');
                         formsSlider.classList.remove('show-register');
                     }
                 } else {
-                    // ИСПРАВЛЕНО: Выводим реальную причину ошибки от FastAPI (например, "Этот никнейм уже занят!")
                     if (registerError) registerError.textContent = result.detail || "Этот никнейм уже занят.";
                 }
             } catch (error) {
